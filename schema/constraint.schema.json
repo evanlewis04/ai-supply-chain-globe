@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-supply-chain-globe/schema/constraint.schema.json",
+  "title": "Constraint",
+  "description": "A first-class bottleneck entity (e.g. CoWoS capacity). Nodes and edges reference constraints by id; selecting one in the UI highlights everything downstream.",
+  "type": "object",
+  "required": ["id", "name", "category", "description", "sources"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Kebab-case unique identifier, e.g. cowos-capacity"
+    },
+    "name": { "type": "string", "minLength": 1 },
+    "category": {
+      "enum": ["capacity", "regulatory", "resource", "geographic"],
+      "description": "capacity = manufacturing throughput limits; regulatory = export controls etc.; resource = water/power/materials; geographic = concentration risk"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "description": "One-paragraph plain-language explanation of the bottleneck and why it matters"
+    },
+    "metrics": {
+      "type": "array",
+      "description": "Time-stamped quantitative estimates of the constraint (e.g. CoWoS wafers/month over time). Multiple entries with different as_of dates build the historical record.",
+      "items": {
+        "type": "object",
+        "required": ["value", "unit", "as_of"],
+        "additionalProperties": false,
+        "properties": {
+          "value": { "type": ["number", "null"] },
+          "unit": { "type": ["string", "null"] },
+          "as_of": {
+            "type": "string",
+            "pattern": "^\\d{4}(-Q[1-4]|-\\d{2}(-\\d{2})?)?$"
+          },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "severity": {
+      "enum": ["low", "medium", "high"],
+      "description": "Current judgment of how binding this constraint is; revisit as data changes"
+    },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "node.schema.json#/$defs/source" }
+    }
+  }
+}
