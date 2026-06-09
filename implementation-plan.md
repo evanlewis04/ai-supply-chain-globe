@@ -13,6 +13,14 @@
 
 ---
 
+## Status (updated 2026-06-09)
+
+- **M0 (scaffold/schema): done** — commit `c738e9f`.
+- **M1 (walking skeleton): done** — commit `07cf2c6`, plus the finance overlay (added by owner request).
+- **M2 (data): core done** — 11 nodes across all five layers, 10 edges, `cowos-capacity` with the TrendForce capacity timeline; wafer flow routed through packaging. *Remaining: owner research pass over the vault (verify flagged quotes in "Reviewer notes"), optional training-cluster/model-artifact split, optional edge-volume hunting.*
+- **M3 (analytical layer): done** — constraint downstream-highlight, scarce-red constraint-gated arcs, layer toggles, flow tooltips. Commits `f840b5f`, `125ad4c`.
+- **M4 (polish/package): substantially done** — README rewritten as the deliverable with three headless-captured screenshots, shareable URL demo states, offline textures. *Remaining: owner review of README voice, fresh screenshots after any visual tweaks, decision on public vs. private repo (open item).*
+
 ## Amendments (2026-06-09, post-approval)
 
 **Working model change.** Claude owns all technical decisions (stack, architecture, data plumbing, when to merge well-verified factual entries into the vault) and proceeds without waiting for sign-off. The project owner steers features and scope, does the domain research he wants to go deep on, and can veto or edit anything after the fact. `_pending/` remains the channel for entries with contested or analytically uncertain values (capacities, volumes, constraint judgments); straightforward, well-sourced factual entries may be merged directly. Every vault file keeps its "Reviewer notes" so the audit trail survives.
