@@ -4,14 +4,23 @@ import SidePanel from "./components/SidePanel";
 import Legend from "./components/Legend";
 import ConstraintPanel from "./components/ConstraintPanel";
 import { downstreamOfConstraint } from "./graph/traversal";
-import type { GraphData, PricesData } from "./types";
+import type { GraphData, Layer, PricesData } from "./types";
 
 export default function App() {
   const [graph, setGraph] = useState<GraphData | null>(null);
   const [prices, setPrices] = useState<PricesData | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [constraintId, setConstraintId] = useState<string | null>(null);
+  const [hiddenLayers, setHiddenLayers] = useState<Set<Layer>>(new Set());
   const [error, setError] = useState<string | null>(null);
+
+  const toggleLayer = (layer: Layer) =>
+    setHiddenLayers((prev) => {
+      const next = new Set(prev);
+      if (next.has(layer)) next.delete(layer);
+      else next.add(layer);
+      return next;
+    });
 
   useEffect(() => {
     fetch("graph.json")
@@ -19,7 +28,15 @@ export default function App() {
         if (!r.ok) throw new Error(`graph.json: HTTP ${r.status}`);
         return r.json();
       })
-      .then(setGraph)
+      .then((g: GraphData) => {
+        setGraph(g);
+        // Shareable demo states: ?constraint=cowos-capacity or ?node=tsmc-fab-18
+        const params = new URLSearchParams(window.location.search);
+        const c = params.get("constraint");
+        const n = params.get("node");
+        if (c && g.constraints.some((x) => x.id === c)) setConstraintId(c);
+        if (n && g.nodes.some((x) => x.id === n)) setSelectedId(n);
+      })
       .catch((e) => setError(String(e)));
     fetch("prices.json")
       .then((r) => (r.ok ? r.json() : null))
@@ -64,9 +81,10 @@ export default function App() {
         prices={prices}
         selectedId={selectedId}
         highlight={highlight}
+        hiddenLayers={hiddenLayers}
         onSelect={setSelectedId}
       />
-      <Legend />
+      <Legend hiddenLayers={hiddenLayers} onToggleLayer={toggleLayer} />
       <ConstraintPanel
         constraints={graph.constraints}
         selectedId={constraintId}

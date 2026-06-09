@@ -3,14 +3,24 @@ import type { Layer } from "../types";
 
 const LAYERS = Object.keys(LAYER_COLORS) as Layer[];
 
-export default function Legend() {
+interface Props {
+  hiddenLayers: Set<Layer>;
+  onToggleLayer: (layer: Layer) => void;
+}
+
+export default function Legend({ hiddenLayers, onToggleLayer }: Props) {
   return (
     <div className="legend">
       {LAYERS.map((layer) => (
-        <span key={layer} className="legend-item">
+        <button
+          key={layer}
+          className={`legend-item legend-toggle ${hiddenLayers.has(layer) ? "off" : ""}`}
+          onClick={() => onToggleLayer(layer)}
+          title={`Toggle ${LAYER_LABELS[layer]} layer`}
+        >
           <span className="legend-dot" style={{ background: LAYER_COLORS[layer] }} />
           {LAYER_LABELS[layer]}
-        </span>
+        </button>
       ))}
       <span className="legend-item">
         <span className="legend-dot" style={{ background: "#ff4d4d" }} />

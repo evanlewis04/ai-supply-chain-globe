@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Globe, { GlobeMethods } from "react-globe.gl";
-import type { GraphData, GraphNode, PricesData } from "../types";
+import type { GraphData, GraphNode, Layer, PricesData } from "../types";
 import { FLOW_COLORS, LAYER_COLORS } from "../types";
 import type { AffectedSet } from "../graph/traversal";
 
@@ -9,6 +9,7 @@ interface Props {
   prices: PricesData | null;
   selectedId: string | null;
   highlight: AffectedSet | null;
+  hiddenLayers: Set<Layer>;
   onSelect: (id: string | null) => void;
 }
 
@@ -36,7 +37,14 @@ function escapeHtml(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-export default function GlobeView({ graph, prices, selectedId, highlight, onSelect }: Props) {
+export default function GlobeView({
+  graph,
+  prices,
+  selectedId,
+  highlight,
+  hiddenLayers,
+  onSelect,
+}: Props) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const [size, setSize] = useState({ w: window.innerWidth, h: window.innerHeight });
 
@@ -50,7 +58,7 @@ export default function GlobeView({ graph, prices, selectedId, highlight, onSele
     const globe = globeRef.current;
     if (!globe) return;
     // Frame the whole slice: mid-Pacific vantage shows Taiwan and the US
-    globe.pointOfView({ lat: 30, lng: 180, altitude: 2.4 }, 0);
+    globe.pointOfView({ lat: 28, lng: -165, altitude: 2.2 }, 0);
     const controls = globe.controls();
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.35;
@@ -60,12 +68,14 @@ export default function GlobeView({ graph, prices, selectedId, highlight, onSele
 
   const points = useMemo<PointDatum[]>(
     () =>
-      graph.nodes.map((node) => ({
-        node,
-        lat: node.location.lat,
-        lng: node.location.lon,
-      })),
-    [graph]
+      graph.nodes
+        .filter((node) => !hiddenLayers.has(node.layer))
+        .map((node) => ({
+          node,
+          lat: node.location.lat,
+          lng: node.location.lon,
+        })),
+    [graph, hiddenLayers]
   );
 
   const nodeById = useMemo(() => {
@@ -80,8 +90,11 @@ export default function GlobeView({ graph, prices, selectedId, highlight, onSele
         const from = nodeById.get(e.from);
         const to = nodeById.get(e.to);
         if (!from || !to) return [];
-        const emphasized =
-          e.constraint_level === "high" && e.substitutability === "low";
+        if (hiddenLayers.has(from.layer) || hiddenLayers.has(to.layer)) return [];
+        // Red = explicitly gated by a constraint entity. (High-constraint/
+        // low-substitutability alone is common in this graph and is shown
+        // in tooltips instead, so red stays scarce and meaningful.)
+        const emphasized = (e.constraints?.length ?? 0) > 0;
         return [
           {
             id: e.id,
@@ -95,13 +108,13 @@ export default function GlobeView({ graph, prices, selectedId, highlight, onSele
             )}</b><br/>${escapeHtml(e.flow_type)} · constraint: ${
               e.constraint_level ?? "n/a"
             } · substitutability: ${e.substitutability ?? "n/a"}${
-              emphasized ? "<br/><span style='color:#ff4d4d'>chokepoint: hard to substitute</span>" : ""
+              emphasized ? "<br/><span style='color:#ff4d4d'>gated by: " + (e.constraints ?? []).join(", ") + "</span>" : ""
             }</div>`,
             emphasized,
           },
         ];
       }),
-    [graph, nodeById]
+    [graph, nodeById, hiddenLayers]
   );
 
   const pointLabel = (d: object) => {
@@ -125,8 +138,8 @@ export default function GlobeView({ graph, prices, selectedId, highlight, onSele
       ref={globeRef}
       width={size.w}
       height={size.h}
-      globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-      backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+      globeImageUrl="textures/earth-night.jpg"
+      backgroundImageUrl="textures/night-sky.png"
       atmosphereColor="#3a86ff"
       atmosphereAltitude={0.18}
       pointsData={points}
