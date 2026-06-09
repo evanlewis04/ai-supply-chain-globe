@@ -4,6 +4,9 @@ name: Human Readable Name
 layer: chips           # energy | chips | infrastructure | models | applications
 type: fab              # must match layer — see schema/node.schema.json
 operator: Company Name
+# ticker:              # optional — only if the operator is publicly listed
+#   symbol: TSM        # drives the stock-performance overlay
+#   exchange: NYSE (ADR; primary listing TWSE 2330)
 location:
   lat: 0.0             # never guessed — must trace to a source
   lon: 0.0

@@ -1,0 +1,404 @@
+{
+  "meta": {
+    "generated_at": "2026-06-09T18:25:54+00:00",
+    "counts": {
+      "nodes": 6,
+      "edges": 5,
+      "constraints": 0
+    },
+    "schema_version": "1.0.0"
+  },
+  "nodes": [
+    {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "layer": "applications",
+      "type": "product",
+      "operator": "OpenAI",
+      "location": {
+        "lat": 37.7749,
+        "lon": -122.4194,
+        "country": "US",
+        "region": "San Francisco, California",
+        "precision": "city"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "status": "operational",
+      "constraints": [],
+      "tags": [
+        "consumer",
+        "chatbot"
+      ],
+      "sources": [
+        {
+          "url": "https://openai.com/index/chatgpt/",
+          "title": "Introducing ChatGPT",
+          "date": "2022-11-30",
+          "quote": "We've trained a model called ChatGPT which interacts in a conversational way.",
+          "supports": "existence, operator, launch date"
+        }
+      ],
+      "body": "# ChatGPT\n\nThe consumer application that terminates the v1 slice — launched\nNovember 30, 2022 as a \"research preview\" and the proximate cause of the\ndemand shock that propagates backward through this entire graph: model\nscale → infrastructure buildout → accelerator supply → packaging and wafer\ncapacity → grid and water constraints. The pull dynamic starts here.\n\n**Location convention:** products are global, not geographic. By project\nconvention, application-layer nodes are anchored at the operator's HQ city\n(`precision: city`). This keeps the schema uniform; the UI can render\napplication nodes differently if we choose.\n\n**Reviewer notes:** Verify the quoted launch-post sentence against\nopenai.com/index/chatgpt/ — wording is from the launch announcement."
+    },
+    {
+      "id": "asml-veldhoven",
+      "name": "ASML Veldhoven (HQ & EUV production)",
+      "layer": "chips",
+      "type": "equipment_maker",
+      "operator": "ASML Holding N.V.",
+      "ticker": {
+        "symbol": "ASML",
+        "exchange": "NASDAQ (ADR; primary listing Euronext Amsterdam)"
+      },
+      "location": {
+        "lat": 51.403,
+        "lon": 5.457,
+        "country": "NL",
+        "region": "Veldhoven, North Brabant",
+        "precision": "site"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "status": "operational",
+      "constraints": [],
+      "tags": [
+        "euv",
+        "lithography",
+        "monopoly-supplier"
+      ],
+      "sources": [
+        {
+          "url": "https://www.dnb.com/business-directory/company-profiles.asml_holding_nv.b5ed2b6201b6ff7d0f05fdfcdbbaa474.html",
+          "title": "D&B company profile — ASML Holding N.V. (accessed 2026-06)",
+          "date": "2026-06",
+          "supports": "location (De Run 6501, Veldhoven)"
+        },
+        {
+          "url": "https://www.digitimes.com/news/a20241112PD204/euv-tsmc-adoption-2023-technology.html",
+          "title": "TSMC now reportedly operates over half of global EUVs, weighs high-NA adoption",
+          "date": "2024-11",
+          "supports": "role as the EUV supplier to leading-edge fabs"
+        }
+      ],
+      "body": "# ASML Veldhoven (HQ & EUV production)\n\nASML's Veldhoven campus (De Run 6501) is corporate HQ and the final-assembly\nsite for its lithography systems, including EUV — the machines without which\nno leading-edge (N5/N3-class) logic can be manufactured. ASML is widely\ndocumented as the only company supplying production EUV lithography systems,\nwhich makes this single campus one of the most concentrated points of\nfailure in the entire AI supply chain.\n\nCoordinates geocoded from the published street address (De Run 6501,\nVeldhoven); precision `site`.\n\n**Reviewer notes:** (1) The \"sole supplier of EUV\" claim is universally\nreported but the sources attached here support it only indirectly — consider\nadding ASML's own 20-F annual report language before this enters canon.\n(2) EUV annual shipment counts are published in ASML annual reports and\nwould make a good `capacity` entry (unit: euv_systems_per_year) in M2."
+    },
+    {
+      "id": "nvidia-santa-clara",
+      "name": "Nvidia HQ (Santa Clara)",
+      "layer": "chips",
+      "type": "designer",
+      "operator": "NVIDIA Corporation",
+      "ticker": {
+        "symbol": "NVDA",
+        "exchange": "NASDAQ"
+      },
+      "location": {
+        "lat": 37.3705,
+        "lon": -121.967,
+        "country": "US",
+        "region": "Santa Clara, California",
+        "precision": "site"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "status": "operational",
+      "constraints": [],
+      "tags": [
+        "fabless",
+        "gpu",
+        "ai-accelerators"
+      ],
+      "sources": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581024000029/Financial_Report.xlsx",
+          "title": "NVIDIA Corp Form 10-K FY2024 (SEC EDGAR)",
+          "date": "2024-02",
+          "supports": "location (2788 San Tomas Expressway, Santa Clara, CA — principal executive offices per 10-K)"
+        }
+      ],
+      "body": "# Nvidia HQ (Santa Clara)\n\nNvidia is the fabless designer at the center of the AI accelerator market.\nThe Santa Clara HQ (2788 San Tomas Expressway) is where the architecture,\nallocation, and customer relationships live; manufacturing is entirely\noutsourced — wafers from TSMC, HBM from SK Hynix/Micron/Samsung, advanced\npackaging via TSMC CoWoS. In graph terms this node is where wafer supply\nturns into allocated, packaged product flowing to cloud providers.\n\nCoordinates geocoded from the published HQ address; precision `site`.\n\n**Reviewer notes:** The 10-K source link is the financial-report artifact\nfrom EDGAR; consider swapping for the main 10-K HTML filing URL for\nreadability when this enters canon."
+    },
+    {
+      "id": "tsmc-fab-18",
+      "name": "TSMC Fab 18 (GIGAFAB, N5/N3)",
+      "layer": "chips",
+      "type": "fab",
+      "operator": "TSMC",
+      "ticker": {
+        "symbol": "TSM",
+        "exchange": "NYSE (ADR; primary listing TWSE 2330)"
+      },
+      "location": {
+        "lat": 23.1,
+        "lon": 120.27,
+        "country": "TW",
+        "region": "Southern Taiwan Science Park, Tainan",
+        "precision": "region"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "status": "operational",
+      "constraints": [],
+      "tags": [
+        "leading-edge",
+        "n5",
+        "n3",
+        "gigafab"
+      ],
+      "sources": [
+        {
+          "url": "https://www.tsmc.com/tsmcdotcom/PRListingNewsArchivesAction.do?action=detail&newsid=THGOHITHTH&language=E",
+          "title": "TSMC Breaks Ground on Fab 18 in Southern Taiwan Science Park",
+          "date": "2018-01",
+          "supports": "location, purpose (5nm fab in STSP)"
+        },
+        {
+          "url": "https://pr.tsmc.com/english/news/2986",
+          "title": "TSMC Holds 3nm Volume Production and Capacity Expansion Ceremony",
+          "date": "2022-12-29",
+          "quote": "TSMC today held a '3nm Volume Production and Capacity Expansion Ceremony' at its Fab 18 new construction site in the Southern Taiwan Science Park.",
+          "supports": "status, N3 production at Fab 18"
+        }
+      ],
+      "body": "# TSMC Fab 18 (GIGAFAB, N5/N3)\n\nTSMC's Fab 18 in the Southern Taiwan Science Park (Tainan) is the company's\nN5-family and N3 production site — the origin of essentially every\nleading-edge AI accelerator die, including Nvidia's Hopper generation\n(TSMC \"4N\", an N5-family process customized for Nvidia).\n\nCoordinates are the STSP area centroid, precision `region` — the fab's\nexact parcel can be added later with a mapped source if site precision\nmatters for the visual.\n\n**Reviewer notes:** (1) Capacity is deliberately `null`: public figures for\nFab 18 conflate construction phases and process nodes; a defensible wpm\nnumber with an `as_of` needs dedicated M2 research. (2) Verify the quoted\nPR sentence against pr.tsmc.com/english/news/2986 — phrasing reconstructed\nfrom the press release coverage."
+    },
+    {
+      "id": "azure-west-des-moines",
+      "name": "Microsoft Azure — West Des Moines campus",
+      "layer": "infrastructure",
+      "type": "data_center",
+      "operator": "Microsoft (Azure)",
+      "ticker": {
+        "symbol": "MSFT",
+        "exchange": "NASDAQ"
+      },
+      "location": {
+        "lat": 41.577,
+        "lon": -93.711,
+        "country": "US",
+        "region": "West Des Moines, Iowa",
+        "precision": "city"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "status": "operational",
+      "constraints": [],
+      "tags": [
+        "azure",
+        "openai-training",
+        "gpt-4"
+      ],
+      "sources": [
+        {
+          "url": "https://thehill.com/homenews/ap/ap-technology/ap-artificial-intelligence-technology-behind-chatgpt-was-built-in-iowa-with-a-lot-of-water/",
+          "title": "AP: Artificial intelligence technology behind ChatGPT was built in Iowa — with a lot of water (syndicated)",
+          "date": "2023-09",
+          "quote": "Microsoft's president, Brad Smith, disclosed that it had built its 'advanced AI supercomputing data center' in Iowa, exclusively to enable OpenAI to train what has become its fourth-generation model, GPT-4.",
+          "supports": "location, role in GPT-4 training"
+        }
+      ],
+      "body": "# Microsoft Azure — West Des Moines campus\n\nMicrosoft's data center cluster in West Des Moines, Iowa is — per Microsoft\npresident Brad Smith via AP reporting — the \"advanced AI supercomputing\ndata center\" built exclusively to enable OpenAI to train GPT-4. It is the\nconcrete geographic answer to \"where was GPT-4 actually trained,\" which is\nwhy it anchors the infrastructure layer of the v1 slice.\n\nThe AP reporting also documents the resource cost: ~11.5 million gallons of\nwater drawn in July 2022 (the month before GPT-4 finished training), about\n6% of the district's usage — a preview of the water/power constraint\nentities coming in later iterations.\n\nCoordinates are the West Des Moines city centroid, precision `city`; the\ncampus consists of multiple sites.\n\n**Reviewer notes:** (1) The source is AP syndicated via The Hill — swap in\nthe canonical apnews.com URL if preferred. (2) MW capacity is `null`;\nMicrosoft does not publish campus power figures — note rather than guess."
+    },
+    {
+      "id": "openai-hq",
+      "name": "OpenAI (San Francisco)",
+      "layer": "models",
+      "type": "lab",
+      "operator": "OpenAI",
+      "location": {
+        "lat": 37.7749,
+        "lon": -122.4194,
+        "country": "US",
+        "region": "San Francisco, California (Mission Bay)",
+        "precision": "city"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "status": "operational",
+      "constraints": [],
+      "tags": [
+        "frontier-lab",
+        "gpt"
+      ],
+      "sources": [
+        {
+          "url": "https://therealdeal.com/san-francisco/2026/03/16/openai-inks-another-mission-bay-lease/",
+          "title": "OpenAI surges past 1M sf of offices in SF with latest Mission Bay lease",
+          "date": "2026-03-16",
+          "supports": "location (Mission Bay, San Francisco campus)"
+        }
+      ],
+      "body": "# OpenAI (San Francisco)\n\nOpenAI is the frontier lab in the v1 slice: it consumes Azure compute\n(training run in the West Des Moines campus for GPT-4) and produces the\nmodel artifacts behind ChatGPT and the API. Its physical footprint is a\nMission Bay, San Francisco campus exceeding 1M sq ft across multiple\nbuildings (1455/1515 Third Street, 550 Terry Francois Blvd, 1800 Owens St).\n\nCoordinates are the San Francisco city centroid, precision `city` — the\nmulti-building campus makes a single site coordinate misleading anyway.\n\n**Reviewer notes:** In M2, the *training cluster* should become its own\nnode (sited at the Azure campus) and the *model artifact* (GPT-4) a third,\nper the data model. This single lab node is the walking-skeleton stand-in."
+    }
+  ],
+  "edges": [
+    {
+      "id": "asml-to-tsmc-fab-18",
+      "from": "asml-veldhoven",
+      "to": "tsmc-fab-18",
+      "flow_type": "equipment",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "high",
+      "substitutability": "low",
+      "constraints": [],
+      "notes": "EUV lithography systems. N5/N3 production at Fab 18 is impossible without ASML EUV tools, and there is no second source — the canonical low-substitutability link in the entire supply chain. Volume is null: ASML reports EUV shipments company-wide, not per customer site.\n",
+      "sources": [
+        {
+          "url": "https://www.digitimes.com/news/a20241112PD204/euv-tsmc-adoption-2023-technology.html",
+          "title": "TSMC now reportedly operates over half of global EUVs, weighs high-NA adoption",
+          "date": "2024-11",
+          "supports": "relationship (TSMC operates the majority of installed ASML EUV systems)"
+        }
+      ],
+      "body": "# asml-veldhoven → tsmc-fab-18\n\nTSMC is ASML's largest EUV customer, reportedly operating over half of all\ninstalled EUV systems globally as of 2023. Fab 18's N5/N3 output — the\nwafers under every Nvidia AI accelerator — depends on these tools.\n\n**Reviewer notes:** A per-fab tool count is not public; if M2 research\nfinds a defensible installed-base figure (analyst estimates with\nmethodology), it can become a volume with `as_of`. ASML annual report\ntotal EUV shipment counts are a good supplementary source."
+    },
+    {
+      "id": "azure-wdm-to-openai",
+      "from": "azure-west-des-moines",
+      "to": "openai-hq",
+      "flow_type": "compute",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2022-Q3"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "high",
+      "substitutability": "low",
+      "constraints": [],
+      "notes": "Training compute. The West Des Moines campus hosted the supercomputer Microsoft built exclusively for OpenAI, on which GPT-4 was trained (training completed August 2022 per AP reporting). Substitutability low: Azure was OpenAI's exclusive cloud provider during this period.\n",
+      "sources": [
+        {
+          "url": "https://thehill.com/homenews/ap/ap-technology/ap-artificial-intelligence-technology-behind-chatgpt-was-built-in-iowa-with-a-lot-of-water/",
+          "title": "AP: Artificial intelligence technology behind ChatGPT was built in Iowa — with a lot of water (syndicated)",
+          "date": "2023-09",
+          "quote": "Microsoft's president, Brad Smith, disclosed that it had built its 'advanced AI supercomputing data center' in Iowa, exclusively to enable OpenAI to train what has become its fourth-generation model, GPT-4.",
+          "supports": "relationship (GPT-4 trained on the Iowa campus)"
+        },
+        {
+          "url": "https://news.microsoft.com/source/features/ai/openai-azure-supercomputer/",
+          "title": "Microsoft announces new supercomputer, lays out vision for future AI work",
+          "date": "2020-05-19",
+          "supports": "exclusive Azure supercomputer built for OpenAI"
+        }
+      ],
+      "body": "# azure-west-des-moines → openai-hq\n\nThe compute edge that produced GPT-4. In M2 this gets refined: a\ntraining-cluster node sited at the Azure campus, with the model artifact\nas its output — this direct lab edge is the walking-skeleton version."
+    },
+    {
+      "id": "nvidia-to-azure-wdm",
+      "from": "nvidia-santa-clara",
+      "to": "azure-west-des-moines",
+      "flow_type": "chips",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2022-Q4"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "high",
+      "substitutability": "low",
+      "constraints": [],
+      "notes": "GPU supply to Azure AI infrastructure. Microsoft's announced Azure AI buildout adds \"tens of thousands\" of Nvidia A100/H100 GPUs; the 2020 OpenAI supercomputer disclosed 10,000 GPUs. Per-campus allocation is not public, so volume is null on this specific edge. Substitutability low: in the GPT-4 training era there was no practical alternative to Nvidia accelerators at this scale (CUDA ecosystem lock-in).\n",
+      "sources": [
+        {
+          "url": "https://nvidianews.nvidia.com/news/nvidia-microsoft-accelerate-cloud-enterprise-ai",
+          "title": "NVIDIA Teams With Microsoft to Build Massive Cloud AI Computer",
+          "date": "2022-11-16",
+          "quote": "Azure will incorporate tens of thousands of NVIDIA A100 and H100 GPUs.",
+          "supports": "relationship, scale of GPU flow to Azure"
+        },
+        {
+          "url": "https://news.microsoft.com/source/features/ai/openai-azure-supercomputer/",
+          "title": "Microsoft announces new supercomputer, lays out vision for future AI work",
+          "date": "2020-05-19",
+          "quote": "The supercomputer developed for OpenAI is a single system with more than 285,000 CPU cores, 10,000 GPUs and 400 gigabits per second of network connectivity for each GPU server.",
+          "supports": "GPU scale of the OpenAI-dedicated Azure system"
+        }
+      ],
+      "body": "# nvidia-santa-clara → azure-west-des-moines\n\nThe allocation edge: Nvidia GPUs flowing into the Azure campus that trained\nGPT-4. This is where chip supply meets infrastructure, and during 2023 it\nwas the most contested link in the industry (GPU allocation queues).\n\n**Reviewer notes:** Both quotes reconstructed from announcement coverage —\nverify wording against the linked pages. The Azure-wide \"tens of thousands\"\nfigure is not campus-specific; the notes field says so explicitly."
+    },
+    {
+      "id": "openai-to-chatgpt",
+      "from": "openai-hq",
+      "to": "chatgpt",
+      "flow_type": "model_weights",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2022-Q4"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "low",
+      "substitutability": "low",
+      "constraints": [],
+      "notes": "Model deployment: OpenAI's trained models power ChatGPT. Intra- organization edge — constraint level low (no external dependency), but substitutability low by definition (the product is the model).\n",
+      "sources": [
+        {
+          "url": "https://openai.com/index/chatgpt/",
+          "title": "Introducing ChatGPT",
+          "date": "2022-11-30",
+          "quote": "We've trained a model called ChatGPT which interacts in a conversational way.",
+          "supports": "relationship (OpenAI model behind the ChatGPT product)"
+        }
+      ],
+      "body": "# openai-hq → chatgpt\n\nThe final edge of the slice: model becomes product. This is where the pull\ndynamic originates — ChatGPT's demand shock propagates backward through\nevery edge upstream of this one."
+    },
+    {
+      "id": "tsmc-fab-18-to-nvidia",
+      "from": "tsmc-fab-18",
+      "to": "nvidia-santa-clara",
+      "flow_type": "wafers",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "medium",
+      "substitutability": "low",
+      "constraints": [],
+      "notes": "Leading-edge logic wafers. Nvidia's Hopper-generation GPUs (H100) are fabricated on TSMC \"4N,\" an N5-family process customized for Nvidia and produced at TSMC's 5nm site, Fab 18. No second source exists at this node class. Constraint level set medium rather than high because the binding bottleneck downstream has been advanced packaging (CoWoS), not wafer starts — the cowos-capacity constraint entity (M2) will carry that.\n",
+      "sources": [
+        {
+          "url": "https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/",
+          "title": "NVIDIA Hopper Architecture In-Depth",
+          "date": "2022-03",
+          "quote": "The full GH100 GPU is fabricated using the TSMC 4N process customized for NVIDIA.",
+          "supports": "relationship (H100 fabricated on TSMC 4N)"
+        },
+        {
+          "url": "https://pr.tsmc.com/english/news/2986",
+          "title": "TSMC Holds 3nm Volume Production and Capacity Expansion Ceremony",
+          "date": "2022-12-29",
+          "supports": "Fab 18 as TSMC's 5nm/3nm production site"
+        }
+      ],
+      "body": "# tsmc-fab-18 → nvidia-santa-clara\n\nThe wafer supply line under the entire AI buildout. \"Nvidia\" here is the\ndesign/allocation node — physically, wafers flow from Fab 18 into TSMC's\npackaging operations, but economically the allocation belongs to Nvidia.\nWhen the CoWoS packaging node is added in M2, this edge will be re-pointed\nthrough it (fab → packaging → Nvidia) per the data model.\n\n**Reviewer notes:** (1) Verify the 4N quote wording against the Nvidia\ndeveloper blog. (2) Wafer volume estimates exist from analysts but rarely\nwith public methodology — likely stays null in v1."
+    }
+  ],
+  "constraints": []
+}

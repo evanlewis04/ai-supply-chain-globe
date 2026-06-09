@@ -14,3 +14,15 @@ jobs:
           python-version: "3.12"
       - run: pip install -r scripts/requirements.txt
       - run: python scripts/build.py --validate --include-pending
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+        working-directory: frontend
+      - run: npm run build
+        working-directory: frontend

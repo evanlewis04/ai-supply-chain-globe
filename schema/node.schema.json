@@ -27,6 +27,16 @@
       "description": "Must belong to the node's layer; the layer/type pairing is cross-checked by build.py"
     },
     "operator": { "type": "string" },
+    "ticker": {
+      "type": "object",
+      "required": ["symbol"],
+      "additionalProperties": false,
+      "description": "Public listing of the node's operator, if any. Drives the stock-performance overlay; price data itself is fetched mechanically (scripts/fetch_prices.py), never stored in the vault.",
+      "properties": {
+        "symbol": { "type": "string", "pattern": "^[A-Z0-9.\\-]{1,10}$" },
+        "exchange": { "type": "string", "description": "e.g. NASDAQ, NYSE; note if the symbol is an ADR" }
+      }
+    },
     "location": {
       "type": "object",
       "required": ["lat", "lon", "country"],

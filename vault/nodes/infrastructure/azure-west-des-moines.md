@@ -4,6 +4,9 @@ name: Microsoft Azure — West Des Moines campus
 layer: infrastructure
 type: data_center
 operator: Microsoft (Azure)
+ticker:
+  symbol: MSFT
+  exchange: NASDAQ
 location:
   lat: 41.577
   lon: -93.711

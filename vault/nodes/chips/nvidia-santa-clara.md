@@ -4,6 +4,9 @@ name: Nvidia HQ (Santa Clara)
 layer: chips
 type: designer
 operator: NVIDIA Corporation
+ticker:
+  symbol: NVDA
+  exchange: NASDAQ
 location:
   lat: 37.3705
   lon: -121.967

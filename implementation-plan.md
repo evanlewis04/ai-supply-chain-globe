@@ -13,6 +13,14 @@
 
 ---
 
+## Amendments (2026-06-09, post-approval)
+
+**Working model change.** Claude owns all technical decisions (stack, architecture, data plumbing, when to merge well-verified factual entries into the vault) and proceeds without waiting for sign-off. The project owner steers features and scope, does the domain research he wants to go deep on, and can veto or edit anything after the fact. `_pending/` remains the channel for entries with contested or analytically uncertain values (capacities, volumes, constraint judgments); straightforward, well-sourced factual entries may be merged directly. Every vault file keeps its "Reviewer notes" so the audit trail survives.
+
+**Finance overlay (new v1 feature).** Public-company nodes carry an optional `ticker` field (`symbol` + `exchange`). `scripts/fetch_prices.py` pulls 2 years of weekly adjusted closes per ticker (Yahoo Finance via yfinance) into `frontend/public/prices.json`, which is committed so the repo renders offline. The UI shows ticker + 2-year performance on node hover and a sparkline with last close and provenance in the side panel. Market data is display-layer data, not vault content: it is fetched mechanically, never hand-edited, and is exempt from the per-claim sourcing standard (its provenance lives in `prices.json` meta). Private companies (e.g. OpenAI) simply have no ticker. Post-v1 candidates: align the price window with the time slider, event markers on price series.
+
+---
+
 ## 1. Exact v1 Scope
 
 ### The slice
@@ -60,6 +68,7 @@ This is a *candidate* list. During Milestone 2 each node gets proposed with its 
 5. **Edge encoding** — thickness = volume, color = flow type, red emphasis = high-constraint + low-substitutability.
 6. **Vault → graph build pipeline** — `build.py` parses the Obsidian vault, validates against the schema (broken refs, missing sources, missing coordinates fail the build), emits `graph.json`.
 7. **README as the deliverable surface** — architecture explanation, screenshots/GIFs of the constraint traversal, data methodology and sourcing standards section.
+8. **Finance overlay** — ticker + 2-year stock performance at each public-company node (hover badge + side-panel sparkline), fed by `scripts/fetch_prices.py`. See Amendments.
 
 ---
 

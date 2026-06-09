@@ -4,6 +4,9 @@ name: TSMC Fab 18 (GIGAFAB, N5/N3)
 layer: chips
 type: fab
 operator: TSMC
+ticker:
+  symbol: TSM
+  exchange: NYSE (ADR; primary listing TWSE 2330)
 location:
   lat: 23.10
   lon: 120.27

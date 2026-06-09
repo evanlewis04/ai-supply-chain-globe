@@ -22,6 +22,11 @@ every edge is typed and weighted; every claim traces to a public source.
 Constraints — CoWoS capacity, export controls, grid limits — are first-class
 entities: select one and everything downstream of it lights up.
 
+Public-company nodes also carry their **stock ticker and 2-year price
+performance** (hover a node, or open its panel for the sparkline) — so the
+supply chain's chokepoints and the market's reaction to them sit on the
+same map.
+
 ## Architecture
 
 ```
@@ -48,6 +53,7 @@ interactive globe
 ```sh
 pip install -r scripts/requirements.txt
 python scripts/build.py            # vault -> frontend/public/graph.json
+python scripts/fetch_prices.py     # optional: refresh stock data (committed copy works offline)
 cd frontend && npm install && npm run dev
 ```
 

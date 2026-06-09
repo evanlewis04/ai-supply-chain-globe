@@ -4,6 +4,9 @@ name: ASML Veldhoven (HQ & EUV production)
 layer: chips
 type: equipment_maker
 operator: ASML Holding N.V.
+ticker:
+  symbol: ASML
+  exchange: NASDAQ (ADR; primary listing Euronext Amsterdam)
 location:
   lat: 51.403
   lon: 5.457
