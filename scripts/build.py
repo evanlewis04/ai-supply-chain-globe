@@ -87,7 +87,11 @@ def normalize(value):
     if isinstance(value, date):
         return value.isoformat()
     if isinstance(value, dict):
-        return {k: normalize(v) for k, v in value.items()}
+        # Bare years (`as_of: 2024`) parse as ints; schemas expect strings
+        return {
+            k: str(v) if k == "as_of" and isinstance(v, int) else normalize(v)
+            for k, v in value.items()
+        }
     if isinstance(value, list):
         return [normalize(v) for v in value]
     return value

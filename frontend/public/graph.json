@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generated_at": "2026-06-09T18:25:54+00:00",
+    "generated_at": "2026-06-09T18:39:20+00:00",
     "counts": {
-      "nodes": 6,
-      "edges": 5,
-      "constraints": 0
+      "nodes": 11,
+      "edges": 10,
+      "constraints": 1
     },
     "schema_version": "1.0.0"
   },
@@ -90,6 +90,51 @@
       "body": "# ASML Veldhoven (HQ & EUV production)\n\nASML's Veldhoven campus (De Run 6501) is corporate HQ and the final-assembly\nsite for its lithography systems, including EUV — the machines without which\nno leading-edge (N5/N3-class) logic can be manufactured. ASML is widely\ndocumented as the only company supplying production EUV lithography systems,\nwhich makes this single campus one of the most concentrated points of\nfailure in the entire AI supply chain.\n\nCoordinates geocoded from the published street address (De Run 6501,\nVeldhoven); precision `site`.\n\n**Reviewer notes:** (1) The \"sole supplier of EUV\" claim is universally\nreported but the sources attached here support it only indirectly — consider\nadding ASML's own 20-F annual report language before this enters canon.\n(2) EUV annual shipment counts are published in ASML annual reports and\nwould make a good `capacity` entry (unit: euv_systems_per_year) in M2."
     },
     {
+      "id": "ibiden-ono",
+      "name": "Ibiden Ono Plant (ABF substrates)",
+      "layer": "chips",
+      "type": "substrate_maker",
+      "operator": "Ibiden",
+      "ticker": {
+        "symbol": "4062.T",
+        "exchange": "TSE"
+      },
+      "location": {
+        "lat": 35.47,
+        "lon": 136.63,
+        "country": "JP",
+        "region": "Ono Town, Ibi District, Gifu",
+        "precision": "city"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "status": "ramping",
+      "constraints": [],
+      "tags": [
+        "abf-substrate",
+        "ic-substrate",
+        "packaging-materials"
+      ],
+      "sources": [
+        {
+          "url": "https://evertiq.com/design/2025-10-15-ibiden-expands-ic-substrate-production-with-ono-plant",
+          "title": "Ibiden expands IC substrate production with Ono plant",
+          "date": "2025-10-15",
+          "supports": "location, status (opening ceremony Oct 2025, ramp into 2026)"
+        },
+        {
+          "url": "https://www.taipeitimes.com/News/biz/archives/2024/12/31/2003829378",
+          "title": "Ibiden weighs faster expansion for AI demand",
+          "date": "2024-12-31",
+          "supports": "role as leading substrate supplier to Nvidia"
+        }
+      ],
+      "body": "# Ibiden Ono Plant (ABF substrates)\n\nIbiden is the leading supplier of the ABF package substrates under Nvidia's\nAI accelerators — the layer of the stack almost nobody outside the industry\nhas heard of, and one of the candidate \"next bottlenecks\" as CoWoS capacity\ncatches up. The new Ono plant (Gifu) opened October 2025 and is ramping:\nreported ~25% utilization in late 2025, targeting ~50% by March 2026.\n\nSubstrates flow from here into the advanced packaging step, where the\nCoWoS interposer-plus-die assembly is mounted onto the substrate.\n\n**Reviewer notes:** (1) Capacity null — Ibiden discloses percentage ramp\ntargets, not absolute substrate volumes. (2) An `abf-substrate-capacity`\nconstraint entity is deferred post-v1. (3) Ticker is the TSE listing via\nYahoo symbol 4062.T."
+    },
+    {
       "id": "nvidia-santa-clara",
       "name": "Nvidia HQ (Santa Clara)",
       "layer": "chips",
@@ -112,7 +157,9 @@
         "as_of": "2026-Q2"
       },
       "status": "operational",
-      "constraints": [],
+      "constraints": [
+        "cowos-capacity"
+      ],
       "tags": [
         "fabless",
         "gpu",
@@ -127,6 +174,96 @@
         }
       ],
       "body": "# Nvidia HQ (Santa Clara)\n\nNvidia is the fabless designer at the center of the AI accelerator market.\nThe Santa Clara HQ (2788 San Tomas Expressway) is where the architecture,\nallocation, and customer relationships live; manufacturing is entirely\noutsourced — wafers from TSMC, HBM from SK Hynix/Micron/Samsung, advanced\npackaging via TSMC CoWoS. In graph terms this node is where wafer supply\nturns into allocated, packaged product flowing to cloud providers.\n\nCoordinates geocoded from the published HQ address; precision `site`.\n\n**Reviewer notes:** The 10-K source link is the financial-report artifact\nfrom EDGAR; consider swapping for the main 10-K HTML filing URL for\nreadability when this enters canon."
+    },
+    {
+      "id": "sk-hynix-icheon",
+      "name": "SK hynix Icheon (HBM)",
+      "layer": "chips",
+      "type": "memory_fab",
+      "operator": "SK hynix",
+      "ticker": {
+        "symbol": "000660.KS",
+        "exchange": "KRX"
+      },
+      "location": {
+        "lat": 37.27,
+        "lon": 127.44,
+        "country": "KR",
+        "region": "Icheon, Gyeonggi-do",
+        "precision": "city"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "status": "operational",
+      "constraints": [],
+      "tags": [
+        "hbm",
+        "hbm3",
+        "hbm3e",
+        "dram"
+      ],
+      "sources": [
+        {
+          "url": "https://news.skhynix.com/sk-hynix-to-supply-industrys-first-hbm3-dram-to-nvidia/",
+          "title": "SK hynix to Supply Industry's First HBM3 DRAM to NVIDIA",
+          "date": "2022-06",
+          "supports": "HBM3 supply relationship with Nvidia"
+        },
+        {
+          "url": "https://www.trendforce.com/presscenter/news/20240313-12075.html",
+          "title": "HBM3 Initially Exclusively Supplied by SK Hynix, Samsung Rallies Fast After AMD Validation",
+          "date": "2024-03-13",
+          "supports": "initial exclusivity of HBM3 supply"
+        }
+      ],
+      "body": "# SK hynix Icheon (HBM)\n\nSK hynix's Icheon campus (HQ plus DRAM fabs) anchors its HBM production.\nSK hynix was the first to mass-produce HBM3 and was initially its exclusive\nsupplier to Nvidia for the H100 generation — when CoWoS wasn't the binding\nconstraint, HBM was, and the two alternate as the chokepoint of the moment.\nThat alternation is exactly what this map is built to show.\n\nHBM stacks ship from here to TSMC's advanced packaging sites, where they\nare co-packaged with GPU dies on CoWoS interposers.\n\n**Reviewer notes:** (1) Per-site HBM capacity is not public — null. An\n`hbm-supply` constraint entity is deferred post-v1 per the plan. (2) HBM\nproduction also spans Cheongju; Icheon stands in for SK hynix HBM\noperations in v1. (3) Ticker is the KRX listing via Yahoo symbol 000660.KS."
+    },
+    {
+      "id": "tsmc-ap6-zhunan",
+      "name": "TSMC Advanced Backend Fab 6 (Zhunan)",
+      "layer": "chips",
+      "type": "packaging_facility",
+      "operator": "TSMC",
+      "ticker": {
+        "symbol": "TSM",
+        "exchange": "NYSE (ADR; primary listing TWSE 2330)"
+      },
+      "location": {
+        "lat": 24.69,
+        "lon": 120.88,
+        "country": "TW",
+        "region": "Zhunan Science Park, Miaoli",
+        "precision": "city"
+      },
+      "capacity": {
+        "value": 1000000,
+        "unit": "12in_wafer_equiv_per_year_3dfabric",
+        "as_of": "2023-Q2"
+      },
+      "status": "operational",
+      "constraints": [
+        "cowos-capacity"
+      ],
+      "tags": [
+        "advanced-packaging",
+        "cowos",
+        "soic",
+        "info",
+        "3dfabric"
+      ],
+      "sources": [
+        {
+          "url": "https://pr.tsmc.com/english/news/3033",
+          "title": "TSMC Announces the Opening of Advanced Backend Fab 6",
+          "date": "2023-06-08",
+          "quote": "Located in Zhunan Science Park, the fab has a base area of 14.3 hectares... will have the capacity to produce more than 1 million 12-inch wafer equivalent 3DFabric process technology per year.",
+          "supports": "location, capacity, status, packaging role"
+        }
+      ],
+      "body": "# TSMC Advanced Backend Fab 6 (Zhunan)\n\nTSMC's largest advanced backend fab — the first all-in-one automated\nadvanced packaging and testing site, flexibly allocating capacity across\n3DFabric technologies: CoWoS, SoIC, InFO, and advanced testing. This is\nwhere leading-edge AI accelerator dies and HBM stacks become packaged\nmodules — the physical site of the industry's binding bottleneck since 2023.\n\nStated capacity (>1M 12-inch wafer-equivalents/year) covers **all 3DFabric\ntechnologies**, not CoWoS alone — the CoWoS-specific company-wide capacity\nlives on the [[cowos-capacity]] constraint entity, which is the analytically\nmeaningful number.\n\nThis node represents TSMC's CoWoS operations in v1; in reality CoWoS spans\nmultiple sites (Longtan AP3, Taichung AP5, the former Innolux AP8, plus\nnew Chiayi fabs). Splitting them into separate nodes is a post-v1 data task.\n\n**Reviewer notes:** Coordinates are the Zhunan Science Park vicinity\n(precision `city`). Verify the capacity quote wording against the TSMC PR."
     },
     {
       "id": "tsmc-fab-18",
@@ -174,6 +311,83 @@
         }
       ],
       "body": "# TSMC Fab 18 (GIGAFAB, N5/N3)\n\nTSMC's Fab 18 in the Southern Taiwan Science Park (Tainan) is the company's\nN5-family and N3 production site — the origin of essentially every\nleading-edge AI accelerator die, including Nvidia's Hopper generation\n(TSMC \"4N\", an N5-family process customized for Nvidia).\n\nCoordinates are the STSP area centroid, precision `region` — the fab's\nexact parcel can be added later with a mapped source if site precision\nmatters for the visual.\n\n**Reviewer notes:** (1) Capacity is deliberately `null`: public figures for\nFab 18 conflate construction phases and process nodes; a defensible wpm\nnumber with an `as_of` needs dedicated M2 research. (2) Verify the quoted\nPR sentence against pr.tsmc.com/english/news/2986 — phrasing reconstructed\nfrom the press release coverage."
+    },
+    {
+      "id": "midamerican-iowa",
+      "name": "MidAmerican Energy (Iowa service territory)",
+      "layer": "energy",
+      "type": "grid_region",
+      "operator": "MidAmerican Energy (Berkshire Hathaway Energy)",
+      "location": {
+        "lat": 41.59,
+        "lon": -93.62,
+        "country": "US",
+        "region": "Des Moines, Iowa",
+        "precision": "region"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "status": "operational",
+      "constraints": [],
+      "tags": [
+        "utility",
+        "wind",
+        "data-center-load"
+      ],
+      "sources": [
+        {
+          "url": "https://insideclimatenews.org/news/28072025/big-beautiful-bill-iowa-data-centers/",
+          "title": "Clean Energy Brought Data Centers to Iowa (Inside Climate News)",
+          "date": "2025-07-28",
+          "supports": "relationship between Iowa wind energy and the data center cluster, MidAmerican as the serving utility"
+        }
+      ],
+      "body": "# MidAmerican Energy (Iowa service territory)\n\nThe utility serving Microsoft's West Des Moines data center cluster.\nIowa's cheap, abundant wind generation (roughly a third of state\ngeneration, with MidAmerican the dominant builder) is a major reason the\nGPT-4 training campus exists where it does — the clearest example in the\nv1 slice of energy availability determining AI geography.\n\n**Reviewer notes:** (1) Node is the service territory (precision\n`region`, Des Moines-anchored). (2) MidAmerican is owned by Berkshire\nHathaway Energy — no clean public-market ticker for the utility itself, so\nnone is attached. (3) Wind share and contracted-carbon-free figures vary\nby year and source; kept in prose, not as a capacity claim."
+    },
+    {
+      "id": "taipower-grid",
+      "name": "Taiwan power grid (Taipower)",
+      "layer": "energy",
+      "type": "grid_region",
+      "operator": "Taiwan Power Company (state-owned)",
+      "location": {
+        "lat": 23.7,
+        "lon": 121.0,
+        "country": "TW",
+        "region": "Taiwan (island grid)",
+        "precision": "region"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "status": "operational",
+      "constraints": [],
+      "tags": [
+        "grid",
+        "island-grid",
+        "semiconductor-load"
+      ],
+      "sources": [
+        {
+          "url": "https://www.taipeitimes.com/News/taiwan/archives/2025/04/11/2003834993",
+          "title": "TSMC should lead green power transition: report",
+          "date": "2025-04-11",
+          "quote": "TSMC's power consumption made up 8.4 percent of domestic power consumption in 2023 and is projected to climb to 23.7 percent in 2030.",
+          "supports": "TSMC share of Taiwan electricity consumption"
+        },
+        {
+          "url": "https://english.cw.com.tw/article/article.action?id=3766",
+          "title": "TSMC to Consume Three Nuclear Reactors' Worth of Power (CommonWealth Magazine)",
+          "date": "2024-08-28",
+          "supports": "scale and trajectory of TSMC's power demand on the Taiwan grid"
+        }
+      ],
+      "body": "# Taiwan power grid (Taipower)\n\nTaiwan is an island grid with no interconnections — every leading-edge\nwafer and CoWoS package depends on Taipower keeping the lights on. TSMC\nalone drew 8.4% of Taiwan's total power consumption in 2023 (S&P Global\nRatings, via Taipei Times), projected to approach a quarter of the island's\nconsumption by 2030 as fab and packaging expansion compounds.\n\nThis makes Taiwan's grid one of the most leveraged single points in the\nglobal AI economy: a `power-taiwan` constraint entity (post-v1) will carry\nreserve-margin and energy-mix metrics.\n\n**Reviewer notes:** Node is the island grid as a region (centroid\ncoordinates, precision `region`). Per-plant generation nodes are post-v1."
     },
     {
       "id": "azure-west-des-moines",
@@ -309,6 +523,62 @@
       "body": "# azure-west-des-moines → openai-hq\n\nThe compute edge that produced GPT-4. In M2 this gets refined: a\ntraining-cluster node sited at the Azure campus, with the model artifact\nas its output — this direct lab edge is the walking-skeleton version."
     },
     {
+      "id": "ibiden-to-tsmc-ap6",
+      "from": "ibiden-ono",
+      "to": "tsmc-ap6-zhunan",
+      "flow_type": "substrates",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "medium",
+      "substitutability": "medium",
+      "constraints": [],
+      "notes": "ABF package substrates onto which the CoWoS interposer assembly is mounted. Ibiden is the leading supplier for Nvidia's AI accelerators; Shinko and others provide partial second-sourcing, hence medium substitutability. Watched as a candidate next bottleneck while Ibiden's Ono plant ramps through 2026.\n",
+      "sources": [
+        {
+          "url": "https://www.taipeitimes.com/News/biz/archives/2024/12/31/2003829378",
+          "title": "Ibiden weighs faster expansion for AI demand",
+          "date": "2024-12-31",
+          "supports": "relationship (leading substrate supplier to Nvidia), expansion under AI demand"
+        },
+        {
+          "url": "https://evertiq.com/design/2025-10-15-ibiden-expands-ic-substrate-production-with-ono-plant",
+          "title": "Ibiden expands IC substrate production with Ono plant",
+          "date": "2025-10-15",
+          "supports": "Ono plant ramp supplying AI server substrates"
+        }
+      ],
+      "body": "# ibiden-ono → tsmc-ap6-zhunan\n\nThe least famous feed into the packaging step — and historically the kind\nof quiet component (ABF film, substrates, ceramics) where shortages\nsurprise the market."
+    },
+    {
+      "id": "midamerican-to-azure-wdm",
+      "from": "midamerican-iowa",
+      "to": "azure-west-des-moines",
+      "flow_type": "power",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "medium",
+      "substitutability": "low",
+      "constraints": [],
+      "notes": "Utility power to Microsoft's West Des Moines campus. Iowa's wind build-out (MidAmerican the dominant builder) is a primary reason hyperscale capacity clustered there — cheap, contracted carbon-free energy. Campus-level MW is not published; null over guess.\n",
+      "sources": [
+        {
+          "url": "https://insideclimatenews.org/news/28072025/big-beautiful-bill-iowa-data-centers/",
+          "title": "Clean Energy Brought Data Centers to Iowa (Inside Climate News)",
+          "date": "2025-07-28",
+          "supports": "relationship (Iowa wind energy underpinning the data center cluster)"
+        }
+      ],
+      "body": "# midamerican-iowa → azure-west-des-moines\n\nEnergy availability deciding AI geography: GPT-4's training site sits\nwhere the wind blows and the power is cheap."
+    },
+    {
       "id": "nvidia-to-azure-wdm",
       "from": "nvidia-santa-clara",
       "to": "azure-west-des-moines",
@@ -368,9 +638,105 @@
       "body": "# openai-hq → chatgpt\n\nThe final edge of the slice: model becomes product. This is where the pull\ndynamic originates — ChatGPT's demand shock propagates backward through\nevery edge upstream of this one."
     },
     {
-      "id": "tsmc-fab-18-to-nvidia",
-      "from": "tsmc-fab-18",
+      "id": "sk-hynix-to-tsmc-ap6",
+      "from": "sk-hynix-icheon",
+      "to": "tsmc-ap6-zhunan",
+      "flow_type": "memory",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "high",
+      "substitutability": "low",
+      "constraints": [],
+      "notes": "HBM stacks shipped for co-packaging with GPU dies on CoWoS interposers. SK hynix was initially the exclusive HBM3 supplier for Nvidia's H100 generation; Samsung and Micron qualified later. Substitutability is low in the relevant period and HBM remains allocation-constrained — a candidate hbm-supply constraint entity post-v1.\n",
+      "sources": [
+        {
+          "url": "https://news.skhynix.com/sk-hynix-to-supply-industrys-first-hbm3-dram-to-nvidia/",
+          "title": "SK hynix to Supply Industry's First HBM3 DRAM to NVIDIA",
+          "date": "2022-06",
+          "supports": "relationship (HBM3 supply for H100)"
+        },
+        {
+          "url": "https://www.trendforce.com/presscenter/news/20240313-12075.html",
+          "title": "HBM3 Initially Exclusively Supplied by SK Hynix, Samsung Rallies Fast After AMD Validation",
+          "date": "2024-03-13",
+          "supports": "initial exclusivity, later second-sourcing"
+        }
+      ],
+      "body": "# sk-hynix-icheon → tsmc-ap6-zhunan\n\nThe memory feed into the packaging bottleneck. HBM and CoWoS alternate as\nthe binding constraint — exactly the dynamic the constraint-entity design\nexists to capture."
+    },
+    {
+      "id": "taipower-to-tsmc-fab-18",
+      "from": "taipower-grid",
+      "to": "tsmc-fab-18",
+      "flow_type": "power",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2023"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "high",
+      "substitutability": "low",
+      "constraints": [],
+      "notes": "Grid power to TSMC's fabs. TSMC company-wide drew 8.4% of Taiwan's electricity in 2023 (S&P Global Ratings), projected toward ~24% by 2030. Taiwan is an isolated island grid — no imports, no interconnection — making this a structurally low-substitutability dependency. Fab-18- specific draw is not disclosed; the company-level figure is recorded here as context, not as this edge's volume.\n",
+      "sources": [
+        {
+          "url": "https://www.taipeitimes.com/News/taiwan/archives/2025/04/11/2003834993",
+          "title": "TSMC should lead green power transition: report",
+          "date": "2025-04-11",
+          "quote": "TSMC's power consumption made up 8.4 percent of domestic power consumption in 2023 and is projected to climb to 23.7 percent in 2030.",
+          "supports": "relationship, scale of TSMC grid dependency"
+        },
+        {
+          "url": "https://english.cw.com.tw/article/article.action?id=3766",
+          "title": "TSMC to Consume Three Nuclear Reactors' Worth of Power (CommonWealth)",
+          "date": "2024-08-28",
+          "supports": "trajectory of TSMC power demand"
+        }
+      ],
+      "body": "# taipower-grid → tsmc-fab-18\n\nThe energy layer's entry into the slice: every wafer and every CoWoS\npackage is downstream of an island grid with no fallback."
+    },
+    {
+      "id": "tsmc-ap6-to-nvidia",
+      "from": "tsmc-ap6-zhunan",
       "to": "nvidia-santa-clara",
+      "flow_type": "packaged_modules",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-Q2"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "high",
+      "substitutability": "low",
+      "constraints": [
+        "cowos-capacity"
+      ],
+      "notes": "CoWoS-packaged AI accelerator modules (GPU die + HBM on interposer). THE bottleneck edge of the 2023-2025 AI buildout: Nvidia is the dominant consumer of CoWoS capacity, demand has exceeded supply through consecutive annual capacity doublings, and no alternative packaging route exists at equivalent scale. Volume null: Nvidia-specific CoWoS allocation is analyst-estimated, not disclosed; the constraint entity carries the sourced total-capacity numbers.\n",
+      "sources": [
+        {
+          "url": "https://www.trendforce.com/news/2024/10/21/news-cowos-capacity-doubles-for-two-years-still-insufficient-positive-outlook-for-suppliers/",
+          "title": "TSMC's CoWoS Capacity Doubles for Two Years, Still Insufficient",
+          "date": "2024-10-21",
+          "supports": "relationship, demand exceeding capacity"
+        },
+        {
+          "url": "https://www.trendforce.com/news/2025/01/02/news-tsmc-set-to-expand-cowos-capacity-to-record-75000-wafers-in-2025-doubling-2024-output/",
+          "title": "TSMC Set to Expand CoWoS Capacity to Record 75,000 Wafers in 2025",
+          "date": "2025-01-02",
+          "supports": "Nvidia as leading CoWoS consumer"
+        }
+      ],
+      "body": "# tsmc-ap6-zhunan → nvidia-santa-clara\n\nThe chokepoint. High constraint, low substitutability, gated by\n[[cowos-capacity]] — this edge renders red on the globe, and selecting\nthe CoWoS constraint lights up everything downstream of it."
+    },
+    {
+      "id": "tsmc-fab-18-to-tsmc-ap6",
+      "from": "tsmc-fab-18",
+      "to": "tsmc-ap6-zhunan",
       "flow_type": "wafers",
       "volume": {
         "value": null,
@@ -378,27 +744,80 @@
         "as_of": "2026-Q2"
       },
       "lead_time_weeks": null,
-      "constraint_level": "medium",
+      "constraint_level": "low",
       "substitutability": "low",
       "constraints": [],
-      "notes": "Leading-edge logic wafers. Nvidia's Hopper-generation GPUs (H100) are fabricated on TSMC \"4N,\" an N5-family process customized for Nvidia and produced at TSMC's 5nm site, Fab 18. No second source exists at this node class. Constraint level set medium rather than high because the binding bottleneck downstream has been advanced packaging (CoWoS), not wafer starts — the cowos-capacity constraint entity (M2) will carry that.\n",
+      "notes": "Processed leading-edge wafers (Nvidia GH100-class dies on TSMC 4N, N5 family) moving from front-end fabrication into advanced packaging. Intra-TSMC logistics — the constraint sits at the packaging step, not this transfer.\n",
       "sources": [
         {
           "url": "https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/",
           "title": "NVIDIA Hopper Architecture In-Depth",
           "date": "2022-03",
-          "quote": "The full GH100 GPU is fabricated using the TSMC 4N process customized for NVIDIA.",
-          "supports": "relationship (H100 fabricated on TSMC 4N)"
+          "supports": "H100 dies fabricated on TSMC 4N (N5 family, produced at Fab 18)"
         },
         {
-          "url": "https://pr.tsmc.com/english/news/2986",
-          "title": "TSMC Holds 3nm Volume Production and Capacity Expansion Ceremony",
-          "date": "2022-12-29",
-          "supports": "Fab 18 as TSMC's 5nm/3nm production site"
+          "url": "https://pr.tsmc.com/english/news/3033",
+          "title": "TSMC Announces the Opening of Advanced Backend Fab 6",
+          "date": "2023-06-08",
+          "supports": "AP6 as the advanced packaging/testing destination for front-end output"
         }
       ],
-      "body": "# tsmc-fab-18 → nvidia-santa-clara\n\nThe wafer supply line under the entire AI buildout. \"Nvidia\" here is the\ndesign/allocation node — physically, wafers flow from Fab 18 into TSMC's\npackaging operations, but economically the allocation belongs to Nvidia.\nWhen the CoWoS packaging node is added in M2, this edge will be re-pointed\nthrough it (fab → packaging → Nvidia) per the data model.\n\n**Reviewer notes:** (1) Verify the 4N quote wording against the Nvidia\ndeveloper blog. (2) Wafer volume estimates exist from analysts but rarely\nwith public methodology — likely stays null in v1."
+      "body": "# tsmc-fab-18 → tsmc-ap6-zhunan\n\nReplaces the v1-skeleton direct fab→Nvidia edge: wafers now flow through\nthe packaging step as the data model intended. The interesting economics\nhappen at the next hop."
     }
   ],
-  "constraints": []
+  "constraints": [
+    {
+      "id": "cowos-capacity",
+      "name": "CoWoS advanced packaging capacity",
+      "category": "capacity",
+      "description": "CoWoS (Chip-on-Wafer-on-Substrate) is TSMC's 2.5D advanced packaging technology that mounts GPU dies and HBM stacks on a silicon interposer — required for essentially every high-end AI accelerator. From 2023 onward, packaging capacity, not wafer fabrication, has been the binding constraint on AI accelerator supply: every H100 that exists passed through this bottleneck.\n",
+      "metrics": [
+        {
+          "value": 37500,
+          "unit": "wafers_per_month",
+          "as_of": "2024",
+          "note": "TrendForce: 35,000-40,000 wpm during 2024 (midpoint recorded)"
+        },
+        {
+          "value": 75000,
+          "unit": "wafers_per_month",
+          "as_of": "2025",
+          "note": "Record high, roughly doubling 2024; includes AP8 (ex-Innolux) and Taichung capacity"
+        },
+        {
+          "value": 125000,
+          "unit": "wafers_per_month",
+          "as_of": "2026-Q4",
+          "note": "Projection: 120,000-130,000 wpm by end-2026 (midpoint recorded)"
+        }
+      ],
+      "severity": "high",
+      "tags": [
+        "advanced-packaging",
+        "tsmc",
+        "bottleneck"
+      ],
+      "sources": [
+        {
+          "url": "https://www.trendforce.com/news/2024/10/21/news-cowos-capacity-doubles-for-two-years-still-insufficient-positive-outlook-for-suppliers/",
+          "title": "TSMC's CoWoS Capacity Doubles for Two Years, Still Insufficient",
+          "date": "2024-10-21",
+          "supports": "2024 capacity range, demand exceeding supply"
+        },
+        {
+          "url": "https://www.trendforce.com/news/2025/01/02/news-tsmc-set-to-expand-cowos-capacity-to-record-75000-wafers-in-2025-doubling-2024-output/",
+          "title": "TSMC Set to Expand CoWoS Capacity to Record 75,000 Wafers in 2025, Doubling 2024 Output",
+          "date": "2025-01-02",
+          "supports": "2025 capacity metric"
+        },
+        {
+          "url": "https://www.trendforce.com/news/2024/12/13/news-tsmc-ramps-up-cowos-capacity-across-taiwan-projected-to-nearly-triple-by-2026/",
+          "title": "TSMC Ramps up CoWoS Capacity across Taiwan, Projected to Nearly Triple by 2026",
+          "date": "2024-12-13",
+          "supports": "2026 projection, multi-site expansion"
+        }
+      ],
+      "body": "# CoWoS advanced packaging capacity\n\nThe defining bottleneck of the 2023-2025 AI buildout. Wafer starts were\nnever the limit — packaging was: attaching HBM to GPU dies on silicon\ninterposers at scale. TSMC's CoWoS capacity has roughly doubled every year\nsince 2023 and demand has stayed ahead of it; TrendForce reported capacity\n\"still insufficient\" even after two consecutive doublings.\n\nSelecting this constraint in the UI highlights everything downstream:\npackaged-module flow to Nvidia, GPU deployment into Azure, OpenAI's\ntraining compute, and ChatGPT itself. When the bottleneck migrates (HBM,\nsubstrates, power), new constraint entities will tell that story the same\nway — the system is deliberately agnostic about which bottleneck matters.\n\n**Reviewer notes:** (1) Metric values record midpoints of reported ranges;\nthe ranges are preserved in each metric's note. (2) Figures are TrendForce\nreporting (supply-chain checks), not TSMC disclosures — TSMC does not\npublish CoWoS capacity. This is the standard public source for these\nnumbers, but treat precision accordingly. (3) The 2026 figure is a\nprojection, marked as such."
+    }
+  ]
 }

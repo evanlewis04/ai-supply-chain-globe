@@ -7,10 +7,18 @@ interface Props {
   graph: GraphData;
   prices: PricesData | null;
   onSelect: (id: string) => void;
+  onSelectConstraint: (id: string) => void;
   onClose: () => void;
 }
 
-export default function SidePanel({ node, graph, prices, onSelect, onClose }: Props) {
+export default function SidePanel({
+  node,
+  graph,
+  prices,
+  onSelect,
+  onSelectConstraint,
+  onClose,
+}: Props) {
   const series = node.ticker ? prices?.series[node.ticker.symbol] : undefined;
   const connected = graph.edges.filter((e) => e.from === node.id || e.to === node.id);
   const nodeName = (id: string) => graph.nodes.find((n) => n.id === id)?.name ?? id;
@@ -48,6 +56,22 @@ export default function SidePanel({ node, graph, prices, onSelect, onClose }: Pr
             ? `${node.capacity.value.toLocaleString()} ${node.capacity.unit ?? ""} (as of ${node.capacity.as_of})`
             : "not publicly disclosed"}
         </dd>
+        {node.constraints && node.constraints.length > 0 && (
+          <>
+            <dt>Gated by</dt>
+            <dd>
+              {node.constraints.map((cid) => (
+                <button
+                  key={cid}
+                  className="link-btn"
+                  onClick={() => onSelectConstraint(cid)}
+                >
+                  {graph.constraints.find((c) => c.id === cid)?.name ?? cid}
+                </button>
+              ))}
+            </dd>
+          </>
+        )}
       </dl>
 
       {node.ticker && (

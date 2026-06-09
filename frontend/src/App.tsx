@@ -2,12 +2,15 @@ import { useEffect, useMemo, useState } from "react";
 import GlobeView from "./components/GlobeView";
 import SidePanel from "./components/SidePanel";
 import Legend from "./components/Legend";
+import ConstraintPanel from "./components/ConstraintPanel";
+import { downstreamOfConstraint } from "./graph/traversal";
 import type { GraphData, PricesData } from "./types";
 
 export default function App() {
   const [graph, setGraph] = useState<GraphData | null>(null);
   const [prices, setPrices] = useState<PricesData | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [constraintId, setConstraintId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -27,6 +30,11 @@ export default function App() {
   const selectedNode = useMemo(
     () => graph?.nodes.find((n) => n.id === selectedId) ?? null,
     [graph, selectedId]
+  );
+
+  const highlight = useMemo(
+    () => (graph && constraintId ? downstreamOfConstraint(graph, constraintId) : null),
+    [graph, constraintId]
   );
 
   if (error) {
@@ -55,15 +63,22 @@ export default function App() {
         graph={graph}
         prices={prices}
         selectedId={selectedId}
+        highlight={highlight}
         onSelect={setSelectedId}
       />
       <Legend />
+      <ConstraintPanel
+        constraints={graph.constraints}
+        selectedId={constraintId}
+        onSelect={setConstraintId}
+      />
       {selectedNode && (
         <SidePanel
           node={selectedNode}
           graph={graph}
           prices={prices}
           onSelect={setSelectedId}
+          onSelectConstraint={setConstraintId}
           onClose={() => setSelectedId(null)}
         />
       )}

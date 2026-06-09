@@ -18,7 +18,7 @@ capacity:
   unit: null
   as_of: 2026-Q2
 status: operational
-constraints: []
+constraints: [cowos-capacity]
 tags: [fabless, gpu, ai-accelerators]
 sources:
   - url: https://www.sec.gov/Archives/edgar/data/0001045810/000104581024000029/Financial_Report.xlsx

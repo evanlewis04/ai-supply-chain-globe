@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/types.ts","./src/components/globeview.tsx","./src/components/legend.tsx","./src/components/sidepanel.tsx","./src/components/sparkline.tsx"],"version":"5.9.3"}
+{"root":["./src/app.tsx","./src/main.tsx","./src/types.ts","./src/components/constraintpanel.tsx","./src/components/globeview.tsx","./src/components/legend.tsx","./src/components/sidepanel.tsx","./src/components/sparkline.tsx","./src/graph/traversal.ts"],"version":"5.9.3"}

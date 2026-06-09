@@ -2,13 +2,18 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Globe, { GlobeMethods } from "react-globe.gl";
 import type { GraphData, GraphNode, PricesData } from "../types";
 import { FLOW_COLORS, LAYER_COLORS } from "../types";
+import type { AffectedSet } from "../graph/traversal";
 
 interface Props {
   graph: GraphData;
   prices: PricesData | null;
   selectedId: string | null;
+  highlight: AffectedSet | null;
   onSelect: (id: string | null) => void;
 }
+
+const DIM_NODE = "rgba(110, 115, 145, 0.25)";
+const DIM_ARC = "rgba(110, 115, 145, 0.12)";
 
 interface PointDatum {
   node: GraphNode;
@@ -31,7 +36,7 @@ function escapeHtml(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-export default function GlobeView({ graph, prices, selectedId, onSelect }: Props) {
+export default function GlobeView({ graph, prices, selectedId, highlight, onSelect }: Props) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const [size, setSize] = useState({ w: window.innerWidth, h: window.innerHeight });
 
@@ -127,7 +132,11 @@ export default function GlobeView({ graph, prices, selectedId, onSelect }: Props
       pointsData={points}
       pointLat="lat"
       pointLng="lng"
-      pointColor={(d: object) => LAYER_COLORS[(d as PointDatum).node.layer]}
+      pointColor={(d: object) => {
+        const { node } = d as PointDatum;
+        if (highlight && !highlight.nodes.has(node.id)) return DIM_NODE;
+        return LAYER_COLORS[node.layer];
+      }}
       pointAltitude={(d: object) =>
         (d as PointDatum).node.id === selectedId ? 0.09 : 0.04
       }
@@ -136,8 +145,16 @@ export default function GlobeView({ graph, prices, selectedId, onSelect }: Props
       onPointClick={(d: object) => onSelect((d as PointDatum).node.id)}
       onGlobeClick={() => onSelect(null)}
       arcsData={arcs}
-      arcColor={(d: object) => (d as ArcDatum).color}
-      arcStroke={(d: object) => ((d as ArcDatum).emphasized ? 0.9 : 0.5)}
+      arcColor={(d: object) => {
+        const arc = d as ArcDatum;
+        if (highlight && !highlight.edges.has(arc.id)) return DIM_ARC;
+        return arc.color;
+      }}
+      arcStroke={(d: object) => {
+        const arc = d as ArcDatum;
+        if (highlight) return highlight.edges.has(arc.id) ? 1.0 : 0.3;
+        return arc.emphasized ? 0.9 : 0.5;
+      }}
       arcDashLength={0.45}
       arcDashGap={0.25}
       arcDashAnimateTime={2500}
@@ -149,7 +166,11 @@ export default function GlobeView({ graph, prices, selectedId, onSelect }: Props
       labelText={(d: object) => (d as PointDatum).node.name}
       labelSize={0.65}
       labelDotRadius={0}
-      labelColor={() => "rgba(255,255,255,0.75)"}
+      labelColor={(d: object) => {
+        const { node } = d as PointDatum;
+        if (highlight && !highlight.nodes.has(node.id)) return "rgba(255,255,255,0.2)";
+        return "rgba(255,255,255,0.75)";
+      }}
       labelResolution={2}
       labelAltitude={0.05}
     />
