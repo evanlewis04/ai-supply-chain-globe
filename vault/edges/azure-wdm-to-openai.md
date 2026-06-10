@@ -18,7 +18,10 @@ notes: >
   GPT-4 training compute estimate (~2e25 FLOP, stated accurate within a
   factor of five) — an independent research estimate, not a disclosure.
   Substitutability low: Azure was OpenAI's exclusive cloud provider during
-  this period.
+  this period. (That exclusivity has since ended: the October 2025
+  agreement removed Microsoft's right of first refusal, and OpenAI training
+  now also runs on non-Azure infrastructure. This edge records the
+  GPT-4-era flow, which remains the best-sourced model-to-site link.)
 sources:
   - url: https://thehill.com/homenews/ap/ap-technology/ap-artificial-intelligence-technology-behind-chatgpt-was-built-in-iowa-with-a-lot-of-water/
     title: "AP: Artificial intelligence technology behind ChatGPT was built in Iowa — with a lot of water (syndicated)"
@@ -38,6 +41,10 @@ sources:
     title: "GPT-4 Architecture, Infrastructure, Training Dataset, Costs, Vision, MoE (SemiAnalysis)"
     date: 2023-07-10
     supports: training infrastructure analysis (cluster scale, parallelism)
+  - url: https://blogs.microsoft.com/blog/2025/10/28/the-next-chapter-of-the-microsoft-openai-partnership/
+    title: "The next chapter of the Microsoft-OpenAI partnership (Microsoft)"
+    date: 2025-10-28
+    supports: end of Azure exclusivity/right of first refusal (bounds the period this edge describes)
 ---
 
 # azure-west-des-moines → openai-hq

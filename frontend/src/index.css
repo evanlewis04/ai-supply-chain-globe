@@ -211,6 +211,38 @@ body,
   color: #7ab8ff;
 }
 
+.node-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  background: rgba(7, 10, 28, 0.84);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-left-width: 3px;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 11.5px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: #e8e8f0;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: opacity 0.2s, background 0.15s;
+}
+
+.node-label:hover {
+  background: rgba(24, 30, 62, 0.95);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.node-label.dimmed {
+  opacity: 0.22;
+}
+
+.node-label-wrap.behind .node-label {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .tooltip {
   font-size: 0.78rem;
   line-height: 1.45;

@@ -20,6 +20,9 @@ interface PointDatum {
   node: GraphNode;
   lat: number;
   lng: number;
+  /** Ring angle (radians) for cluster members; null for standalone nodes. */
+  angle: number | null;
+  dimmed?: boolean;
 }
 
 interface ArcDatum {
@@ -45,7 +48,9 @@ function escapeHtml(s: string): string {
  * shared centroid so each dot is legible and clickable. True coordinates
  * remain untouched in the vault and in the side panel.
  */
-function displacedPositions(nodes: GraphNode[]): Map<string, { lat: number; lng: number }> {
+function displacedPositions(
+  nodes: GraphNode[]
+): Map<string, { lat: number; lng: number; angle: number | null }> {
   const CLUSTER_DEG = 2.2;
   const RING_DEG = 1.6;
   const groups: GraphNode[][] = [];
@@ -61,11 +66,11 @@ function displacedPositions(nodes: GraphNode[]): Map<string, { lat: number; lng:
     else groups.push([node]);
   }
 
-  const positions = new Map<string, { lat: number; lng: number }>();
+  const positions = new Map<string, { lat: number; lng: number; angle: number | null }>();
   for (const group of groups) {
     if (group.length === 1) {
       const n = group[0];
-      positions.set(n.id, { lat: n.location.lat, lng: n.location.lon });
+      positions.set(n.id, { lat: n.location.lat, lng: n.location.lon, angle: null });
       continue;
     }
     const centerLat = group.reduce((s, n) => s + n.location.lat, 0) / group.length;
@@ -76,10 +81,26 @@ function displacedPositions(nodes: GraphNode[]): Map<string, { lat: number; lng:
       positions.set(n.id, {
         lat: centerLat + RING_DEG * Math.sin(angle),
         lng: centerLng + (RING_DEG * Math.cos(angle)) / Math.max(0.3, Math.cos((centerLat * Math.PI) / 180)),
+        angle,
       });
     });
   }
   return positions;
+}
+
+/**
+ * Label boxes extend outward from their cluster centroid (the same
+ * direction the dot was displaced), so labels within a cluster fan away
+ * from each other instead of stacking. Standalone nodes label below.
+ */
+function labelOffsetTransform(angle: number | null): string {
+  if (angle === null) return "translate(-50%, 9px)";
+  const dx = Math.cos(angle);
+  const dy = -Math.sin(angle); // screen y is inverted vs latitude
+  if (dx > 0.45) return "translate(9px, -50%)";
+  if (dx < -0.45) return "translate(calc(-100% - 9px), -50%)";
+  if (dy < 0) return "translate(-50%, calc(-100% - 9px))";
+  return "translate(-50%, 9px)";
 }
 
 /** Great-circle angular distance in degrees. */
@@ -131,6 +152,17 @@ export default function GlobeView({
           ...displayPos.get(node.id)!,
         })),
     [graph, hiddenLayers, displayPos]
+  );
+
+  // Separate identity for label data so highlight changes rebuild the
+  // DOM label boxes with the right dim state.
+  const labelData = useMemo<PointDatum[]>(
+    () =>
+      points.map((p) => ({
+        ...p,
+        dimmed: !!highlight && !highlight.nodes.has(p.node.id),
+      })),
+    [points, highlight]
   );
 
   const nodeById = useMemo(() => {
@@ -235,19 +267,29 @@ export default function GlobeView({
       arcDashAnimateTime={(d: object) => (d as ArcDatum).animTime}
       arcAltitudeAutoScale={0.4}
       arcLabel={(d: object) => (d as ArcDatum).label}
-      labelsData={points}
-      labelLat="lat"
-      labelLng="lng"
-      labelText={(d: object) => (d as PointDatum).node.name}
-      labelSize={0.65}
-      labelDotRadius={0}
-      labelColor={(d: object) => {
-        const { node } = d as PointDatum;
-        if (highlight && !highlight.nodes.has(node.id)) return "rgba(255,255,255,0.2)";
-        return "rgba(255,255,255,0.75)";
+      htmlElementsData={labelData}
+      htmlLat="lat"
+      htmlLng="lng"
+      htmlAltitude={0.015}
+      htmlElement={(d: object) => {
+        const { node, angle, dimmed } = d as PointDatum;
+        const wrap = document.createElement("div");
+        wrap.className = "node-label-wrap";
+        const box = document.createElement("div");
+        box.className = "node-label" + (dimmed ? " dimmed" : "");
+        box.textContent = node.name;
+        box.style.borderLeftColor = LAYER_COLORS[node.layer];
+        box.style.transform = labelOffsetTransform(angle);
+        box.onclick = (ev) => {
+          ev.stopPropagation();
+          onSelect(node.id);
+        };
+        wrap.appendChild(box);
+        return wrap;
       }}
-      labelResolution={2}
-      labelAltitude={0.05}
+      htmlElementVisibilityModifier={(el: HTMLElement, isVisible: boolean) => {
+        el.classList.toggle("behind", !isVisible);
+      }}
     />
   );
 }

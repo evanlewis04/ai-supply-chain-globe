@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-06-10T02:15:00+00:00",
+    "generated_at": "2026-06-10T02:23:58+00:00",
     "counts": {
       "nodes": 11,
       "edges": 10,
@@ -23,9 +23,9 @@
         "precision": "city"
       },
       "capacity": {
-        "value": null,
-        "unit": null,
-        "as_of": "2026-Q2"
+        "value": 800000000,
+        "unit": "weekly_active_users",
+        "as_of": "2025-10"
       },
       "status": "operational",
       "constraints": [],
@@ -40,9 +40,21 @@
           "date": "2022-11-30",
           "quote": "We've trained a model called ChatGPT which interacts in a conversational way.",
           "supports": "existence, operator, launch date"
+        },
+        {
+          "url": "https://techcrunch.com/2025/10/06/sam-altman-says-chatgpt-has-hit-800m-weekly-active-users/",
+          "title": "Sam Altman says ChatGPT has hit 800M weekly active users (TechCrunch)",
+          "date": "2025-10-06",
+          "supports": "capacity (800M weekly active users, announced at DevDay October 2025)"
+        },
+        {
+          "url": "https://techcrunch.com/2026/05/05/openai-releases-gpt-5-5-instant-a-new-default-model-for-chatgpt/",
+          "title": "OpenAI releases GPT-5.5 Instant, a new default model for ChatGPT (TechCrunch)",
+          "date": "2026-05-05",
+          "supports": "current model generation powering the product (GPT-5.5 Instant default since May 2026)"
         }
       ],
-      "body": "# ChatGPT\n\nThe consumer application that terminates the v1 slice — launched\nNovember 30, 2022 as a \"research preview\" and the proximate cause of the\ndemand shock that propagates backward through this entire graph: model\nscale → infrastructure buildout → accelerator supply → packaging and wafer\ncapacity → grid and water constraints. The pull dynamic starts here.\n\n**Location convention:** products are global, not geographic. By project\nconvention, application-layer nodes are anchored at the operator's HQ city\n(`precision: city`). This keeps the schema uniform; the UI can render\napplication nodes differently if we choose.\n\n**Reviewer notes:** Verify the quoted launch-post sentence against\nopenai.com/index/chatgpt/ — wording is from the launch announcement."
+      "body": "# ChatGPT\n\nThe consumer application that terminates the v1 slice — launched\nNovember 30, 2022 as a \"research preview\" and the proximate cause of the\ndemand shock that propagates backward through this entire graph: model\nscale → infrastructure buildout → accelerator supply → packaging and wafer\ncapacity → grid and water constraints. The pull dynamic starts here.\n\nThe pull has only grown: 800M weekly active users as of October 2025\n(Altman, DevDay), with the default model upgraded to the GPT-5.5\ngeneration (GPT-5.5 Instant) in May 2026. Every model generation since\nGPT-4 — GPT-5 (2025), GPT-5.5 (April 2026) — has ratcheted the demand\nsignal running backward through this graph.\n\n**Location convention:** products are global, not geographic. By project\nconvention, application-layer nodes are anchored at the operator's HQ city\n(`precision: city`). This keeps the schema uniform; the UI can render\napplication nodes differently if we choose.\n\n**Reviewer notes:** Verify the quoted launch-post sentence against\nopenai.com/index/chatgpt/ — wording is from the launch announcement."
     },
     {
       "id": "asml-veldhoven",
@@ -502,9 +514,21 @@
           "title": "GPT-4 Architecture, Infrastructure, Training Dataset, Costs, Vision, MoE (SemiAnalysis)",
           "date": "2023-07-10",
           "supports": "GPT-4 scale and architecture analysis (independent estimates)"
+        },
+        {
+          "url": "https://openai.com/index/introducing-gpt-5-5/",
+          "title": "Introducing GPT-5.5 (OpenAI)",
+          "date": "2026-04-23",
+          "supports": "current frontier model generation (GPT-5.5, April 2026)"
+        },
+        {
+          "url": "https://blogs.microsoft.com/blog/2025/10/28/the-next-chapter-of-the-microsoft-openai-partnership/",
+          "title": "The next chapter of the Microsoft-OpenAI partnership (Microsoft)",
+          "date": "2025-10-28",
+          "supports": "restructured compute relationship (27% Microsoft stake, $250B incremental Azure commitment, end of right of first refusal)"
         }
       ],
-      "body": "# OpenAI (San Francisco)\n\nOpenAI is the frontier lab in the v1 slice: it consumes Azure compute\n(training run in the West Des Moines campus for GPT-4) and produces the\nmodel artifacts behind ChatGPT and the API. Its physical footprint is a\nMission Bay, San Francisco campus exceeding 1M sq ft across multiple\nbuildings (1455/1515 Third Street, 550 Terry Francois Blvd, 1800 Owens St).\n\nCoordinates are the San Francisco city centroid, precision `city` — the\nmulti-building campus makes a single site coordinate misleading anyway.\n\nScale context (SemiAnalysis estimates, not OpenAI disclosures): GPT-4 as a\n~1.8T-parameter mixture-of-experts model trained on ~13T tokens — the\ndemand signal that, multiplied across every frontier lab, is what pulls on\nevery upstream node in this graph.\n\n**Reviewer notes:** In M2, the *training cluster* should become its own\nnode (sited at the Azure campus) and the *model artifact* (GPT-4) a third,\nper the data model. This single lab node is the walking-skeleton stand-in."
+      "body": "# OpenAI (San Francisco)\n\nOpenAI is the frontier lab in the v1 slice: it consumes Azure compute\n(training run in the West Des Moines campus for GPT-4) and produces the\nmodel artifacts behind ChatGPT and the API. Its physical footprint is a\nMission Bay, San Francisco campus exceeding 1M sq ft across multiple\nbuildings (1455/1515 Third Street, 550 Terry Francois Blvd, 1800 Owens St).\n\nCoordinates are the San Francisco city centroid, precision `city` — the\nmulti-building campus makes a single site coordinate misleading anyway.\n\nScale context (SemiAnalysis estimates, not OpenAI disclosures): GPT-4 as a\n~1.8T-parameter mixture-of-experts model trained on ~13T tokens — the\ndemand signal that, multiplied across every frontier lab, is what pulls on\nevery upstream node in this graph.\n\n**Current era (2025-2026):** the model line has advanced GPT-4 (Mar 2023)\n→ GPT-5 (2025) → GPT-5.5 (Apr 2026), and the compute relationship has been\nrestructured: under the October 2025 agreement Microsoft holds ~27% of\nOpenAI, OpenAI committed to an incremental $250B of Azure purchases, and\nMicrosoft's right of first refusal on OpenAI compute ended — training now\nalso flows through non-Azure infrastructure (Stargate sites with Oracle\nand others). The Iowa edge in this graph is the *sourced historical\nanchor* (GPT-4); mapping current multi-site training geography\n(Abilene TX, etc.) is the highest-value post-v1 data expansion.\n\n**Reviewer notes:** The *training cluster* should eventually become its\nown node (sited at the Azure campus) and the *model artifact* (GPT-4) a\nthird, per the data model. This single lab node is the walking-skeleton\nstand-in."
     }
   ],
   "edges": [
@@ -547,7 +571,7 @@
       "constraint_level": "high",
       "substitutability": "low",
       "constraints": [],
-      "notes": "Training compute. The West Des Moines campus hosted the supercomputer Microsoft built exclusively for OpenAI, on which GPT-4 was trained (training completed August 2022 per AP reporting). Volume is Epoch AI's GPT-4 training compute estimate (~2e25 FLOP, stated accurate within a factor of five) — an independent research estimate, not a disclosure. Substitutability low: Azure was OpenAI's exclusive cloud provider during this period.\n",
+      "notes": "Training compute. The West Des Moines campus hosted the supercomputer Microsoft built exclusively for OpenAI, on which GPT-4 was trained (training completed August 2022 per AP reporting). Volume is Epoch AI's GPT-4 training compute estimate (~2e25 FLOP, stated accurate within a factor of five) — an independent research estimate, not a disclosure. Substitutability low: Azure was OpenAI's exclusive cloud provider during this period. (That exclusivity has since ended: the October 2025 agreement removed Microsoft's right of first refusal, and OpenAI training now also runs on non-Azure infrastructure. This edge records the GPT-4-era flow, which remains the best-sourced model-to-site link.)\n",
       "sources": [
         {
           "url": "https://thehill.com/homenews/ap/ap-technology/ap-artificial-intelligence-technology-behind-chatgpt-was-built-in-iowa-with-a-lot-of-water/",
@@ -574,6 +598,12 @@
           "title": "GPT-4 Architecture, Infrastructure, Training Dataset, Costs, Vision, MoE (SemiAnalysis)",
           "date": "2023-07-10",
           "supports": "training infrastructure analysis (cluster scale, parallelism)"
+        },
+        {
+          "url": "https://blogs.microsoft.com/blog/2025/10/28/the-next-chapter-of-the-microsoft-openai-partnership/",
+          "title": "The next chapter of the Microsoft-OpenAI partnership (Microsoft)",
+          "date": "2025-10-28",
+          "supports": "end of Azure exclusivity/right of first refusal (bounds the period this edge describes)"
         }
       ],
       "body": "# azure-west-des-moines → openai-hq\n\nThe compute edge that produced GPT-4. In M2 this gets refined: a\ntraining-cluster node sited at the Azure campus, with the model artifact\nas its output — this direct lab edge is the walking-skeleton version."
