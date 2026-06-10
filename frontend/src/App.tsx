@@ -75,6 +75,10 @@ export default function App() {
           {graph.meta.counts.nodes} nodes · {graph.meta.counts.edges} edges ·
           every claim sourced
         </span>
+        <span className="header-hint">
+          Click a node for details &amp; sources · pick a constraint to trace
+          the bottleneck · hover arcs for flows
+        </span>
       </header>
       <GlobeView
         graph={graph}

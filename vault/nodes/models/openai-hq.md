@@ -22,6 +22,10 @@ sources:
     title: "OpenAI surges past 1M sf of offices in SF with latest Mission Bay lease"
     date: 2026-03-16
     supports: location (Mission Bay, San Francisco campus)
+  - url: https://semianalysis.com/2023/07/10/gpt-4-architecture-infrastructure/
+    title: "GPT-4 Architecture, Infrastructure, Training Dataset, Costs, Vision, MoE (SemiAnalysis)"
+    date: 2023-07-10
+    supports: GPT-4 scale and architecture analysis (independent estimates)
 ---
 
 # OpenAI (San Francisco)
@@ -34,6 +38,11 @@ buildings (1455/1515 Third Street, 550 Terry Francois Blvd, 1800 Owens St).
 
 Coordinates are the San Francisco city centroid, precision `city` — the
 multi-building campus makes a single site coordinate misleading anyway.
+
+Scale context (SemiAnalysis estimates, not OpenAI disclosures): GPT-4 as a
+~1.8T-parameter mixture-of-experts model trained on ~13T tokens — the
+demand signal that, multiplied across every frontier lab, is what pulls on
+every upstream node in this graph.
 
 **Reviewer notes:** In M2, the *training cluster* should become its own
 node (sited at the Azure campus) and the *model artifact* (GPT-4) a third,

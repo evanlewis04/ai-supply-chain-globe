@@ -31,10 +31,64 @@ interface ArcDatum {
   color: string;
   label: string;
   emphasized: boolean;
+  animTime: number;
 }
 
 function escapeHtml(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+/**
+ * Display-only cartographic displacement: nodes within ~2° of each other
+ * (OpenAI/ChatGPT share coordinates; Nvidia is ~60km away; the two Des
+ * Moines nodes nearly touch) get spread on a small ring around their
+ * shared centroid so each dot is legible and clickable. True coordinates
+ * remain untouched in the vault and in the side panel.
+ */
+function displacedPositions(nodes: GraphNode[]): Map<string, { lat: number; lng: number }> {
+  const CLUSTER_DEG = 2.2;
+  const RING_DEG = 1.6;
+  const groups: GraphNode[][] = [];
+  for (const node of nodes) {
+    const group = groups.find((g) =>
+      g.some(
+        (m) =>
+          Math.abs(m.location.lat - node.location.lat) < CLUSTER_DEG &&
+          Math.abs(m.location.lon - node.location.lon) < CLUSTER_DEG
+      )
+    );
+    if (group) group.push(node);
+    else groups.push([node]);
+  }
+
+  const positions = new Map<string, { lat: number; lng: number }>();
+  for (const group of groups) {
+    if (group.length === 1) {
+      const n = group[0];
+      positions.set(n.id, { lat: n.location.lat, lng: n.location.lon });
+      continue;
+    }
+    const centerLat = group.reduce((s, n) => s + n.location.lat, 0) / group.length;
+    const centerLng = group.reduce((s, n) => s + n.location.lon, 0) / group.length;
+    const sorted = [...group].sort((a, b) => a.id.localeCompare(b.id));
+    sorted.forEach((n, i) => {
+      const angle = (2 * Math.PI * i) / sorted.length - Math.PI / 2;
+      positions.set(n.id, {
+        lat: centerLat + RING_DEG * Math.sin(angle),
+        lng: centerLng + (RING_DEG * Math.cos(angle)) / Math.max(0.3, Math.cos((centerLat * Math.PI) / 180)),
+      });
+    });
+  }
+  return positions;
+}
+
+/** Great-circle angular distance in degrees. */
+function angularDistanceDeg(aLat: number, aLng: number, bLat: number, bLng: number): number {
+  const r = Math.PI / 180;
+  const cosD =
+    Math.sin(aLat * r) * Math.sin(bLat * r) +
+    Math.cos(aLat * r) * Math.cos(bLat * r) * Math.cos((aLng - bLng) * r);
+  return Math.acos(Math.min(1, Math.max(-1, cosD))) / r;
 }
 
 export default function GlobeView({
@@ -66,16 +120,17 @@ export default function GlobeView({
     globe.renderer().domElement.addEventListener("pointerdown", stop, { once: true });
   }, []);
 
+  const displayPos = useMemo(() => displacedPositions(graph.nodes), [graph]);
+
   const points = useMemo<PointDatum[]>(
     () =>
       graph.nodes
         .filter((node) => !hiddenLayers.has(node.layer))
         .map((node) => ({
           node,
-          lat: node.location.lat,
-          lng: node.location.lon,
+          ...displayPos.get(node.id)!,
         })),
-    [graph, hiddenLayers]
+    [graph, hiddenLayers, displayPos]
   );
 
   const nodeById = useMemo(() => {
@@ -95,13 +150,20 @@ export default function GlobeView({
         // low-substitutability alone is common in this graph and is shown
         // in tooltips instead, so red stays scarce and meaningful.)
         const emphasized = (e.constraints?.length ?? 0) > 0;
+        const start = displayPos.get(from.id)!;
+        const end = displayPos.get(to.id)!;
+        // Constant dash time makes long arcs sweep absurdly fast; scale
+        // animation time with distance so flow speed feels uniform.
+        const dist = angularDistanceDeg(start.lat, start.lng, end.lat, end.lng);
+        const animTime = Math.min(9000, Math.max(2000, 1400 + dist * 65));
         return [
           {
             id: e.id,
-            startLat: from.location.lat,
-            startLng: from.location.lon,
-            endLat: to.location.lat,
-            endLng: to.location.lon,
+            startLat: start.lat,
+            startLng: start.lng,
+            endLat: end.lat,
+            endLng: end.lng,
+            animTime,
             color: emphasized ? "#ff4d4d" : FLOW_COLORS[e.flow_type] ?? "#888",
             label: `<div class="tooltip"><b>${escapeHtml(from.name)} → ${escapeHtml(
               to.name
@@ -114,7 +176,7 @@ export default function GlobeView({
           },
         ];
       }),
-    [graph, nodeById, hiddenLayers]
+    [graph, nodeById, hiddenLayers, displayPos]
   );
 
   const pointLabel = (d: object) => {
@@ -153,7 +215,7 @@ export default function GlobeView({
       pointAltitude={(d: object) =>
         (d as PointDatum).node.id === selectedId ? 0.09 : 0.04
       }
-      pointRadius={0.55}
+      pointRadius={0.75}
       pointLabel={pointLabel}
       onPointClick={(d: object) => onSelect((d as PointDatum).node.id)}
       onGlobeClick={() => onSelect(null)}
@@ -170,7 +232,7 @@ export default function GlobeView({
       }}
       arcDashLength={0.45}
       arcDashGap={0.25}
-      arcDashAnimateTime={2500}
+      arcDashAnimateTime={(d: object) => (d as ArcDatum).animTime}
       arcAltitudeAutoScale={0.4}
       arcLabel={(d: object) => (d as ArcDatum).label}
       labelsData={points}

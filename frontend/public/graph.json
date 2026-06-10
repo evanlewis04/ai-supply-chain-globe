@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-06-09T18:39:20+00:00",
+    "generated_at": "2026-06-10T02:02:31+00:00",
     "counts": {
       "nodes": 11,
       "edges": 10,
@@ -85,6 +85,13 @@
           "title": "TSMC now reportedly operates over half of global EUVs, weighs high-NA adoption",
           "date": "2024-11",
           "supports": "role as the EUV supplier to leading-edge fabs"
+        },
+        {
+          "url": "https://www.asianometry.com/p/whats-next-for-asml",
+          "title": "What's Next For ASML? (Asianometry, Jon Y)",
+          "date": "2024-06-16",
+          "quote": "The first EUV machine took 23 hours to pattern a single wafer. Today's best EUV machines can do 180 wafers per hour.",
+          "supports": "EUV technology maturity and throughput context"
         }
       ],
       "body": "# ASML Veldhoven (HQ & EUV production)\n\nASML's Veldhoven campus (De Run 6501) is corporate HQ and the final-assembly\nsite for its lithography systems, including EUV — the machines without which\nno leading-edge (N5/N3-class) logic can be manufactured. ASML is widely\ndocumented as the only company supplying production EUV lithography systems,\nwhich makes this single campus one of the most concentrated points of\nfailure in the entire AI supply chain.\n\nCoordinates geocoded from the published street address (De Run 6501,\nVeldhoven); precision `site`.\n\n**Reviewer notes:** (1) The \"sole supplier of EUV\" claim is universally\nreported but the sources attached here support it only indirectly — consider\nadding ASML's own 20-F annual report language before this enters canon.\n(2) EUV annual shipment counts are published in ASML annual reports and\nwould make a good `capacity` entry (unit: euv_systems_per_year) in M2."
@@ -459,9 +466,15 @@
           "title": "OpenAI surges past 1M sf of offices in SF with latest Mission Bay lease",
           "date": "2026-03-16",
           "supports": "location (Mission Bay, San Francisco campus)"
+        },
+        {
+          "url": "https://semianalysis.com/2023/07/10/gpt-4-architecture-infrastructure/",
+          "title": "GPT-4 Architecture, Infrastructure, Training Dataset, Costs, Vision, MoE (SemiAnalysis)",
+          "date": "2023-07-10",
+          "supports": "GPT-4 scale and architecture analysis (independent estimates)"
         }
       ],
-      "body": "# OpenAI (San Francisco)\n\nOpenAI is the frontier lab in the v1 slice: it consumes Azure compute\n(training run in the West Des Moines campus for GPT-4) and produces the\nmodel artifacts behind ChatGPT and the API. Its physical footprint is a\nMission Bay, San Francisco campus exceeding 1M sq ft across multiple\nbuildings (1455/1515 Third Street, 550 Terry Francois Blvd, 1800 Owens St).\n\nCoordinates are the San Francisco city centroid, precision `city` — the\nmulti-building campus makes a single site coordinate misleading anyway.\n\n**Reviewer notes:** In M2, the *training cluster* should become its own\nnode (sited at the Azure campus) and the *model artifact* (GPT-4) a third,\nper the data model. This single lab node is the walking-skeleton stand-in."
+      "body": "# OpenAI (San Francisco)\n\nOpenAI is the frontier lab in the v1 slice: it consumes Azure compute\n(training run in the West Des Moines campus for GPT-4) and produces the\nmodel artifacts behind ChatGPT and the API. Its physical footprint is a\nMission Bay, San Francisco campus exceeding 1M sq ft across multiple\nbuildings (1455/1515 Third Street, 550 Terry Francois Blvd, 1800 Owens St).\n\nCoordinates are the San Francisco city centroid, precision `city` — the\nmulti-building campus makes a single site coordinate misleading anyway.\n\nScale context (SemiAnalysis estimates, not OpenAI disclosures): GPT-4 as a\n~1.8T-parameter mixture-of-experts model trained on ~13T tokens — the\ndemand signal that, multiplied across every frontier lab, is what pulls on\nevery upstream node in this graph.\n\n**Reviewer notes:** In M2, the *training cluster* should become its own\nnode (sited at the Azure campus) and the *model artifact* (GPT-4) a third,\nper the data model. This single lab node is the walking-skeleton stand-in."
     }
   ],
   "edges": [
@@ -496,15 +509,15 @@
       "to": "openai-hq",
       "flow_type": "compute",
       "volume": {
-        "value": null,
-        "unit": null,
-        "as_of": "2022-Q3"
+        "value": 2e+25,
+        "unit": "flop_training_total_gpt4_estimate",
+        "as_of": "2023-03"
       },
       "lead_time_weeks": null,
       "constraint_level": "high",
       "substitutability": "low",
       "constraints": [],
-      "notes": "Training compute. The West Des Moines campus hosted the supercomputer Microsoft built exclusively for OpenAI, on which GPT-4 was trained (training completed August 2022 per AP reporting). Substitutability low: Azure was OpenAI's exclusive cloud provider during this period.\n",
+      "notes": "Training compute. The West Des Moines campus hosted the supercomputer Microsoft built exclusively for OpenAI, on which GPT-4 was trained (training completed August 2022 per AP reporting). Volume is Epoch AI's GPT-4 training compute estimate (~2e25 FLOP, stated accurate within a factor of five) — an independent research estimate, not a disclosure. Substitutability low: Azure was OpenAI's exclusive cloud provider during this period.\n",
       "sources": [
         {
           "url": "https://thehill.com/homenews/ap/ap-technology/ap-artificial-intelligence-technology-behind-chatgpt-was-built-in-iowa-with-a-lot-of-water/",
@@ -518,6 +531,19 @@
           "title": "Microsoft announces new supercomputer, lays out vision for future AI work",
           "date": "2020-05-19",
           "supports": "exclusive Azure supercomputer built for OpenAI"
+        },
+        {
+          "url": "https://epoch.ai/data-insights/models-over-1e25-flop",
+          "title": "Over 30 AI models have been trained at the scale of GPT-4 (Epoch AI, accessed 2026-06)",
+          "date": "2026-06",
+          "quote": "GPT-4 was the first model trained at this scale (~2e25 FLOP), released in March 2023.",
+          "supports": "volume (training compute estimate)"
+        },
+        {
+          "url": "https://semianalysis.com/2023/07/10/gpt-4-architecture-infrastructure/",
+          "title": "GPT-4 Architecture, Infrastructure, Training Dataset, Costs, Vision, MoE (SemiAnalysis)",
+          "date": "2023-07-10",
+          "supports": "training infrastructure analysis (cluster scale, parallelism)"
         }
       ],
       "body": "# azure-west-des-moines → openai-hq\n\nThe compute edge that produced GPT-4. In M2 this gets refined: a\ntraining-cluster node sited at the Azure campus, with the model artifact\nas its output — this direct lab edge is the walking-skeleton version."
@@ -664,6 +690,13 @@
           "title": "HBM3 Initially Exclusively Supplied by SK Hynix, Samsung Rallies Fast After AMD Validation",
           "date": "2024-03-13",
           "supports": "initial exclusivity, later second-sourcing"
+        },
+        {
+          "url": "https://newsletter.semianalysis.com/p/ai-capacity-constraints-cowos-and",
+          "title": "AI Capacity Constraints: CoWoS and HBM (SemiAnalysis)",
+          "date": "2023-07-05",
+          "quote": "CoWoS and HBM are already majority AI-facing technologies, so all slack was already absorbed in Q1. With GPU demand exploding, these are the parts of the supply chain that just cannot keep up and are bottlenecking GPU supply.",
+          "supports": "HBM as a co-binding constraint with CoWoS (2023)"
         }
       ],
       "body": "# sk-hynix-icheon → tsmc-ap6-zhunan\n\nThe memory feed into the packaging bottleneck. HBM and CoWoS alternate as\nthe binding constraint — exactly the dynamic the constraint-entity design\nexists to capture."
@@ -815,6 +848,13 @@
           "title": "TSMC Ramps up CoWoS Capacity across Taiwan, Projected to Nearly Triple by 2026",
           "date": "2024-12-13",
           "supports": "2026 projection, multi-site expansion"
+        },
+        {
+          "url": "https://newsletter.semianalysis.com/p/ai-capacity-constraints-cowos-and",
+          "title": "AI Capacity Constraints: CoWoS and HBM (SemiAnalysis)",
+          "date": "2023-07-05",
+          "quote": "CoWoS and HBM are already majority AI-facing technologies, so all slack was already absorbed in Q1. With GPU demand exploding, these are the parts of the supply chain that just cannot keep up and are bottlenecking GPU supply.",
+          "supports": "CoWoS as the binding bottleneck on GPU supply (2023)"
         }
       ],
       "body": "# CoWoS advanced packaging capacity\n\nThe defining bottleneck of the 2023-2025 AI buildout. Wafer starts were\nnever the limit — packaging was: attaching HBM to GPU dies on silicon\ninterposers at scale. TSMC's CoWoS capacity has roughly doubled every year\nsince 2023 and demand has stayed ahead of it; TrendForce reported capacity\n\"still insufficient\" even after two consecutive doublings.\n\nSelecting this constraint in the UI highlights everything downstream:\npackaged-module flow to Nvidia, GPU deployment into Azure, OpenAI's\ntraining compute, and ChatGPT itself. When the bottleneck migrates (HBM,\nsubstrates, power), new constraint entities will tell that story the same\nway — the system is deliberately agnostic about which bottleneck matters.\n\n**Reviewer notes:** (1) Metric values record midpoints of reported ranges;\nthe ranges are preserved in each metric's note. (2) Figures are TrendForce\nreporting (supply-chain checks), not TSMC disclosures — TSMC does not\npublish CoWoS capacity. This is the standard public source for these\nnumbers, but treat precision accordingly. (3) The 2026 figure is a\nprojection, marked as such."

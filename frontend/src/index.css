@@ -47,6 +47,13 @@ body,
   color: #9aa0b4;
 }
 
+.header-hint {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.72rem;
+  color: #6f7590;
+}
+
 .legend {
   position: absolute;
   bottom: 14px;

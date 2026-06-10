@@ -26,6 +26,11 @@ sources:
     title: "HBM3 Initially Exclusively Supplied by SK Hynix, Samsung Rallies Fast After AMD Validation"
     date: 2024-03-13
     supports: initial exclusivity, later second-sourcing
+  - url: https://newsletter.semianalysis.com/p/ai-capacity-constraints-cowos-and
+    title: "AI Capacity Constraints: CoWoS and HBM (SemiAnalysis)"
+    date: 2023-07-05
+    quote: "CoWoS and HBM are already majority AI-facing technologies, so all slack was already absorbed in Q1. With GPU demand exploding, these are the parts of the supply chain that just cannot keep up and are bottlenecking GPU supply."
+    supports: HBM as a co-binding constraint with CoWoS (2023)
 ---
 
 # sk-hynix-icheon → tsmc-ap6-zhunan

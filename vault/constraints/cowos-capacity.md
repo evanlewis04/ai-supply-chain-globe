@@ -37,6 +37,11 @@ sources:
     title: "TSMC Ramps up CoWoS Capacity across Taiwan, Projected to Nearly Triple by 2026"
     date: 2024-12-13
     supports: 2026 projection, multi-site expansion
+  - url: https://newsletter.semianalysis.com/p/ai-capacity-constraints-cowos-and
+    title: "AI Capacity Constraints: CoWoS and HBM (SemiAnalysis)"
+    date: 2023-07-05
+    quote: "CoWoS and HBM are already majority AI-facing technologies, so all slack was already absorbed in Q1. With GPU demand exploding, these are the parts of the supply chain that just cannot keep up and are bottlenecking GPU supply."
+    supports: CoWoS as the binding bottleneck on GPU supply (2023)
 ---
 
 # CoWoS advanced packaging capacity

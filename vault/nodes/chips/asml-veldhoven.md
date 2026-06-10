@@ -29,6 +29,11 @@ sources:
     title: "TSMC now reportedly operates over half of global EUVs, weighs high-NA adoption"
     date: 2024-11
     supports: role as the EUV supplier to leading-edge fabs
+  - url: https://www.asianometry.com/p/whats-next-for-asml
+    title: "What's Next For ASML? (Asianometry, Jon Y)"
+    date: 2024-06-16
+    quote: "The first EUV machine took 23 hours to pattern a single wafer. Today's best EUV machines can do 180 wafers per hour."
+    supports: EUV technology maturity and throughput context
 ---
 
 # ASML Veldhoven (HQ & EUV production)

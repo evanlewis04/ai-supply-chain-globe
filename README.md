@@ -91,6 +91,12 @@ public number exists — per-customer CoWoS allocation, campus-level MW —
 the field is `null` with a note explaining why. An honest unknown beats a
 plausible guess.
 
+One rendering note: nodes that share or nearly share coordinates (e.g.
+OpenAI and ChatGPT, both anchored to San Francisco) are slightly displaced
+on the globe for legibility and clickability — a standard cartographic
+technique. True coordinates are untouched in the data and shown in the
+side panel.
+
 Globe textures: NASA-derived imagery via the
 [three-globe](https://github.com/vasturiano/three-globe) example assets.
 Stock data: Yahoo Finance via yfinance — display only, not investment advice.
