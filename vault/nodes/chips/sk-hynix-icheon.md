@@ -29,6 +29,14 @@ sources:
     title: "HBM3 Initially Exclusively Supplied by SK Hynix, Samsung Rallies Fast After AMD Validation"
     date: 2024-03-13
     supports: initial exclusivity of HBM3 supply
+  - url: https://www.trendforce.com/news/2026/01/28/news-sk-hynix-reportedly-to-supply-about-two-thirds-of-nvidia-hbm4-samsung-targets-early-delivery/
+    title: "SK hynix Reportedly to Supply About Two-Thirds of NVIDIA HBM4; Samsung Targets Early Delivery (TrendForce)"
+    date: 2026-01-28
+    supports: continued HBM leadership into the HBM4 generation (2026)
+  - url: https://www.kedglobal.com/korean-chipmakers/newsView/ked202603100011
+    title: "SK Hynix to deliver final HBM4 samples to Nvidia to cement AI memory leadership (KED Global)"
+    date: 2026-03-10
+    supports: HBM4 qualification timeline with Nvidia
 ---
 
 # SK hynix Icheon (HBM)
@@ -38,6 +46,12 @@ SK hynix was the first to mass-produce HBM3 and was initially its exclusive
 supplier to Nvidia for the H100 generation — when CoWoS wasn't the binding
 constraint, HBM was, and the two alternate as the chokepoint of the moment.
 That alternation is exactly what this map is built to show.
+
+The dominance has held across generations: as of early 2026, SK hynix is
+reportedly supplying about two-thirds of Nvidia's HBM4, with 2026 HBM4
+capacity industry-wide reported as effectively pre-sold. The 2-year stock
+chart on this node (+900%+ over 2024-2026) is the market pricing exactly
+this position.
 
 HBM stacks ship from here to TSMC's advanced packaging sites, where they
 are co-packaged with GPU dies on CoWoS interposers.

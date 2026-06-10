@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-06-10T02:02:31+00:00",
+    "generated_at": "2026-06-10T02:15:00+00:00",
     "counts": {
       "nodes": 11,
       "edges": 10,
@@ -62,9 +62,9 @@
         "precision": "site"
       },
       "capacity": {
-        "value": null,
-        "unit": null,
-        "as_of": "2026-Q2"
+        "value": 48,
+        "unit": "euv_systems_shipped_in_year",
+        "as_of": "2025"
       },
       "status": "operational",
       "constraints": [],
@@ -92,9 +92,15 @@
           "date": "2024-06-16",
           "quote": "The first EUV machine took 23 hours to pattern a single wafer. Today's best EUV machines can do 180 wafers per hour.",
           "supports": "EUV technology maturity and throughput context"
+        },
+        {
+          "url": "https://www.asml.com/en/news/press-releases/2026/q4-2025-financial-results",
+          "title": "ASML reports EUR 32.7 billion total net sales and EUR 9.6 billion net income in 2025",
+          "date": "2026-01-28",
+          "supports": "capacity (48 EUV systems shipped in 2025, up from 44 in 2024; EUV sales +39% to EUR 11.6B)"
         }
       ],
-      "body": "# ASML Veldhoven (HQ & EUV production)\n\nASML's Veldhoven campus (De Run 6501) is corporate HQ and the final-assembly\nsite for its lithography systems, including EUV — the machines without which\nno leading-edge (N5/N3-class) logic can be manufactured. ASML is widely\ndocumented as the only company supplying production EUV lithography systems,\nwhich makes this single campus one of the most concentrated points of\nfailure in the entire AI supply chain.\n\nCoordinates geocoded from the published street address (De Run 6501,\nVeldhoven); precision `site`.\n\n**Reviewer notes:** (1) The \"sole supplier of EUV\" claim is universally\nreported but the sources attached here support it only indirectly — consider\nadding ASML's own 20-F annual report language before this enters canon.\n(2) EUV annual shipment counts are published in ASML annual reports and\nwould make a good `capacity` entry (unit: euv_systems_per_year) in M2."
+      "body": "# ASML Veldhoven (HQ & EUV production)\n\nASML's Veldhoven campus (De Run 6501) is corporate HQ and the final-assembly\nsite for its lithography systems, including EUV — the machines without which\nno leading-edge (N5/N3-class) logic can be manufactured. ASML is widely\ndocumented as the only company supplying production EUV lithography systems,\nwhich makes this single campus one of the most concentrated points of\nfailure in the entire AI supply chain.\n\nCoordinates geocoded from the published street address (De Run 6501,\nVeldhoven); precision `site`.\n\nAnnual EUV output: 48 systems shipped in 2025 (44 in 2024), per ASML's\nQ4 2025 results — the entire world's supply of leading-edge lithography,\nabout four machines a month, from one campus. ASML guides 2026 as another\ngrowth year \"largely driven by a significant increase in EUV sales\" on AI\ndemand.\n\n**Reviewer notes:** The \"sole supplier of EUV\" claim is universally\nreported but the sources attached here support it only indirectly —\nconsider adding ASML's own 20-F annual report language. (Capacity field\nresolved 2026-06 with the official 2025 shipment count.)"
     },
     {
       "id": "ibiden-ono",
@@ -224,9 +230,21 @@
           "title": "HBM3 Initially Exclusively Supplied by SK Hynix, Samsung Rallies Fast After AMD Validation",
           "date": "2024-03-13",
           "supports": "initial exclusivity of HBM3 supply"
+        },
+        {
+          "url": "https://www.trendforce.com/news/2026/01/28/news-sk-hynix-reportedly-to-supply-about-two-thirds-of-nvidia-hbm4-samsung-targets-early-delivery/",
+          "title": "SK hynix Reportedly to Supply About Two-Thirds of NVIDIA HBM4; Samsung Targets Early Delivery (TrendForce)",
+          "date": "2026-01-28",
+          "supports": "continued HBM leadership into the HBM4 generation (2026)"
+        },
+        {
+          "url": "https://www.kedglobal.com/korean-chipmakers/newsView/ked202603100011",
+          "title": "SK Hynix to deliver final HBM4 samples to Nvidia to cement AI memory leadership (KED Global)",
+          "date": "2026-03-10",
+          "supports": "HBM4 qualification timeline with Nvidia"
         }
       ],
-      "body": "# SK hynix Icheon (HBM)\n\nSK hynix's Icheon campus (HQ plus DRAM fabs) anchors its HBM production.\nSK hynix was the first to mass-produce HBM3 and was initially its exclusive\nsupplier to Nvidia for the H100 generation — when CoWoS wasn't the binding\nconstraint, HBM was, and the two alternate as the chokepoint of the moment.\nThat alternation is exactly what this map is built to show.\n\nHBM stacks ship from here to TSMC's advanced packaging sites, where they\nare co-packaged with GPU dies on CoWoS interposers.\n\n**Reviewer notes:** (1) Per-site HBM capacity is not public — null. An\n`hbm-supply` constraint entity is deferred post-v1 per the plan. (2) HBM\nproduction also spans Cheongju; Icheon stands in for SK hynix HBM\noperations in v1. (3) Ticker is the KRX listing via Yahoo symbol 000660.KS."
+      "body": "# SK hynix Icheon (HBM)\n\nSK hynix's Icheon campus (HQ plus DRAM fabs) anchors its HBM production.\nSK hynix was the first to mass-produce HBM3 and was initially its exclusive\nsupplier to Nvidia for the H100 generation — when CoWoS wasn't the binding\nconstraint, HBM was, and the two alternate as the chokepoint of the moment.\nThat alternation is exactly what this map is built to show.\n\nThe dominance has held across generations: as of early 2026, SK hynix is\nreportedly supplying about two-thirds of Nvidia's HBM4, with 2026 HBM4\ncapacity industry-wide reported as effectively pre-sold. The 2-year stock\nchart on this node (+900%+ over 2024-2026) is the market pricing exactly\nthis position.\n\nHBM stacks ship from here to TSMC's advanced packaging sites, where they\nare co-packaged with GPU dies on CoWoS interposers.\n\n**Reviewer notes:** (1) Per-site HBM capacity is not public — null. An\n`hbm-supply` constraint entity is deferred post-v1 per the plan. (2) HBM\nproduction also spans Cheongju; Icheon stands in for SK hynix HBM\noperations in v1. (3) Ticker is the KRX listing via Yahoo symbol 000660.KS."
     },
     {
       "id": "tsmc-ap6-zhunan",
@@ -392,9 +410,21 @@
           "title": "TSMC to Consume Three Nuclear Reactors' Worth of Power (CommonWealth Magazine)",
           "date": "2024-08-28",
           "supports": "scale and trajectory of TSMC's power demand on the Taiwan grid"
+        },
+        {
+          "url": "https://www.digitimes.com/news/a20260303PD228/taiwan-power-company-demand-2030-electricity-taiwan.html",
+          "title": "Taipower forecasts over 5GW new power demand by 2030 amid semiconductor and AI data center expansion (DigiTimes)",
+          "date": "2026-03-03",
+          "supports": "forward demand growth (~1GW/year through 2030, driven by foundry, memory, advanced packaging, AI)"
+        },
+        {
+          "url": "https://www.digitimes.com/news/a20260119PD213/taiwan-electricity-data-center-taiwan-power-company-data.html",
+          "title": "Taiwan rolls out tiered electricity rates for data centers amid AI power crunch (DigiTimes)",
+          "date": "2026-01-19",
+          "supports": "policy response to grid pressure from AI loads"
         }
       ],
-      "body": "# Taiwan power grid (Taipower)\n\nTaiwan is an island grid with no interconnections — every leading-edge\nwafer and CoWoS package depends on Taipower keeping the lights on. TSMC\nalone drew 8.4% of Taiwan's total power consumption in 2023 (S&P Global\nRatings, via Taipei Times), projected to approach a quarter of the island's\nconsumption by 2030 as fab and packaging expansion compounds.\n\nThis makes Taiwan's grid one of the most leveraged single points in the\nglobal AI economy: a `power-taiwan` constraint entity (post-v1) will carry\nreserve-margin and energy-mix metrics.\n\n**Reviewer notes:** Node is the island grid as a region (centroid\ncoordinates, precision `region`). Per-plant generation nodes are post-v1."
+      "body": "# Taiwan power grid (Taipower)\n\nTaiwan is an island grid with no interconnections — every leading-edge\nwafer and CoWoS package depends on Taipower keeping the lights on. TSMC\nalone drew 8.4% of Taiwan's total power consumption in 2023 (S&P Global\nRatings, via Taipei Times), projected to approach a quarter of the island's\nconsumption by 2030 as fab and packaging expansion compounds.\n\nThis makes Taiwan's grid one of the most leveraged single points in the\nglobal AI economy: a `power-taiwan` constraint entity (post-v1) will carry\nreserve-margin and energy-mix metrics.\n\nThe squeeze is tightening, not easing: Taipower's March 2026 forecast adds\nover 5GW of new demand by 2030 (~1GW/year) from foundry, memory, advanced\npackaging, and AI data centers, and Taiwan introduced tiered electricity\nrates for data centers in January 2026 — the grid is now actively rationing\nAI growth by price.\n\n**Reviewer notes:** Node is the island grid as a region (centroid\ncoordinates, precision `region`). Per-plant generation nodes are post-v1."
     },
     {
       "id": "azure-west-des-moines",
@@ -818,10 +848,10 @@
           "note": "Record high, roughly doubling 2024; includes AP8 (ex-Innolux) and Taichung capacity"
         },
         {
-          "value": 125000,
+          "value": 127500,
           "unit": "wafers_per_month",
           "as_of": "2026-Q4",
-          "note": "Projection: 120,000-130,000 wpm by end-2026 (midpoint recorded)"
+          "note": "Projection: 115,000-140,000 wpm by end-2026 (midpoint recorded; TrendForce estimate as of April 2026, revised from the earlier 120-130k range)"
         }
       ],
       "severity": "high",
@@ -855,9 +885,27 @@
           "date": "2023-07-05",
           "quote": "CoWoS and HBM are already majority AI-facing technologies, so all slack was already absorbed in Q1. With GPU demand exploding, these are the parts of the supply chain that just cannot keep up and are bottlenecking GPU supply.",
           "supports": "CoWoS as the binding bottleneck on GPU supply (2023)"
+        },
+        {
+          "url": "https://www.trendforce.com/news/2025/12/08/news-tsmcs-cowos-l-s-reportedly-fully-booked-osat-partners-step-up-with-ases-cowop-in-focus/",
+          "title": "TSMC's CoWoS-L/S Reportedly Fully Booked, OSAT Partners Step Up (TrendForce)",
+          "date": "2025-12-08",
+          "supports": "demand still exceeding capacity in late 2025 despite consecutive doublings"
+        },
+        {
+          "url": "https://www.trendforce.com/news/2026/04/16/news-tsmc-says-cowos-offers-industrys-largest-reticle-size-packaging-amid-intel-emib-rivalry-copos-advances/",
+          "title": "TSMC Says CoWoS Offers Industry's Largest Reticle-Size Packaging; CoPoS Advances (TrendForce)",
+          "date": "2026-04-16",
+          "supports": "2026 capacity estimate revision (115,000-140,000 wpm by end-2026)"
+        },
+        {
+          "url": "https://www.trendforce.com/news/2026/05/14/news-tsmc-sees-ai-wafer-demand-rising-11x-from-2022-2026-targets-cowos-with-24-hbm-stacks-in-2029/",
+          "title": "TSMC Sees AI Wafer Demand Rising 11x From 2022-2026; Targets CoWoS With 24 HBM Stacks in 2029 (TrendForce)",
+          "date": "2026-05-14",
+          "supports": "demand trajectory through 2026 and packaging roadmap beyond"
         }
       ],
-      "body": "# CoWoS advanced packaging capacity\n\nThe defining bottleneck of the 2023-2025 AI buildout. Wafer starts were\nnever the limit — packaging was: attaching HBM to GPU dies on silicon\ninterposers at scale. TSMC's CoWoS capacity has roughly doubled every year\nsince 2023 and demand has stayed ahead of it; TrendForce reported capacity\n\"still insufficient\" even after two consecutive doublings.\n\nSelecting this constraint in the UI highlights everything downstream:\npackaged-module flow to Nvidia, GPU deployment into Azure, OpenAI's\ntraining compute, and ChatGPT itself. When the bottleneck migrates (HBM,\nsubstrates, power), new constraint entities will tell that story the same\nway — the system is deliberately agnostic about which bottleneck matters.\n\n**Reviewer notes:** (1) Metric values record midpoints of reported ranges;\nthe ranges are preserved in each metric's note. (2) Figures are TrendForce\nreporting (supply-chain checks), not TSMC disclosures — TSMC does not\npublish CoWoS capacity. This is the standard public source for these\nnumbers, but treat precision accordingly. (3) The 2026 figure is a\nprojection, marked as such."
+      "body": "# CoWoS advanced packaging capacity\n\nThe defining bottleneck of the 2023-2025 AI buildout — and still binding\nin 2026. Wafer starts were never the limit — packaging was: attaching HBM\nto GPU dies on silicon interposers at scale. TSMC's CoWoS capacity has\nroughly doubled every year since 2023 and demand has stayed ahead of it;\nTrendForce reported capacity \"still insufficient\" after two consecutive\ndoublings, and as of December 2025 CoWoS-L/S was reportedly fully booked,\npushing overflow to OSAT partners (ASE). TSMC's own framing (May 2026):\nAI wafer demand up ~11x from 2022 to 2026.\n\nSelecting this constraint in the UI highlights everything downstream:\npackaged-module flow to Nvidia, GPU deployment into Azure, OpenAI's\ntraining compute, and ChatGPT itself. When the bottleneck migrates (HBM,\nsubstrates, power), new constraint entities will tell that story the same\nway — the system is deliberately agnostic about which bottleneck matters.\n\n**Reviewer notes:** (1) Metric values record midpoints of reported ranges;\nthe ranges are preserved in each metric's note. (2) Figures are TrendForce\nreporting (supply-chain checks), not TSMC disclosures — TSMC does not\npublish CoWoS capacity. This is the standard public source for these\nnumbers, but treat precision accordingly. (3) The 2026 figure is a\nprojection, marked as such."
     }
   ]
 }

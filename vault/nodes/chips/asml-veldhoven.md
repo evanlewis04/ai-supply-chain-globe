@@ -14,9 +14,9 @@ location:
   region: Veldhoven, North Brabant
   precision: site
 capacity:
-  value: null
-  unit: null
-  as_of: 2026-Q2
+  value: 48
+  unit: euv_systems_shipped_in_year
+  as_of: 2025
 status: operational
 constraints: []
 tags: [euv, lithography, monopoly-supplier]
@@ -34,6 +34,10 @@ sources:
     date: 2024-06-16
     quote: "The first EUV machine took 23 hours to pattern a single wafer. Today's best EUV machines can do 180 wafers per hour."
     supports: EUV technology maturity and throughput context
+  - url: https://www.asml.com/en/news/press-releases/2026/q4-2025-financial-results
+    title: "ASML reports EUR 32.7 billion total net sales and EUR 9.6 billion net income in 2025"
+    date: 2026-01-28
+    supports: capacity (48 EUV systems shipped in 2025, up from 44 in 2024; EUV sales +39% to EUR 11.6B)
 ---
 
 # ASML Veldhoven (HQ & EUV production)
@@ -48,8 +52,13 @@ failure in the entire AI supply chain.
 Coordinates geocoded from the published street address (De Run 6501,
 Veldhoven); precision `site`.
 
-**Reviewer notes:** (1) The "sole supplier of EUV" claim is universally
-reported but the sources attached here support it only indirectly — consider
-adding ASML's own 20-F annual report language before this enters canon.
-(2) EUV annual shipment counts are published in ASML annual reports and
-would make a good `capacity` entry (unit: euv_systems_per_year) in M2.
+Annual EUV output: 48 systems shipped in 2025 (44 in 2024), per ASML's
+Q4 2025 results — the entire world's supply of leading-edge lithography,
+about four machines a month, from one campus. ASML guides 2026 as another
+growth year "largely driven by a significant increase in EUV sales" on AI
+demand.
+
+**Reviewer notes:** The "sole supplier of EUV" claim is universally
+reported but the sources attached here support it only indirectly —
+consider adding ASML's own 20-F annual report language. (Capacity field
+resolved 2026-06 with the official 2025 shipment count.)

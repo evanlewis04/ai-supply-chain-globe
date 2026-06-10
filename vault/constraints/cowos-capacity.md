@@ -18,10 +18,10 @@ metrics:
     unit: wafers_per_month
     as_of: 2025
     note: "Record high, roughly doubling 2024; includes AP8 (ex-Innolux) and Taichung capacity"
-  - value: 125000
+  - value: 127500
     unit: wafers_per_month
     as_of: 2026-Q4
-    note: "Projection: 120,000-130,000 wpm by end-2026 (midpoint recorded)"
+    note: "Projection: 115,000-140,000 wpm by end-2026 (midpoint recorded; TrendForce estimate as of April 2026, revised from the earlier 120-130k range)"
 severity: high
 tags: [advanced-packaging, tsmc, bottleneck]
 sources:
@@ -42,15 +42,30 @@ sources:
     date: 2023-07-05
     quote: "CoWoS and HBM are already majority AI-facing technologies, so all slack was already absorbed in Q1. With GPU demand exploding, these are the parts of the supply chain that just cannot keep up and are bottlenecking GPU supply."
     supports: CoWoS as the binding bottleneck on GPU supply (2023)
+  - url: https://www.trendforce.com/news/2025/12/08/news-tsmcs-cowos-l-s-reportedly-fully-booked-osat-partners-step-up-with-ases-cowop-in-focus/
+    title: "TSMC's CoWoS-L/S Reportedly Fully Booked, OSAT Partners Step Up (TrendForce)"
+    date: 2025-12-08
+    supports: demand still exceeding capacity in late 2025 despite consecutive doublings
+  - url: https://www.trendforce.com/news/2026/04/16/news-tsmc-says-cowos-offers-industrys-largest-reticle-size-packaging-amid-intel-emib-rivalry-copos-advances/
+    title: "TSMC Says CoWoS Offers Industry's Largest Reticle-Size Packaging; CoPoS Advances (TrendForce)"
+    date: 2026-04-16
+    supports: 2026 capacity estimate revision (115,000-140,000 wpm by end-2026)
+  - url: https://www.trendforce.com/news/2026/05/14/news-tsmc-sees-ai-wafer-demand-rising-11x-from-2022-2026-targets-cowos-with-24-hbm-stacks-in-2029/
+    title: "TSMC Sees AI Wafer Demand Rising 11x From 2022-2026; Targets CoWoS With 24 HBM Stacks in 2029 (TrendForce)"
+    date: 2026-05-14
+    supports: demand trajectory through 2026 and packaging roadmap beyond
 ---
 
 # CoWoS advanced packaging capacity
 
-The defining bottleneck of the 2023-2025 AI buildout. Wafer starts were
-never the limit — packaging was: attaching HBM to GPU dies on silicon
-interposers at scale. TSMC's CoWoS capacity has roughly doubled every year
-since 2023 and demand has stayed ahead of it; TrendForce reported capacity
-"still insufficient" even after two consecutive doublings.
+The defining bottleneck of the 2023-2025 AI buildout — and still binding
+in 2026. Wafer starts were never the limit — packaging was: attaching HBM
+to GPU dies on silicon interposers at scale. TSMC's CoWoS capacity has
+roughly doubled every year since 2023 and demand has stayed ahead of it;
+TrendForce reported capacity "still insufficient" after two consecutive
+doublings, and as of December 2025 CoWoS-L/S was reportedly fully booked,
+pushing overflow to OSAT partners (ASE). TSMC's own framing (May 2026):
+AI wafer demand up ~11x from 2022 to 2026.
 
 Selecting this constraint in the UI highlights everything downstream:
 packaged-module flow to Nvidia, GPU deployment into Azure, OpenAI's
