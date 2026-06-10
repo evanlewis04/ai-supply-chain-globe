@@ -69,17 +69,24 @@ export default function App() {
 
   return (
     <div className="app">
-      <header className="header">
-        <h1>AI Supply Chain Globe</h1>
-        <span className="header-sub">
-          {graph.meta.counts.nodes} nodes · {graph.meta.counts.edges} edges ·
-          every claim sourced
-        </span>
-        <span className="header-hint">
-          Click a node for details &amp; sources · pick a constraint to trace
-          the bottleneck · hover arcs for flows
-        </span>
-      </header>
+      <div className="left-rail">
+        <header className="header">
+          <h1>AI Supply Chain Globe</h1>
+          <span className="header-sub">
+            {graph.meta.counts.nodes} nodes · {graph.meta.counts.edges} edges ·
+            every claim sourced
+          </span>
+          <span className="header-hint">
+            Click a node for details &amp; sources · pick a constraint to trace
+            the bottleneck · hover arcs for flows
+          </span>
+        </header>
+        <ConstraintPanel
+          constraints={graph.constraints}
+          selectedId={constraintId}
+          onSelect={setConstraintId}
+        />
+      </div>
       <GlobeView
         graph={graph}
         prices={prices}
@@ -89,11 +96,6 @@ export default function App() {
         onSelect={setSelectedId}
       />
       <Legend hiddenLayers={hiddenLayers} onToggleLayer={toggleLayer} />
-      <ConstraintPanel
-        constraints={graph.constraints}
-        selectedId={constraintId}
-        onSelect={setConstraintId}
-      />
       {selectedNode && (
         <SidePanel
           node={selectedNode}

@@ -26,12 +26,21 @@ body,
   color: #9aa0b4;
 }
 
-.header {
+.left-rail {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
   padding: 14px 20px;
+  max-height: calc(100% - 90px); /* keep clear of the legend */
+  pointer-events: none;
+}
+
+.header {
   pointer-events: none;
 }
 
@@ -103,12 +112,10 @@ body,
 }
 
 .constraint-panel {
-  position: absolute;
-  top: 70px;
-  left: 20px;
-  z-index: 10;
   width: 300px;
   max-width: 80vw;
+  overflow-y: auto;
+  pointer-events: auto;
   background: rgba(5, 8, 25, 0.78);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
@@ -243,11 +250,29 @@ body,
   pointer-events: none;
 }
 
+/* Stacking context for everything globe.gl renders (canvas, CSS2D labels,
+   hover tooltip), so internal z-indexes can't leak above the UI panels. */
+.globe-stage {
+  isolation: isolate;
+}
+
+/* globe.gl's hover tooltip (float-tooltip lib). CSS2DRenderer depth-sorts
+   label boxes with z-index 0..N-1, so the tooltip needs a value that always
+   beats them. Also strip the lib's default chrome so .tooltip is the only
+   visible box. */
+div.float-tooltip-kap {
+  z-index: 9999;
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font: inherit;
+}
+
 .tooltip {
   font-size: 0.78rem;
   line-height: 1.45;
-  background: rgba(5, 8, 25, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(7, 10, 28, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 6px;
   padding: 7px 10px;
   max-width: 280px;

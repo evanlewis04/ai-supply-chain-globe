@@ -228,68 +228,70 @@ export default function GlobeView({
   };
 
   return (
-    <Globe
-      ref={globeRef}
-      width={size.w}
-      height={size.h}
-      globeImageUrl="textures/earth-night.jpg"
-      backgroundImageUrl="textures/night-sky.png"
-      atmosphereColor="#3a86ff"
-      atmosphereAltitude={0.18}
-      pointsData={points}
-      pointLat="lat"
-      pointLng="lng"
-      pointColor={(d: object) => {
-        const { node } = d as PointDatum;
-        if (highlight && !highlight.nodes.has(node.id)) return DIM_NODE;
-        return LAYER_COLORS[node.layer];
-      }}
-      pointAltitude={(d: object) =>
-        (d as PointDatum).node.id === selectedId ? 0.09 : 0.04
-      }
-      pointRadius={0.75}
-      pointLabel={pointLabel}
-      onPointClick={(d: object) => onSelect((d as PointDatum).node.id)}
-      onGlobeClick={() => onSelect(null)}
-      arcsData={arcs}
-      arcColor={(d: object) => {
-        const arc = d as ArcDatum;
-        if (highlight && !highlight.edges.has(arc.id)) return DIM_ARC;
-        return arc.color;
-      }}
-      arcStroke={(d: object) => {
-        const arc = d as ArcDatum;
-        if (highlight) return highlight.edges.has(arc.id) ? 1.0 : 0.3;
-        return arc.emphasized ? 0.9 : 0.5;
-      }}
-      arcDashLength={0.45}
-      arcDashGap={0.25}
-      arcDashAnimateTime={(d: object) => (d as ArcDatum).animTime}
-      arcAltitudeAutoScale={0.4}
-      arcLabel={(d: object) => (d as ArcDatum).label}
-      htmlElementsData={labelData}
-      htmlLat="lat"
-      htmlLng="lng"
-      htmlAltitude={0.015}
-      htmlElement={(d: object) => {
-        const { node, angle, dimmed } = d as PointDatum;
-        const wrap = document.createElement("div");
-        wrap.className = "node-label-wrap";
-        const box = document.createElement("div");
-        box.className = "node-label" + (dimmed ? " dimmed" : "");
-        box.textContent = node.name;
-        box.style.borderLeftColor = LAYER_COLORS[node.layer];
-        box.style.transform = labelOffsetTransform(angle);
-        box.onclick = (ev) => {
-          ev.stopPropagation();
-          onSelect(node.id);
-        };
-        wrap.appendChild(box);
-        return wrap;
-      }}
-      htmlElementVisibilityModifier={(el: HTMLElement, isVisible: boolean) => {
-        el.classList.toggle("behind", !isVisible);
-      }}
-    />
+    <div className="globe-stage">
+      <Globe
+        ref={globeRef}
+        width={size.w}
+        height={size.h}
+        globeImageUrl="textures/earth-night.jpg"
+        backgroundImageUrl="textures/night-sky.png"
+        atmosphereColor="#3a86ff"
+        atmosphereAltitude={0.18}
+        pointsData={points}
+        pointLat="lat"
+        pointLng="lng"
+        pointColor={(d: object) => {
+          const { node } = d as PointDatum;
+          if (highlight && !highlight.nodes.has(node.id)) return DIM_NODE;
+          return LAYER_COLORS[node.layer];
+        }}
+        pointAltitude={(d: object) =>
+          (d as PointDatum).node.id === selectedId ? 0.09 : 0.04
+        }
+        pointRadius={0.75}
+        pointLabel={pointLabel}
+        onPointClick={(d: object) => onSelect((d as PointDatum).node.id)}
+        onGlobeClick={() => onSelect(null)}
+        arcsData={arcs}
+        arcColor={(d: object) => {
+          const arc = d as ArcDatum;
+          if (highlight && !highlight.edges.has(arc.id)) return DIM_ARC;
+          return arc.color;
+        }}
+        arcStroke={(d: object) => {
+          const arc = d as ArcDatum;
+          if (highlight) return highlight.edges.has(arc.id) ? 1.0 : 0.3;
+          return arc.emphasized ? 0.9 : 0.5;
+        }}
+        arcDashLength={0.45}
+        arcDashGap={0.25}
+        arcDashAnimateTime={(d: object) => (d as ArcDatum).animTime}
+        arcAltitudeAutoScale={0.4}
+        arcLabel={(d: object) => (d as ArcDatum).label}
+        htmlElementsData={labelData}
+        htmlLat="lat"
+        htmlLng="lng"
+        htmlAltitude={0.015}
+        htmlElement={(d: object) => {
+          const { node, angle, dimmed } = d as PointDatum;
+          const wrap = document.createElement("div");
+          wrap.className = "node-label-wrap";
+          const box = document.createElement("div");
+          box.className = "node-label" + (dimmed ? " dimmed" : "");
+          box.textContent = node.name;
+          box.style.borderLeftColor = LAYER_COLORS[node.layer];
+          box.style.transform = labelOffsetTransform(angle);
+          box.onclick = (ev) => {
+            ev.stopPropagation();
+            onSelect(node.id);
+          };
+          wrap.appendChild(box);
+          return wrap;
+        }}
+        htmlElementVisibilityModifier={(el: HTMLElement, isVisible: boolean) => {
+          el.classList.toggle("behind", !isVisible);
+        }}
+      />
+    </div>
   );
 }
