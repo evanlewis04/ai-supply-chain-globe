@@ -268,6 +268,149 @@ div.float-tooltip-kap {
   font: inherit;
 }
 
+.ask-globe {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 12;
+  width: min(620px, 60vw);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.ask-bar {
+  display: flex;
+  gap: 8px;
+  background: rgba(5, 8, 25, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  padding: 8px 10px;
+  backdrop-filter: blur(8px);
+}
+
+.ask-bar input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: #e8e8f0;
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.ask-bar input::placeholder {
+  color: #6f7590;
+}
+
+.ask-bar button {
+  font: inherit;
+  font-size: 0.8rem;
+  color: #e8e8f0;
+  background: rgba(58, 134, 255, 0.25);
+  border: 1px solid rgba(58, 134, 255, 0.55);
+  border-radius: 7px;
+  padding: 4px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ask-bar button:hover:not(:disabled) {
+  background: rgba(58, 134, 255, 0.4);
+}
+
+.ask-bar button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.ask-bar .ask-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.ask-model {
+  font: inherit;
+  font-size: 0.74rem;
+  color: #9aa0b4;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 7px;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.ask-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.ask-chip {
+  font: inherit;
+  font-size: 0.72rem;
+  color: #c8cbe0;
+  background: rgba(5, 8, 25, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  padding: 3px 11px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+
+.ask-chip:hover {
+  background: rgba(24, 30, 62, 0.85);
+  color: #fff;
+}
+
+.ask-answer {
+  position: relative;
+  background: rgba(7, 10, 28, 0.9);
+  border: 1px solid rgba(58, 134, 255, 0.4);
+  border-radius: 10px;
+  padding: 12px 34px 10px 14px;
+  backdrop-filter: blur(8px);
+}
+
+.ask-answer p {
+  margin: 0 0 6px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.ask-meta {
+  font-size: 0.7rem;
+  color: #9aa0b4;
+}
+
+.ask-dismiss {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #9aa0b4;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ask-dismiss:hover {
+  color: #fff;
+}
+
+.ask-error {
+  font-size: 0.76rem;
+  color: #ffb4b4;
+  background: rgba(80, 10, 20, 0.6);
+  border: 1px solid rgba(255, 77, 77, 0.4);
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
 .tooltip {
   font-size: 0.78rem;
   line-height: 1.45;

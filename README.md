@@ -48,6 +48,21 @@ The scope is deliberately **narrow-deep**: one end-to-end slice, fully
 sourced, rather than hundreds of shallow nodes — with each chokepoint
 adding only the nodes needed to tell its story.
 
+## Ask the Globe (LLM-driven)
+
+Type a question — *"why can't Nvidia just make more GPUs?"* — and Claude
+answers it **by driving the visualization**: the model returns a structured
+`{answer, node_ids, edge_ids, constraint_id}` response, every id is
+validated against the real graph (a hallucinated node simply can't render),
+and the relevant supply-chain path lights up using the same highlight
+machinery as the constraint chips. Grounding comes free: the model can only
+reference entities that exist in the vault, all of which are source-backed.
+
+Bring your own Anthropic API key (entered once, stored only in your
+browser's localStorage, sent only to `api.anthropic.com`). Default model is
+Haiku 4.5 — with the graph context prompt-cached, a question costs about a
+cent — with a Sonnet 4.6 toggle for harder questions.
+
 ## Finance overlay
 
 Public-company nodes carry their ticker and 2-year stock performance —

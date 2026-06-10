@@ -3,7 +3,9 @@ import GlobeView from "./components/GlobeView";
 import SidePanel from "./components/SidePanel";
 import Legend from "./components/Legend";
 import ConstraintPanel from "./components/ConstraintPanel";
+import AskGlobe from "./components/AskGlobe";
 import { downstreamOfConstraint } from "./graph/traversal";
+import type { AskResult } from "./lib/askGlobe";
 import type { GraphData, Layer, PricesData } from "./types";
 
 export default function App() {
@@ -11,8 +13,20 @@ export default function App() {
   const [prices, setPrices] = useState<PricesData | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [constraintId, setConstraintId] = useState<string | null>(null);
+  const [askResult, setAskResult] = useState<AskResult | null>(null);
   const [hiddenLayers, setHiddenLayers] = useState<Set<Layer>>(new Set());
   const [error, setError] = useState<string | null>(null);
+
+  // Ask-answers and constraint selections drive the same highlight channel;
+  // activating one clears the other.
+  const selectConstraint = (id: string | null) => {
+    setConstraintId(id);
+    if (id) setAskResult(null);
+  };
+  const applyAskResult = (result: AskResult | null) => {
+    setAskResult(result);
+    if (result) setConstraintId(null);
+  };
 
   const toggleLayer = (layer: Layer) =>
     setHiddenLayers((prev) => {
@@ -49,10 +63,11 @@ export default function App() {
     [graph, selectedId]
   );
 
-  const highlight = useMemo(
-    () => (graph && constraintId ? downstreamOfConstraint(graph, constraintId) : null),
-    [graph, constraintId]
-  );
+  const highlight = useMemo(() => {
+    if (askResult && askResult.affected.nodes.size > 0) return askResult.affected;
+    if (graph && constraintId) return downstreamOfConstraint(graph, constraintId);
+    return null;
+  }, [graph, constraintId, askResult]);
 
   if (error) {
     return (
@@ -84,7 +99,7 @@ export default function App() {
         <ConstraintPanel
           constraints={graph.constraints}
           selectedId={constraintId}
-          onSelect={setConstraintId}
+          onSelect={selectConstraint}
         />
       </div>
       <GlobeView
@@ -96,13 +111,14 @@ export default function App() {
         onSelect={setSelectedId}
       />
       <Legend hiddenLayers={hiddenLayers} onToggleLayer={toggleLayer} />
+      <AskGlobe graph={graph} result={askResult} onResult={applyAskResult} />
       {selectedNode && (
         <SidePanel
           node={selectedNode}
           graph={graph}
           prices={prices}
           onSelect={setSelectedId}
-          onSelectConstraint={setConstraintId}
+          onSelectConstraint={selectConstraint}
           onClose={() => setSelectedId(null)}
         />
       )}
