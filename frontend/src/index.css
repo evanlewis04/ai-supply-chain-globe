@@ -270,7 +270,9 @@ div.float-tooltip-kap {
 
 .ask-globe {
   position: absolute;
-  bottom: 14px;
+  /* Clear of the legend's bottom lane (legend is bottom: 14px, ~40px tall),
+     so wrapped suggestion chips can never collide with it. */
+  bottom: 64px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 12;

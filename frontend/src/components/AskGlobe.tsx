@@ -95,6 +95,15 @@ export default function AskGlobe({ graph, result, onResult }: Props) {
         </div>
       )}
       {error && <div className="ask-error">{error}</div>}
+      {!result && !loading && !needsKey && (
+        <div className="ask-suggestions">
+          {SUGGESTIONS.map((s) => (
+            <button key={s} className="ask-chip" onClick={() => void ask(s)}>
+              {s}
+            </button>
+          ))}
+        </div>
+      )}
       {needsKey ? (
         <form className="ask-bar" onSubmit={saveKey}>
           <input
@@ -140,15 +149,6 @@ export default function AskGlobe({ graph, result, onResult }: Props) {
             ))}
           </select>
         </form>
-      )}
-      {!result && !loading && !needsKey && (
-        <div className="ask-suggestions">
-          {SUGGESTIONS.map((s) => (
-            <button key={s} className="ask-chip" onClick={() => void ask(s)}>
-              {s}
-            </button>
-          ))}
-        </div>
       )}
     </div>
   );
