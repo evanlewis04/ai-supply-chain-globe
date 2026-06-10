@@ -52,11 +52,13 @@ adding only the nodes needed to tell its story.
 
 Type a question — *"why can't Nvidia just make more GPUs?"* — and Claude
 answers it **by driving the visualization**: the model returns a structured
-`{answer, node_ids, edge_ids, constraint_id}` response, every id is
-validated against the real graph (a hallucinated node simply can't render),
-and the relevant supply-chain path lights up using the same highlight
-machinery as the constraint chips. Grounding comes free: the model can only
-reference entities that exist in the vault, all of which are source-backed.
+`{answer, node_ids, edge_ids, constraint_id, references}` response, every id
+is validated against the real graph (a hallucinated node simply can't
+render), the camera flies to frame the relevant supply-chain path, the
+central constraint's chip activates with its metrics and sources, and entity
+names in the answer are clickable — opening that node's detail panel with
+its primary sources. Grounding comes free: the model can only reference
+entities that exist in the vault, all of which are source-backed.
 
 Bring your own Anthropic API key (entered once, stored only in your
 browser's localStorage, sent only to `api.anthropic.com`). Default model is

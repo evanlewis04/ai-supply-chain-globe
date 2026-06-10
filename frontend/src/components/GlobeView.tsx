@@ -143,6 +143,35 @@ export default function GlobeView({
 
   const displayPos = useMemo(() => displacedPositions(graph.nodes), [graph]);
 
+  // Fly the camera to frame the active highlight (constraint selection or
+  // an Ask answer). Centroid via 3D vector mean — a plain lat/lng average
+  // puts Taiwan↔Iowa over Africa instead of the Pacific.
+  useEffect(() => {
+    const globe = globeRef.current;
+    if (!globe || !highlight || highlight.nodes.size === 0) return;
+    const r = Math.PI / 180;
+    let x = 0, y = 0, z = 0, count = 0;
+    highlight.nodes.forEach((id) => {
+      const p = displayPos.get(id);
+      if (!p) return;
+      x += Math.cos(p.lat * r) * Math.cos(p.lng * r);
+      y += Math.cos(p.lat * r) * Math.sin(p.lng * r);
+      z += Math.sin(p.lat * r);
+      count++;
+    });
+    if (count === 0) return;
+    const lat = Math.atan2(z, Math.hypot(x, y)) / r;
+    const lng = Math.atan2(y, x) / r;
+    let spread = 0;
+    highlight.nodes.forEach((id) => {
+      const p = displayPos.get(id);
+      if (p) spread = Math.max(spread, angularDistanceDeg(lat, lng, p.lat, p.lng));
+    });
+    const altitude = Math.min(2.6, Math.max(0.8, 0.7 + spread / 38));
+    globe.controls().autoRotate = false;
+    globe.pointOfView({ lat, lng, altitude }, 1400);
+  }, [highlight, displayPos]);
+
   const points = useMemo<PointDatum[]>(
     () =>
       graph.nodes

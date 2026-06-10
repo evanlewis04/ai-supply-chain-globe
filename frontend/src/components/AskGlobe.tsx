@@ -1,8 +1,9 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, ReactNode, useState } from "react";
 import type { GraphData } from "../types";
 import {
   ASK_MODELS,
   AskModel,
+  AskReference,
   AskResult,
   DEFAULT_ASK_MODEL,
   askGlobe,
@@ -12,6 +13,42 @@ interface Props {
   graph: GraphData;
   result: AskResult | null;
   onResult: (result: AskResult | null) => void;
+  onSelectNode: (id: string) => void;
+}
+
+/**
+ * Render the answer with each referenced entity name as a clickable link.
+ * References are matched at their first non-overlapping occurrence; text
+ * the model didn't quote verbatim was already filtered out upstream.
+ */
+function linkifyAnswer(
+  answer: string,
+  references: AskReference[],
+  onSelectNode: (id: string) => void
+): ReactNode[] {
+  const spans: { start: number; end: number; nodeId: string }[] = [];
+  for (const ref of references) {
+    const start = answer.indexOf(ref.text);
+    if (start < 0) continue;
+    const end = start + ref.text.length;
+    if (spans.some((s) => start < s.end && end > s.start)) continue;
+    spans.push({ start, end, nodeId: ref.nodeId });
+  }
+  spans.sort((a, b) => a.start - b.start);
+
+  const parts: ReactNode[] = [];
+  let pos = 0;
+  for (const s of spans) {
+    if (s.start > pos) parts.push(answer.slice(pos, s.start));
+    parts.push(
+      <button key={s.start} className="ask-link" onClick={() => onSelectNode(s.nodeId)}>
+        {answer.slice(s.start, s.end)}
+      </button>
+    );
+    pos = s.end;
+  }
+  if (pos < answer.length) parts.push(answer.slice(pos));
+  return parts;
 }
 
 const KEY_STORAGE = "ask-globe-api-key";
@@ -24,7 +61,7 @@ const SUGGESTIONS = [
   "Why are datacenter buildouts delayed?",
 ];
 
-export default function AskGlobe({ graph, result, onResult }: Props) {
+export default function AskGlobe({ graph, result, onResult, onSelectNode }: Props) {
   const [question, setQuestion] = useState("");
   const [apiKey, setApiKey] = useState(() => localStorage.getItem(KEY_STORAGE) ?? "");
   const [model, setModel] = useState<AskModel>(() => {
@@ -86,7 +123,7 @@ export default function AskGlobe({ graph, result, onResult }: Props) {
           <button className="ask-dismiss" onClick={() => onResult(null)} aria-label="Dismiss answer">
             ×
           </button>
-          <p>{result.answer}</p>
+          <p>{linkifyAnswer(result.answer, result.references, onSelectNode)}</p>
           <span className="ask-meta">
             {result.affected.nodes.size} nodes · {result.affected.edges.size} flows highlighted
             {result.droppedIds.length > 0 &&

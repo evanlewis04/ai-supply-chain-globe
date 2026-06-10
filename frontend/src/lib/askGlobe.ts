@@ -10,12 +10,21 @@ export const ASK_MODELS = {
 export type AskModel = keyof typeof ASK_MODELS;
 export const DEFAULT_ASK_MODEL: AskModel = "claude-haiku-4-5";
 
+export interface AskReference {
+  /** Validated node id. */
+  nodeId: string;
+  /** The exact substring of the answer that names this entity. */
+  text: string;
+}
+
 export interface AskResult {
   answer: string;
   /** Validated against the graph — hallucinated ids are dropped. */
   affected: AffectedSet;
   /** A constraint the model judged central to the answer, if any. */
   constraintId: string | null;
+  /** Entity mentions in the answer, for click-to-open-node links. */
+  references: AskReference[];
   /** Ids the model returned that don't exist in the graph (for transparency). */
   droppedIds: string[];
 }
@@ -79,6 +88,10 @@ and return empty id arrays.
 the relevant path(s), not everything. Use ONLY ids that exist in the graph data. Include \
 the edges connecting the nodes you select.
 - constraint_id: if one constraint entity is central to the answer, its id; else null.
+- references: one entry per facility/company/product your answer mentions by name, \
+with node_id (a real graph node id) and text set to the EXACT substring of your answer \
+that names it (e.g. {"node_id": "tsmc-fab-18", "text": "TSMC's Fab 18"}). These become \
+clickable links that open the node's detail panel with its sources.
 
 Graph data:
 ${buildGraphContext(graph)}`;
@@ -91,8 +104,20 @@ const RESPONSE_SCHEMA = {
     node_ids: { type: "array", items: { type: "string" } },
     edge_ids: { type: "array", items: { type: "string" } },
     constraint_id: { anyOf: [{ type: "string" }, { type: "null" }] },
+    references: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          node_id: { type: "string" },
+          text: { type: "string" },
+        },
+        required: ["node_id", "text"],
+        additionalProperties: false,
+      },
+    },
   },
-  required: ["answer", "node_ids", "edge_ids", "constraint_id"],
+  required: ["answer", "node_ids", "edge_ids", "constraint_id", "references"],
   additionalProperties: false,
 } as const;
 
@@ -134,6 +159,7 @@ export async function askGlobe(
     node_ids: string[];
     edge_ids: string[];
     constraint_id: string | null;
+    references: { node_id: string; text: string }[];
   };
 
   // Ground the response: only ids that exist in the graph may render.
@@ -164,5 +190,18 @@ export async function askGlobe(
     parsed.constraint_id && constraintIds.has(parsed.constraint_id) ? parsed.constraint_id : null;
   if (parsed.constraint_id && !constraintId) droppedIds.push(parsed.constraint_id);
 
-  return { answer: parsed.answer, affected: { nodes, edges }, constraintId, droppedIds };
+  // References must point at real nodes and quote the answer verbatim;
+  // anything mentioned by name belongs in the highlight too.
+  const references: AskReference[] = [];
+  for (const ref of parsed.references ?? []) {
+    if (!nodeIds.has(ref.node_id)) {
+      droppedIds.push(ref.node_id);
+      continue;
+    }
+    if (!parsed.answer.includes(ref.text)) continue;
+    references.push({ nodeId: ref.node_id, text: ref.text });
+    nodes.add(ref.node_id);
+  }
+
+  return { answer: parsed.answer, affected: { nodes, edges }, constraintId, references, droppedIds };
 }

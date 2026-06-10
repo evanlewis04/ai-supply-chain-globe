@@ -18,14 +18,15 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
 
   // Ask-answers and constraint selections drive the same highlight channel;
-  // activating one clears the other.
+  // a manual chip click clears the answer, while an answer activates the
+  // constraint chip the model judged central (or clears any stale one).
   const selectConstraint = (id: string | null) => {
     setConstraintId(id);
     if (id) setAskResult(null);
   };
   const applyAskResult = (result: AskResult | null) => {
     setAskResult(result);
-    if (result) setConstraintId(null);
+    setConstraintId(result?.constraintId ?? null);
   };
 
   const toggleLayer = (layer: Layer) =>
@@ -111,7 +112,12 @@ export default function App() {
         onSelect={setSelectedId}
       />
       <Legend hiddenLayers={hiddenLayers} onToggleLayer={toggleLayer} />
-      <AskGlobe graph={graph} result={askResult} onResult={applyAskResult} />
+      <AskGlobe
+        graph={graph}
+        result={askResult}
+        onResult={applyAskResult}
+        onSelectNode={setSelectedId}
+      />
       {selectedNode && (
         <SidePanel
           node={selectedNode}
