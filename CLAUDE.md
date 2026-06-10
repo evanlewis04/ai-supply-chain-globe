@@ -30,8 +30,9 @@ Claude owns technical decisions and merges well-verified factual entries
 directly (keep a "Reviewer notes" section in each vault file as the audit
 trail). Contested/analytical values go to `vault/_pending/` for the owner's
 review. The owner (Evan) steers features and scope; push back on scope
-creep — narrow-deep beats broad-shallow. v1 = one slice, one constraint
-(cowos-capacity); see `implementation-plan.md` § Amendments.
+creep — narrow-deep beats broad-shallow. One slice, five constraints
+(cowos-capacity, spruce-pine-quartz, grid-transformers, euv-optics,
+euv-photoresist); see `implementation-plan.md` § Amendments.
 
 ## Gotchas
 

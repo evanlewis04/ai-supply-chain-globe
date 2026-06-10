@@ -18,24 +18,35 @@ graph property, not a slide bullet.
 
 ![CoWoS constraint selected — downstream highlight](docs/screenshots/constraint-cowos.png)
 
-Constraints are first-class, data-driven entities. Today the featured
-bottleneck is CoWoS (TrendForce capacity timeline: ~37.5k wafers/month in
-2024 → 75k in 2025 → ~125k projected end-2026); when the bottleneck migrates
-— HBM, ABF substrates, grid power — new constraint entities tell that story
-with zero code changes.
+Constraints are first-class, data-driven entities. The flagship is CoWoS
+(TrendForce capacity timeline: ~37.5k wafers/month in 2024 → 75k in 2025 →
+~125k projected end-2026), joined by four chokepoints most coverage misses:
+
+- **Spruce Pine ultra-pure quartz** — one NC town supplies the quartz in
+  70-90% of the world's polysilicon crucibles; Hurricane Helene shut it
+  for two weeks in 2024.
+- **Grid equipment lead times** — 128-week average waits for large power
+  transformers are now delaying close to half of planned US datacenter
+  builds.
+- **EUV optics & light source** — Zeiss SMT and TRUMPF single-source the
+  mirrors and drive laser inside every ASML EUV machine.
+- **EUV photoresist** — three Japanese firms make ~85% of the chemistry
+  that records every EUV pattern; Japan has already weaponized it once
+  (2019) and nationalized JSR (2024).
 
 ## The five-layer cake
 
-| Layer | v1 nodes |
+| Layer | Nodes |
 |---|---|
-| **Energy** | Taipower island grid, MidAmerican Iowa (wind → data centers) |
-| **Chips** | ASML Veldhoven (EUV), TSMC Fab 18 (N5/N3), TSMC AP6 Zhunan (CoWoS), SK hynix Icheon (HBM), Ibiden Ono (ABF substrates), Nvidia |
+| **Energy** | Taipower island grid, MidAmerican Iowa (wind → data centers), Hitachi Energy South Boston (power transformers) |
+| **Chips** | Spruce Pine quartz district, GlobalWafers Hsinchu (300mm wafers), Zeiss SMT Oberkochen (EUV optics), TRUMPF Ditzingen (EUV lasers), JSR Yokkaichi (EUV resists), ASML Veldhoven (EUV), TSMC Fab 18 (N5/N3), TSMC AP6 Zhunan (CoWoS), SK hynix Icheon (HBM), Ibiden Ono (ABF substrates), Nvidia |
 | **Infrastructure** | Microsoft Azure West Des Moines — the campus built exclusively to train GPT-4 |
 | **Models** | OpenAI |
 | **Applications** | ChatGPT |
 
-The v1 scope is deliberately **narrow-deep**: one end-to-end slice, fully
-sourced, rather than hundreds of shallow nodes.
+The scope is deliberately **narrow-deep**: one end-to-end slice, fully
+sourced, rather than hundreds of shallow nodes — with each chokepoint
+adding only the nodes needed to tell its story.
 
 ## Finance overlay
 
@@ -103,8 +114,9 @@ Stock data: Yahoo Finance via yfinance — display only, not investment advice.
 
 ## Roadmap
 
-- **Post-v1 constraints (data-only additions):** HBM supply, ABF substrate
-  capacity, EUV export controls, Taiwan water/power, US interconnect queues.
+- **More constraints (data-only additions):** HBM supply, ABF substrate
+  capacity, EUV export controls, Taiwan water/power, US interconnect queues,
+  gas turbines.
 - **Time dimension:** every value already carries `as_of`; a slider scrubs
   the buildout (Arizona fabs appearing, CoWoS tripling).
 - **Update pipeline:** scheduled source monitoring drafting proposals into

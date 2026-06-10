@@ -25,6 +25,18 @@
 
 **Working model change.** Claude owns all technical decisions (stack, architecture, data plumbing, when to merge well-verified factual entries into the vault) and proceeds without waiting for sign-off. The project owner steers features and scope, does the domain research he wants to go deep on, and can veto or edit anything after the fact. `_pending/` remains the channel for entries with contested or analytically uncertain values (capacities, volumes, constraint judgments); straightforward, well-sourced factual entries may be merged directly. Every vault file keeps its "Reviewer notes" so the audit trail survives.
 
+**Multi-constraint expansion (2026-06-10, owner-directed).** Non-goal 4a
+("no constraints beyond CoWoS") is retired. The owner selected four
+additional chokepoints — Spruce Pine ultra-pure quartz, grid transformer
+lead times, EUV optics/light source (Zeiss SMT + TRUMPF), and EUV
+photoresist (Japan) — deliberately favoring underappreciated bottlenecks
+over obvious ones (HBM, wafer fab). Each constraint added only the nodes
+and edges needed to tell its story (6 new nodes, 5 new edges, schema
+gained `material_supplier`/`wafer_plant` node types and a `materials`
+flow type). Edges whose relationships are industry-structural rather
+than documented bilateral contracts (Spruce Pine→GlobalWafers,
+Hitachi→MidAmerican) say so explicitly in notes and Reviewer notes.
+
 **Finance overlay (new v1 feature).** Public-company nodes carry an optional `ticker` field (`symbol` + `exchange`). `scripts/fetch_prices.py` pulls 2 years of weekly adjusted closes per ticker (Yahoo Finance via yfinance) into `frontend/public/prices.json`, which is committed so the repo renders offline. The UI shows ticker + 2-year performance on node hover and a sparkline with last close and provenance in the side panel. Market data is display-layer data, not vault content: it is fetched mechanically, never hand-edited, and is exempt from the per-claim sourcing standard (its provenance lives in `prices.json` meta). Private companies (e.g. OpenAI) simply have no ticker. Post-v1 candidates: align the price window with the time slider, event markers on price series.
 
 ---

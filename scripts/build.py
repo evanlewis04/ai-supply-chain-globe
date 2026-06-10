@@ -36,8 +36,9 @@ DEFAULT_OUT = ROOT / "frontend" / "public" / "graph.json"
 
 # Which node types are legal in which layer (cross-check beyond pure schema)
 LAYER_TYPES = {
-    "energy": {"power_plant", "substation", "grid_region", "gas_pipeline", "water_supply"},
-    "chips": {"fab", "packaging_facility", "memory_fab", "equipment_maker", "designer", "substrate_maker"},
+    "energy": {"power_plant", "substation", "grid_region", "gas_pipeline", "water_supply", "equipment_maker"},
+    "chips": {"fab", "packaging_facility", "memory_fab", "equipment_maker", "designer", "substrate_maker",
+              "material_supplier", "wafer_plant"},
     "infrastructure": {"data_center", "ai_factory", "network_hub", "cooling_supplier", "server_assembly"},
     "models": {"training_cluster", "model_artifact", "lab"},
     "applications": {"product", "deployment"},

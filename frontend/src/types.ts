@@ -116,6 +116,7 @@ export const FLOW_COLORS: Record<string, string> = {
   packaged_modules: "#56cfe1",
   memory: "#ffd166",
   substrates: "#f4a261",
+  materials: "#d4a373",
   servers: "#80ffdb",
   power: "#f6c945",
   water: "#90e0ef",

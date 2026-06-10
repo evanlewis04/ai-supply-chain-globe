@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generated_at": "2026-06-10T02:23:58+00:00",
+    "generated_at": "2026-06-10T20:20:26+00:00",
     "counts": {
-      "nodes": 11,
-      "edges": 10,
-      "constraints": 1
+      "nodes": 17,
+      "edges": 16,
+      "constraints": 5
     },
     "schema_version": "1.0.0"
   },
@@ -115,6 +115,59 @@
       "body": "# ASML Veldhoven (HQ & EUV production)\n\nASML's Veldhoven campus (De Run 6501) is corporate HQ and the final-assembly\nsite for its lithography systems, including EUV — the machines without which\nno leading-edge (N5/N3-class) logic can be manufactured. ASML is widely\ndocumented as the only company supplying production EUV lithography systems,\nwhich makes this single campus one of the most concentrated points of\nfailure in the entire AI supply chain.\n\nCoordinates geocoded from the published street address (De Run 6501,\nVeldhoven); precision `site`.\n\nAnnual EUV output: 48 systems shipped in 2025 (44 in 2024), per ASML's\nQ4 2025 results — the entire world's supply of leading-edge lithography,\nabout four machines a month, from one campus. ASML guides 2026 as another\ngrowth year \"largely driven by a significant increase in EUV sales\" on AI\ndemand.\n\n**Reviewer notes:** The \"sole supplier of EUV\" claim is universally\nreported but the sources attached here support it only indirectly —\nconsider adding ASML's own 20-F annual report language. (Capacity field\nresolved 2026-06 with the official 2025 shipment count.)"
     },
     {
+      "id": "globalwafers-hsinchu",
+      "name": "GlobalWafers Hsinchu (300mm wafer plant & HQ)",
+      "layer": "chips",
+      "type": "wafer_plant",
+      "operator": "GlobalWafers Co., Ltd.",
+      "ticker": {
+        "symbol": "6488.TWO",
+        "exchange": "TPEx (Taipei Exchange)"
+      },
+      "location": {
+        "lat": 24.8138,
+        "lon": 120.9675,
+        "country": "TW",
+        "region": "Hsinchu Science Park, Hsinchu",
+        "precision": "city"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-06"
+      },
+      "status": "operational",
+      "constraints": [],
+      "tags": [
+        "silicon-wafers",
+        "ingot-growth",
+        "taiwan"
+      ],
+      "sources": [
+        {
+          "url": "https://www.gw-semi.com/overview-locations/",
+          "title": "GlobalWafers locations (company site, accessed 2026-06)",
+          "date": "2026-06",
+          "supports": "location (No. 2 Creation Road 1, Hsinchu Science Park; 300mm/200mm polished and epitaxial wafer production)"
+        },
+        {
+          "url": "https://www.opportimes.com/en/tsmcs-6-semiconductor-wafer-vendors/",
+          "title": "TSMC's 6 semiconductor wafer vendors (Opportimes)",
+          "date": "2021-11-04",
+          "quote": "The main wafer suppliers for TSMC semiconductor company are Taiwan's Formosa SUMCO Technology Corporation, Taiwan's GlobalWafers, Japan's Shin-Etsu Handotai, Germany's Siltronic AG, Singapore's Soitec Microelectronics, and Japan's SUMCO Corporation.",
+          "supports": "GlobalWafers as one of TSMC's main wafer suppliers"
+        },
+        {
+          "url": "https://marklapedus.substack.com/p/taiwan-firm-boosts-us-silicon-wafer",
+          "title": "Taiwan Firm Boosts U.S. Silicon Wafer Industry (Semiecosystem, Mark LaPedus)",
+          "date": "2025-05-19",
+          "quote": "GlobalWafers is the world's third largest silicon wafer maker, behind Japan's Shin-Etsu and Japan's Sumco.",
+          "supports": "market position (world"
+        }
+      ],
+      "body": "# GlobalWafers Hsinchu (300mm wafer plant & HQ)\n\nGlobalWafers — the world's third-largest silicon wafer maker — runs its\nheadquarters and a 300mm/200mm polished and epitaxial wafer plant at\nNo. 2 Creation Road 1, Hsinchu Science Park, about 100 km up the west\ncoast from TSMC's Fab 18 in Tainan. It is one of TSMC's six publicly\nidentified main wafer suppliers, and it stands here for the wafer/ingot\nstage of the chain: the step that consumes Spruce Pine quartz crucibles\nand feeds blank 300mm wafers into leading-edge fabs.\n\nCoordinates are the Hsinchu city centroid (precision `city`); the street\naddress is published but has not been independently geocoded to site\nprecision.\n\nCapacity is `null`: GlobalWafers reports revenue and wafer-area\nshipments company-wide, not per-site wafer starts.\n\n**Reviewer notes:** (1) TSMC does not disclose supplier shares; the\n\"main wafer suppliers\" list is trade-press reporting (Opportimes 2021)\nconsistent with later coverage — treat the GlobalWafers→TSMC link as\nwell-established but unquantified. (2) Shin-Etsu and SUMCO are larger\nsuppliers globally; GlobalWafers was chosen as the representative wafer\nnode because it is Taiwanese (geographic proximity to Fab 18) and\npublicly listed (6488 on TPEx, for the finance overlay). Adding\nShin-Etsu Shirakawa later would also serve the photoresist story."
+    },
+    {
       "id": "ibiden-ono",
       "name": "Ibiden Ono Plant (ABF substrates)",
       "layer": "chips",
@@ -158,6 +211,57 @@
         }
       ],
       "body": "# Ibiden Ono Plant (ABF substrates)\n\nIbiden is the leading supplier of the ABF package substrates under Nvidia's\nAI accelerators — the layer of the stack almost nobody outside the industry\nhas heard of, and one of the candidate \"next bottlenecks\" as CoWoS capacity\ncatches up. The new Ono plant (Gifu) opened October 2025 and is ramping:\nreported ~25% utilization in late 2025, targeting ~50% by March 2026.\n\nSubstrates flow from here into the advanced packaging step, where the\nCoWoS interposer-plus-die assembly is mounted onto the substrate.\n\n**Reviewer notes:** (1) Capacity null — Ibiden discloses percentage ramp\ntargets, not absolute substrate volumes. (2) An `abf-substrate-capacity`\nconstraint entity is deferred post-v1. (3) Ticker is the TSE listing via\nYahoo symbol 4062.T."
+    },
+    {
+      "id": "jsr-yokkaichi",
+      "name": "JSR Yokkaichi (EUV photoresists)",
+      "layer": "chips",
+      "type": "material_supplier",
+      "operator": "JSR Corporation (owned by Japan Investment Corp)",
+      "location": {
+        "lat": 34.965,
+        "lon": 136.6244,
+        "country": "JP",
+        "region": "Yokkaichi, Mie Prefecture",
+        "precision": "city"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-06"
+      },
+      "status": "operational",
+      "constraints": [
+        "euv-photoresist"
+      ],
+      "tags": [
+        "photoresist",
+        "euv",
+        "materials",
+        "japan"
+      ],
+      "sources": [
+        {
+          "url": "https://www.jsr.co.jp/jsr_e/news/2024/20240830.html",
+          "title": "JSR Expands Global Development and Production Functions for Leading-Edge Photoresists (JSR press release)",
+          "date": "2024-08-30",
+          "quote": "In Japan, in addition to the Fine Electronic Materials Development Center located in the Yokkaichi Plant, JSR has recently decided to establish a new R&D center for MOR in the Kanto area.",
+          "supports": "Yokkaichi as JSR's main leading-edge photoresist development/production site; MOR (metal oxide resist) commercialization since the 2021 Inpria acquisition"
+        },
+        {
+          "url": "https://www.digitimes.com/news/a20240419PD204/jsr-japan-ic-manufacturing-delisting.html",
+          "title": "Japan's JIC successfully acquires JSR with delisting expected by summer (DigiTimes)",
+          "date": "2024-04-19",
+          "supports": "ownership (state-backed JIC; delisted from TSE June 2024 — hence no ticker)"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Yokkaichi",
+          "title": "Yokkaichi (Wikipedia — pointer for city centroid coordinates)",
+          "date": "2026-06",
+          "supports": "location (city centroid; precision city)"
+        }
+      ],
+      "body": "# JSR Yokkaichi (EUV photoresists)\n\nJSR's Yokkaichi plant in Mie Prefecture is the company's main site for\nleading-edge lithography materials — home to its Fine Electronic\nMaterials Development Center and the expansion announced for EUV\nresist production. JSR is one of the three Japanese firms that\ntogether make ~85% of the world's EUV photoresist, and since\nacquiring Inpria (2021) it leads the next-generation metal oxide\nresist (MOR) chemistry that High-NA EUV will lean on.\n\nThe ownership story is the tell: in 2024 Japan's government-backed\nJIC fund bought JSR for ~$6B and delisted it — a national-strategic\nacquisition of a chemicals company most people have never heard of.\nNo ticker for the finance overlay, by design of the Japanese state.\n\nCoordinates are the Yokkaichi city centroid (precision `city`).\n\nCapacity is `null`: resist output (liters/year) is not disclosed.\n\n**Reviewer notes:** JSR also announced a Yunlin County, Taiwan plant\n(2026) to co-develop resists with TSMC from ~2028 — when it breaks\nground it deserves its own node; for now the Taiwan story lives on\nthe edge to Fab 18."
     },
     {
       "id": "nvidia-santa-clara",
@@ -259,6 +363,115 @@
       "body": "# SK hynix Icheon (HBM)\n\nSK hynix's Icheon campus (HQ plus DRAM fabs) anchors its HBM production.\nSK hynix was the first to mass-produce HBM3 and was initially its exclusive\nsupplier to Nvidia for the H100 generation — when CoWoS wasn't the binding\nconstraint, HBM was, and the two alternate as the chokepoint of the moment.\nThat alternation is exactly what this map is built to show.\n\nThe dominance has held across generations: as of early 2026, SK hynix is\nreportedly supplying about two-thirds of Nvidia's HBM4, with 2026 HBM4\ncapacity industry-wide reported as effectively pre-sold. The 2-year stock\nchart on this node (+900%+ over 2024-2026) is the market pricing exactly\nthis position.\n\nHBM stacks ship from here to TSMC's advanced packaging sites, where they\nare co-packaged with GPU dies on CoWoS interposers.\n\n**Reviewer notes:** (1) Per-site HBM capacity is not public — null. An\n`hbm-supply` constraint entity is deferred post-v1 per the plan. (2) HBM\nproduction also spans Cheongju; Icheon stands in for SK hynix HBM\noperations in v1. (3) Ticker is the KRX listing via Yahoo symbol 000660.KS."
     },
     {
+      "id": "spruce-pine-quartz-district",
+      "name": "Spruce Pine quartz district (Sibelco & The Quartz Corp)",
+      "layer": "chips",
+      "type": "material_supplier",
+      "operator": "Sibelco NV / The Quartz Corp",
+      "location": {
+        "lat": 35.9154,
+        "lon": -82.0646,
+        "country": "US",
+        "region": "Spruce Pine, North Carolina",
+        "precision": "city"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-06"
+      },
+      "status": "operational",
+      "constraints": [
+        "spruce-pine-quartz"
+      ],
+      "tags": [
+        "quartz",
+        "raw-materials",
+        "crucibles",
+        "single-point-of-failure"
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Spruce_Pine,_North_Carolina",
+          "title": "Spruce Pine, North Carolina (Wikipedia — pointer for town centroid coordinates)",
+          "date": "2026-06",
+          "supports": "location (town centroid; precision city)"
+        },
+        {
+          "url": "https://www.npr.org/2024/09/30/nx-s1-5133462/hurricane-helene-quartz-microchips-solar-panels-spruce-pine",
+          "title": "Spruce Pine just got hit by Helene. The fallout on the tech industry could be huge (NPR)",
+          "date": "2024-09-30",
+          "supports": "both operators (Sibelco, The Quartz Corp) mine HPQ at Spruce Pine"
+        },
+        {
+          "url": "https://finance.yahoo.com/news/north-carolina-maker-high-purity-201718462.html",
+          "title": "North Carolina maker of high-purity quartz back operating post-Helene (AP)",
+          "date": "2024-10-10",
+          "quote": "An estimated 70% to 90% of the crucibles used worldwide in which polysilicon used for the chips is melted down are made from Spruce Pine quartz.",
+          "supports": "role in semiconductor supply chain; operational status (production restarted 2024-10-10)"
+        },
+        {
+          "url": "https://www.sibelco.com/en/news/sibelco-restarts-production-and-customer-shipments-at-spruce-pine-following-hurricane-helene",
+          "title": "Sibelco Restarts Production and Customer Shipments at Spruce Pine Following Hurricane Helene",
+          "date": "2024-10",
+          "quote": "Sibelco today announced the restart of production at its Spruce Pine high purity quartz mining and processing operations following the disruption caused by Hurricane Helene.",
+          "supports": "status operational after the September 2024 halt"
+        }
+      ],
+      "body": "# Spruce Pine quartz district (Sibelco & The Quartz Corp)\n\nTwo adjacent mining and processing operations in Spruce Pine, Mitchell\nCounty, North Carolina — Sibelco's and The Quartz Corp's — produce\nessentially the entire world supply of semiconductor-grade high-purity\nquartz. The quartz becomes the crucibles in which polysilicon is melted\nfor Czochralski ingot growth: the first physical step on the road to\nevery wafer TSMC starts, and therefore upstream of every GPU.\n\nModeled as a single district node rather than two operator nodes:\nboth operations sit in the same small valley, share the same\nconcentration risk, and were shut by the same storm (Hurricane Helene,\nSeptember 26 - October 10+, 2024). Coordinates are the town centroid\n(precision `city`); the mine sites are within a few km.\n\nCapacity is `null`: neither operator publishes HPQ output tonnage.\nSibelco discloses only relative figures (production up >70% from 2019\nto 2023; Expansion 1 doubling installed capacity by 2025).\n\n**Reviewer notes:** (1) Private companies — no ticker, no IR-grade\ncapacity data; all quantitative claims live on the constraint entity\nwhere they are sourced to AP/CNBC/Sibelco. (2) If the district-node\nmodeling feels wrong once more material suppliers exist, split into\ntwo operator nodes; ids are stable so edges would need re-pointing."
+    },
+    {
+      "id": "trumpf-ditzingen",
+      "name": "TRUMPF Ditzingen (EUV drive lasers)",
+      "layer": "chips",
+      "type": "equipment_maker",
+      "operator": "TRUMPF SE + Co. KG",
+      "location": {
+        "lat": 48.8264,
+        "lon": 9.0664,
+        "country": "DE",
+        "region": "Ditzingen, Baden-Württemberg",
+        "precision": "city"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-06"
+      },
+      "status": "operational",
+      "constraints": [
+        "euv-optics"
+      ],
+      "tags": [
+        "euv",
+        "laser",
+        "light-source",
+        "single-source"
+      ],
+      "sources": [
+        {
+          "url": "https://www.deutscher-zukunftspreis.de/en/team-1-2020",
+          "title": "Deutscher Zukunftspreis 2020, Team 1: EUV lithography (TRUMPF, ZEISS, Fraunhofer IOF) — accessed 2026-06",
+          "date": "2026-06",
+          "quote": "Michael Kösters, group lead at TRUMPF Lasersystems for Semiconductor Manufacturing in Ditzingen, is co-developer of the high-performance laser that generates the EUV light.",
+          "supports": "location (TRUMPF Lasersystems for Semiconductor Manufacturing, Ditzingen); role as EUV drive-laser developer; 30kW CO2 laser"
+        },
+        {
+          "url": "https://www.zeiss.com/semiconductor-manufacturing-technology/news-and-events/smt-press-releases/deutscher-zukunftspreis-2020-euv.html",
+          "title": "Deutscher Zukunftspreis 2020: EUV developers from TRUMPF, ZEISS and Fraunhofer nominated (Zeiss press release)",
+          "date": "2020-09",
+          "supports": "TRUMPF/Zeiss/Fraunhofer as the EUV component development trio behind ASML"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Ditzingen",
+          "title": "Ditzingen (Wikipedia — pointer for town centroid coordinates)",
+          "date": "2026-06",
+          "supports": "location (town centroid; precision city)"
+        }
+      ],
+      "body": "# TRUMPF Ditzingen (EUV drive lasers)\n\nEUV light does not come from a bulb. Inside every ASML EUV system, a\nTRUMPF-built pulsed CO2 laser — ~30kW average power, the most powerful\nindustrial laser of its kind — fires tens of thousands of times per\nsecond at falling tin droplets, vaporizing them into plasma that emits\n13.5nm light. TRUMPF Lasersystems for Semiconductor Manufacturing\ndeveloped and builds it in Ditzingen, outside Stuttgart. Like Zeiss\nSMT's optics, it has no second source; unlike Zeiss, TRUMPF is a\nfamily-owned company most people have never heard of.\n\nCoordinates are the town centroid (precision `city`); TRUMPF's HQ\ncampus is in Ditzingen.\n\nCapacity is `null`: TRUMPF does not publish EUV laser unit output.\n\n**Reviewer notes:** The \"no economical alternative\" framing appears in\naward/press materials rather than an arms-length filing; the\nload-bearing single-source claim for the constraint rests on ASML's\n20-F optics language, with TRUMPF's laser as the parallel story. If a\nstronger arms-length source for laser single-sourcing surfaces (e.g.\nASML supplier-risk language naming TRUMPF), add it here."
+    },
+    {
       "id": "tsmc-ap6-zhunan",
       "name": "TSMC Advanced Backend Fab 6 (Zhunan)",
       "layer": "chips",
@@ -348,6 +561,118 @@
         }
       ],
       "body": "# TSMC Fab 18 (GIGAFAB, N5/N3)\n\nTSMC's Fab 18 in the Southern Taiwan Science Park (Tainan) is the company's\nN5-family and N3 production site — the origin of essentially every\nleading-edge AI accelerator die, including Nvidia's Hopper generation\n(TSMC \"4N\", an N5-family process customized for Nvidia).\n\nCoordinates are the STSP area centroid, precision `region` — the fab's\nexact parcel can be added later with a mapped source if site precision\nmatters for the visual.\n\n**Reviewer notes:** (1) Capacity is deliberately `null`: public figures for\nFab 18 conflate construction phases and process nodes; a defensible wpm\nnumber with an `as_of` needs dedicated M2 research. (2) Verify the quoted\nPR sentence against pr.tsmc.com/english/news/2986 — phrasing reconstructed\nfrom the press release coverage."
+    },
+    {
+      "id": "zeiss-smt-oberkochen",
+      "name": "Zeiss SMT Oberkochen (EUV optics)",
+      "layer": "chips",
+      "type": "equipment_maker",
+      "operator": "Carl Zeiss SMT GmbH (Zeiss Group; ASML holds 24.9%)",
+      "location": {
+        "lat": 48.7854,
+        "lon": 10.0986,
+        "country": "DE",
+        "region": "Oberkochen, Baden-Württemberg",
+        "precision": "city"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-06"
+      },
+      "status": "operational",
+      "constraints": [
+        "euv-optics"
+      ],
+      "tags": [
+        "euv",
+        "optics",
+        "mirrors",
+        "single-source"
+      ],
+      "sources": [
+        {
+          "url": "https://www.zeiss.com/semiconductor-manufacturing-technology/news-and-events/smt-press-releases/2025/euv-30-years.html",
+          "title": "30 years of EUV lithography optics at ZEISS SMT (Zeiss press release)",
+          "date": "2025-04-01",
+          "quote": "These optical systems... are a crucial part of the EUV systems built by ASML. The systems are unique to ASML, ZEISS' strategic partner.",
+          "supports": "location (headquartered in Oberkochen); role as EUV optics maker for ASML"
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+          "title": "ASML Holding N.V. Form 20-F (FY2025), SEC EDGAR",
+          "date": "2026-02-25",
+          "quote": "Carl Zeiss SMT GmbH is ASML's sole supplier of lenses, mirrors, illuminators, collectors and other critical optical components.",
+          "supports": "sole-supplier status"
+        },
+        {
+          "url": "https://optics.org/news/7/11/11",
+          "title": "ASML buys billion-euro stake in Zeiss subsidiary (optics.org)",
+          "date": "2016-11",
+          "supports": "ASML's 24.9% equity stake in Carl Zeiss SMT (capacity lock-in)"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Oberkochen",
+          "title": "Oberkochen (Wikipedia — pointer for town centroid coordinates)",
+          "date": "2026-06",
+          "supports": "location (town centroid; precision city)"
+        }
+      ],
+      "body": "# Zeiss SMT Oberkochen (EUV optics)\n\nCarl Zeiss SMT's Oberkochen campus develops and builds the projection\noptics inside every EUV lithography system on Earth — mirror trains\npolished to sub-atomic flatness (\"able to hit a ping pong ball on the\nMoon\"). It is, per ASML's own SEC filings, ASML's sole supplier of\nlenses, mirrors, illuminators and collectors, which makes this small\nSwabian town the second German chokepoint nobody prices in: ASML's\nEUV output is explicitly capped by Zeiss SMT's production capacity.\nASML took a 24.9% stake in 2016 to co-fund expansion and lock in\nsupply.\n\nCoordinates are the town centroid (precision `city`); Zeiss is by far\nthe town's dominant employer and site.\n\nCapacity is `null`: Zeiss does not publish optics output per year.\n\n**Reviewer notes:** Carl Zeiss AG is foundation-owned (Carl-Zeiss-\nStiftung) — no ticker anywhere on this chain's German leg. The\n\"unique to ASML\" quote also establishes the reverse dependency (Zeiss\nSMT's EUV optics have exactly one customer), worth a mention if a\nmutual-dependency view is ever added."
+    },
+    {
+      "id": "hitachi-energy-south-boston",
+      "name": "Hitachi Energy South Boston (power transformers)",
+      "layer": "energy",
+      "type": "equipment_maker",
+      "operator": "Hitachi Energy (Hitachi, Ltd.)",
+      "ticker": {
+        "symbol": "6501.T",
+        "exchange": "TSE (parent Hitachi, Ltd.; Hitachi Energy is a wholly-owned subsidiary)"
+      },
+      "location": {
+        "lat": 36.6987,
+        "lon": -78.9014,
+        "country": "US",
+        "region": "South Boston, Virginia",
+        "precision": "city"
+      },
+      "capacity": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-06"
+      },
+      "status": "operational",
+      "constraints": [
+        "grid-transformers"
+      ],
+      "tags": [
+        "transformers",
+        "grid-equipment",
+        "manufacturing"
+      ],
+      "sources": [
+        {
+          "url": "https://www.hitachienergy.com/us/en/news-and-events/press-releases/2022/10/hitachi-energy-invests-us-37-million-to-expand-transformer-manufacturing-facility-in-south-boston-virginia",
+          "title": "Hitachi Energy invests US$37 million to expand transformer manufacturing facility in South Boston, Virginia",
+          "date": "2022-10",
+          "supports": "existing transformer plant at South Boston (location, operational status)"
+        },
+        {
+          "url": "https://www.hitachienergy.com/us/en/news-and-events/press-releases/2025/09/hitachi-announces-historic-1-billion-usd-manufacturing-investment-to-power-america-s-energy-future-through-production-of-critical-grid-infrastructure",
+          "title": "Hitachi announces historic $1 billion USD manufacturing investment (Hitachi Energy press release)",
+          "date": "2025-09-04",
+          "quote": "$457 million USD is dedicated to a new power transformer factory in Virginia... will be the largest manufacturing site for large power transformers in the United States.",
+          "supports": "$457M expansion; large power transformers for AI data centers; 825 new jobs"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/South_Boston,_Virginia",
+          "title": "South Boston, Virginia (Wikipedia — pointer for town centroid coordinates)",
+          "date": "2026-06",
+          "supports": "location (town centroid; precision city)"
+        }
+      ],
+      "body": "# Hitachi Energy South Boston (power transformers)\n\nHitachi Energy's South Boston, Virginia campus builds the large power\ntransformers that connect generation and big loads to the US grid. The\nsite has operated and expanded for years ($37M expansion announced\n2022); in September 2025 Hitachi committed $457M more — the anchor of\na $1B US grid-equipment investment — to make South Boston \"the largest\nmanufacturing site for large power transformers in the United States,\"\nexplicitly citing AI datacenter demand. The new factory targets\noperation by 2028, which is the supply-side answer to, and a measure\nof, the lead-time chokepoint.\n\nCoordinates are the town centroid (precision `city`).\n\nCapacity is `null`: Hitachi does not publish per-site transformer\noutput (units/year).\n\n**Reviewer notes:** (1) Ticker points at parent Hitachi, Ltd. (6501,\nTSE) since Hitachi Energy is unlisted — same pattern as ASML's ADR\nnote; flagged in the exchange field. (2) The plant stands in for the\ntransformer manufacturing stage generally; Siemens Energy, GE Prolec,\nand others also supply US utilities — see edge substitutability."
     },
     {
       "id": "midamerican-iowa",
@@ -609,6 +934,71 @@
       "body": "# azure-west-des-moines → openai-hq\n\nThe compute edge that produced GPT-4. In M2 this gets refined: a\ntraining-cluster node sited at the Azure campus, with the model artifact\nas its output — this direct lab edge is the walking-skeleton version."
     },
     {
+      "id": "globalwafers-to-tsmc-fab-18",
+      "from": "globalwafers-hsinchu",
+      "to": "tsmc-fab-18",
+      "flow_type": "wafers",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-06"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "medium",
+      "substitutability": "medium",
+      "constraints": [],
+      "notes": "Blank (polished/epitaxial) 300mm wafers into TSMC's leading-edge fab. Substitutability is medium, not low: TSMC qualifies six main wafer suppliers (Shin-Etsu, SUMCO, GlobalWafers, Formosa SUMCO, Siltronic, Soitec), so losing one vendor is painful but survivable — unlike the quartz that all of them depend on upstream. Volume is null: TSMC does not disclose per-supplier wafer purchases.\n",
+      "sources": [
+        {
+          "url": "https://www.opportimes.com/en/tsmcs-6-semiconductor-wafer-vendors/",
+          "title": "TSMC's 6 semiconductor wafer vendors (Opportimes)",
+          "date": "2021-11-04",
+          "quote": "The main wafer suppliers for TSMC semiconductor company are Taiwan's Formosa SUMCO Technology Corporation, Taiwan's GlobalWafers, Japan's Shin-Etsu Handotai, Germany's Siltronic AG, Singapore's Soitec Microelectronics, and Japan's SUMCO Corporation.",
+          "supports": "relationship (GlobalWafers among TSMC's main blank-wafer suppliers)"
+        },
+        {
+          "url": "https://www.gw-semi.com/overview-locations/",
+          "title": "GlobalWafers locations (company site, accessed 2026-06)",
+          "date": "2026-06",
+          "supports": "flow type (Hsinchu plant produces 300mm polished and epitaxial wafers for the Taiwanese semiconductor market)"
+        }
+      ],
+      "body": "# globalwafers-hsinchu → tsmc-fab-18\n\nBlank 300mm wafers from Hsinchu Science Park down the coast to Fab 18\nin Tainan. This edge closes the path from raw quartz to finished GPU:\nquartz crucible → ingot → blank wafer → N5/N3 wafer → CoWoS package →\naccelerator. Deliberately not gated by the quartz constraint — the\nconstraint gates the upstream quartz edge, and traversal carries the\nhighlight downstream from there.\n\n**Reviewer notes:** The supplier list is 2021 trade press; TSMC's\nsupplier roster is stable but if a newer authoritative list (TSMC annual\nreport names suppliers in some years) is found during the research pass,\nupdate the source. Per-supplier volume is genuinely non-public."
+    },
+    {
+      "id": "hitachi-south-boston-to-midamerican",
+      "from": "hitachi-energy-south-boston",
+      "to": "midamerican-iowa",
+      "flow_type": "equipment",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-06"
+      },
+      "lead_time_weeks": 128,
+      "constraint_level": "high",
+      "substitutability": "medium",
+      "constraints": [
+        "grid-transformers"
+      ],
+      "notes": "Large power transformers and grid equipment from manufacturer to utility. The link is structural, not a documented bilateral contract: Hitachi Energy is one of the largest US large-power-transformer suppliers and stands in for the manufacturing stage; MidAmerican, like every US utility, procures LPTs from this supplier pool at 128-week average lead times. Substitutability is medium — Siemens Energy, GE Prolec and others also build LPTs — but the whole pool is backlogged, which is what the constraint entity captures. Volume null: utility procurement contracts are not public.\n",
+      "sources": [
+        {
+          "url": "https://www.hitachienergy.com/us/en/news-and-events/press-releases/2025/09/hitachi-announces-historic-1-billion-usd-manufacturing-investment-to-power-america-s-energy-future-through-production-of-critical-grid-infrastructure",
+          "title": "Hitachi announces historic $1 billion USD manufacturing investment (Hitachi Energy press release)",
+          "date": "2025-09-04",
+          "supports": "relationship (South Boston builds large power transformers for high-voltage transmission, power generation, and AI data centers)"
+        },
+        {
+          "url": "https://www.powermag.com/transformers-in-2026-shortage-scramble-or-self-inflicted-crisis/",
+          "title": "Transformers in 2026: Shortage, Scramble, or Self-Inflicted Crisis? (POWER Magazine)",
+          "date": "2026-01-02",
+          "supports": "lead_time_weeks (128-week average for power transformers, Wood Mackenzie Q2 2025)"
+        }
+      ],
+      "body": "# hitachi-energy-south-boston → midamerican-iowa\n\nThe arc that explains why \"just build more datacenters\" takes half a\ndecade: before MidAmerican can serve another hyperscale campus, the\ntransformers have to exist, and the queue at every manufacturer —\nHitachi's South Boston plant included — is over two years long.\n\n**Reviewer notes:** Structural edge — no public source documents\nMidAmerican specifically buying from South Boston; Hitachi is the\nrepresentative LPT manufacturer the same way GlobalWafers represents\nwafer supply. lead_time_weeks records the industry-average 128 weeks\n(Wood Mackenzie via POWER), not a contract-specific figure. If that\nreads as overclaiming, null it and leave the figure on the constraint."
+    },
+    {
       "id": "ibiden-to-tsmc-ap6",
       "from": "ibiden-ono",
       "to": "tsmc-ap6-zhunan",
@@ -640,6 +1030,40 @@
       "body": "# ibiden-ono → tsmc-ap6-zhunan\n\nThe least famous feed into the packaging step — and historically the kind\nof quiet component (ABF film, substrates, ceramics) where shortages\nsurprise the market."
     },
     {
+      "id": "jsr-to-tsmc-fab-18",
+      "from": "jsr-yokkaichi",
+      "to": "tsmc-fab-18",
+      "flow_type": "materials",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-06"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "high",
+      "substitutability": "low",
+      "constraints": [
+        "euv-photoresist"
+      ],
+      "notes": "EUV photoresists from Japan into TSMC's leading-edge patterning. JSR is building its first Taiwan plant (Yunlin County, online ~2028) explicitly to co-develop advanced resists with TSMC and shorten the Japan-Taiwan development loop — the clearest public evidence of the supply relationship. Substitutability low: the EUV-qualified resist suppliers are JSR, TOK and Shin-Etsu (~85% of volume, all Japanese); qualifying a new resist on a production node takes years. Volume null: resist purchase quantities are not public.\n",
+      "sources": [
+        {
+          "url": "https://www.tomshardware.com/tech-industry/jsr-builds-first-taiwan-photoresist-plant-as-japanese-materials-makers-race-to-embed-next-to-tsmc",
+          "title": "Japanese chemical giant JSR expands to Taiwan for EUV photoresist production near TSMC (Tom's Hardware)",
+          "date": "2026-05-13",
+          "quote": "The plant, located in Yunlin County, is expected to come online as early as 2028 and will co-develop advanced photoresists with TSMC.",
+          "supports": "relationship (JSR supplying/co-developing EUV photoresists with TSMC)"
+        },
+        {
+          "url": "https://www.jsr.co.jp/jsr_e/news/2024/20240830.html",
+          "title": "JSR Expands Global Development and Production Functions for Leading-Edge Photoresists (JSR press release)",
+          "date": "2024-08-30",
+          "supports": "flow (leading-edge photoresist production at Yokkaichi for global customers)"
+        }
+      ],
+      "body": "# jsr-yokkaichi → tsmc-fab-18\n\nThe chemistry leg of the EUV triangle: machines from Veldhoven, optics\nfrom Oberkochen, and the resist that actually records the pattern from\nYokkaichi. TSMC considers the loop important enough that JSR is\nputting a plant next door in Yunlin — chip-making's equivalent of a\njust-in-time supplier moving onto the customer's campus.\n\n**Reviewer notes:** TSMC does not publish its resist vendor list; the\nrelationship is evidenced by the announced co-development plant\n(Tom's Hardware 2026) rather than a named supply contract. The\nFab 18 endpoint is the modeling choice (it is the leading-edge EUV\nfab on this graph); resists flow to TSMC's EUV fabs generally."
+    },
+    {
       "id": "midamerican-to-azure-wdm",
       "from": "midamerican-iowa",
       "to": "azure-west-des-moines",
@@ -652,17 +1076,26 @@
       "lead_time_weeks": null,
       "constraint_level": "medium",
       "substitutability": "low",
-      "constraints": [],
-      "notes": "Utility power to Microsoft's West Des Moines campus. Iowa's wind build-out (MidAmerican the dominant builder) is a primary reason hyperscale capacity clustered there — cheap, contracted carbon-free energy. Campus-level MW is not published; null over guess.\n",
+      "constraints": [
+        "grid-transformers"
+      ],
+      "notes": "Utility power to Microsoft's West Des Moines campus. Iowa's wind build-out (MidAmerican the dominant builder) is a primary reason hyperscale capacity clustered there — cheap, contracted carbon-free energy. Campus-level MW is not published; null over guess. Gated by grid-transformers: energizing new datacenter load requires transformers and switchgear that are industry-wide backlogged.\n",
       "sources": [
         {
           "url": "https://insideclimatenews.org/news/28072025/big-beautiful-bill-iowa-data-centers/",
           "title": "Clean Energy Brought Data Centers to Iowa (Inside Climate News)",
           "date": "2025-07-28",
           "supports": "relationship (Iowa wind energy underpinning the data center cluster)"
+        },
+        {
+          "url": "https://dig.watch/updates/power-hardware-shortages-are-delaying-ai-data-centre-expansion-despite-record-investment",
+          "title": "Power hardware shortages are delaying AI data centre expansion (Digital Watch, citing Bloomberg)",
+          "date": "2026-04-06",
+          "quote": "Close to half of the planned US data-centre builds this year are expected to be delayed or cancelled.",
+          "supports": "grid-transformers gating (electrical equipment shortages delaying US datacenter energization)"
         }
       ],
-      "body": "# midamerican-iowa → azure-west-des-moines\n\nEnergy availability deciding AI geography: GPT-4's training site sits\nwhere the wind blows and the power is cheap."
+      "body": "# midamerican-iowa → azure-west-des-moines\n\nEnergy availability deciding AI geography: GPT-4's training site sits\nwhere the wind blows and the power is cheap.\n\n**Reviewer notes:** grid-transformers gating added 2026-06 — the claim\nis industry-level (datacenter builds delayed on electrical equipment),\nnot a documented delay at this specific campus."
     },
     {
       "id": "nvidia-to-azure-wdm",
@@ -762,6 +1195,41 @@
       "body": "# sk-hynix-icheon → tsmc-ap6-zhunan\n\nThe memory feed into the packaging bottleneck. HBM and CoWoS alternate as\nthe binding constraint — exactly the dynamic the constraint-entity design\nexists to capture."
     },
     {
+      "id": "spruce-pine-to-globalwafers",
+      "from": "spruce-pine-quartz-district",
+      "to": "globalwafers-hsinchu",
+      "flow_type": "materials",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-06"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "high",
+      "substitutability": "low",
+      "constraints": [
+        "spruce-pine-quartz"
+      ],
+      "notes": "High-purity quartz for the crucibles used in Czochralski silicon ingot growth. The link is structural, not a documented bilateral contract: 70-90% of crucibles worldwide are made from Spruce Pine quartz, and ingot growth — which GlobalWafers performs as a vertically integrated wafer maker — cannot happen without them. Volume is null: neither Sibelco, The Quartz Corp, nor crucible makers publish customer-level shipment data, and the quartz typically passes through crucible fabricators rather than flowing directly.\n",
+      "sources": [
+        {
+          "url": "https://finance.yahoo.com/news/north-carolina-maker-high-purity-201718462.html",
+          "title": "North Carolina maker of high-purity quartz back operating post-Helene (AP)",
+          "date": "2024-10-10",
+          "quote": "An estimated 70% to 90% of the crucibles used worldwide in which polysilicon used for the chips is melted down are made from Spruce Pine quartz.",
+          "supports": "relationship (Spruce Pine quartz → crucibles → polysilicon melt for ingot growth, industry-wide)"
+        },
+        {
+          "url": "https://www.cnbc.com/2024/10/03/helene-quartz-mine-semiconductor-north-carolina.html",
+          "title": "Helene quartz mine damage threatens semiconductor chip industry (CNBC)",
+          "date": "2024-10-03",
+          "quote": "This is the only plant in the world right now that serves the semiconductor industry in its entirety.",
+          "supports": "low substitutability (no second source for semiconductor-grade HPQ)"
+        }
+      ],
+      "body": "# spruce-pine-quartz-district → globalwafers-hsinchu\n\nThe most upstream arc on the globe: ultra-pure quartz leaves one\nAppalachian valley and (via crucible fabricators) ends up holding the\nmolten polysilicon from which GlobalWafers pulls 300mm ingots. When\nSpruce Pine flooded in September 2024, the exposure ran through exactly\nthis link — wafer makers' crucible supply — before any fab would have\nfelt it.\n\n**Reviewer notes:** This edge is an industry-structural claim\n(all ingot growers depend on Spruce Pine-derived crucibles), not a\ndocumented Sibelco→GlobalWafers contract; the intermediate crucible\nfabricators (e.g. Momentive) are deliberately not modeled in this pass\n— narrow-deep. If that intermediation feels like it overstates\ndirectness, an alternative is a crucible-maker node in between; flag\nfor owner review."
+    },
+    {
       "id": "taipower-to-tsmc-fab-18",
       "from": "taipower-grid",
       "to": "tsmc-fab-18",
@@ -792,6 +1260,40 @@
         }
       ],
       "body": "# taipower-grid → tsmc-fab-18\n\nThe energy layer's entry into the slice: every wafer and every CoWoS\npackage is downstream of an island grid with no fallback."
+    },
+    {
+      "id": "trumpf-to-asml",
+      "from": "trumpf-ditzingen",
+      "to": "asml-veldhoven",
+      "flow_type": "equipment",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-06"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "high",
+      "substitutability": "low",
+      "constraints": [
+        "euv-optics"
+      ],
+      "notes": "EUV light-source drive lasers (30kW pulsed CO2) from Ditzingen into ASML's EUV light source (the former Cymer business). No second supplier builds this laser class for EUV. Volume null: unit counts not published, though each EUV system requires one drive laser, so shipments track ASML's EUV output (~48 systems in 2025).\n",
+      "sources": [
+        {
+          "url": "https://www.deutscher-zukunftspreis.de/en/team-1-2020",
+          "title": "Deutscher Zukunftspreis 2020, Team 1: EUV lithography (TRUMPF, ZEISS, Fraunhofer IOF) — accessed 2026-06",
+          "date": "2026-06",
+          "quote": "The key component in these machines is the high-power laser for the EUV light source and the optical system. And this is exactly where the semiconductor segments of laser manufacturer TRUMPF and the optics specialist ZEISS come into play.",
+          "supports": "relationship (TRUMPF EUV drive laser into ASML EUV systems)"
+        },
+        {
+          "url": "https://www.zeiss.com/semiconductor-manufacturing-technology/news-and-events/smt-press-releases/deutscher-zukunftspreis-2020-euv.html",
+          "title": "Deutscher Zukunftspreis 2020: EUV developers nominated (Zeiss press release)",
+          "date": "2020-09",
+          "supports": "TRUMPF as the laser partner in the EUV development alliance"
+        }
+      ],
+      "body": "# trumpf-ditzingen → asml-veldhoven\n\nEvery EUV exposure starts with a TRUMPF laser pulse hitting a tin\ndroplet. The laser ships from Ditzingen; the plasma it makes is the\nonly manufacturable source of 13.5nm light at production power.\n\n**Reviewer notes:** The \"one drive laser per system\" inference in the\nnotes is engineering-structural, not separately sourced; volume stays\nnull accordingly."
     },
     {
       "id": "tsmc-ap6-to-nvidia",
@@ -856,6 +1358,40 @@
         }
       ],
       "body": "# tsmc-fab-18 → tsmc-ap6-zhunan\n\nReplaces the v1-skeleton direct fab→Nvidia edge: wafers now flow through\nthe packaging step as the data model intended. The interesting economics\nhappen at the next hop."
+    },
+    {
+      "id": "zeiss-smt-to-asml",
+      "from": "zeiss-smt-oberkochen",
+      "to": "asml-veldhoven",
+      "flow_type": "equipment",
+      "volume": {
+        "value": null,
+        "unit": null,
+        "as_of": "2026-06"
+      },
+      "lead_time_weeks": null,
+      "constraint_level": "high",
+      "substitutability": "low",
+      "constraints": [
+        "euv-optics"
+      ],
+      "notes": "EUV projection optics (mirror trains), illuminators and collectors from Oberkochen into ASML's Veldhoven final assembly. ASML's 20-F names Carl Zeiss SMT as its sole supplier of these components and states ASML's system output may be limited by Zeiss SMT's capacity — the textbook high-constraint, zero-substitutability link. Volume null: per-year optics module counts are not published.\n",
+      "sources": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+          "title": "ASML Holding N.V. Form 20-F (FY2025), SEC EDGAR",
+          "date": "2026-02-25",
+          "quote": "Carl Zeiss SMT GmbH is ASML's sole supplier of lenses, mirrors, illuminators, collectors and other critical optical components.",
+          "supports": "relationship and sole-supplier status"
+        },
+        {
+          "url": "https://www.zeiss.com/semiconductor-manufacturing-technology/news-and-events/smt-press-releases/2025/euv-30-years.html",
+          "title": "30 years of EUV lithography optics at ZEISS SMT (Zeiss press release)",
+          "date": "2025-04-01",
+          "supports": "flow (EUV optical systems built by Zeiss SMT, unique to ASML)"
+        }
+      ],
+      "body": "# zeiss-smt-oberkochen → asml-veldhoven\n\nThe machine behind the machine: before ASML can ship an EUV system,\nOberkochen has to ship the mirrors. ASML's own risk language is the\nstarkest sentence in any filing on this globe — without Zeiss SMT,\nASML \"would effectively cease to be able to conduct its business.\"\n\n**Reviewer notes:** None — both relationship and severity language come\ndirectly from the primary filing."
     }
   ],
   "constraints": [
@@ -936,6 +1472,188 @@
         }
       ],
       "body": "# CoWoS advanced packaging capacity\n\nThe defining bottleneck of the 2023-2025 AI buildout — and still binding\nin 2026. Wafer starts were never the limit — packaging was: attaching HBM\nto GPU dies on silicon interposers at scale. TSMC's CoWoS capacity has\nroughly doubled every year since 2023 and demand has stayed ahead of it;\nTrendForce reported capacity \"still insufficient\" after two consecutive\ndoublings, and as of December 2025 CoWoS-L/S was reportedly fully booked,\npushing overflow to OSAT partners (ASE). TSMC's own framing (May 2026):\nAI wafer demand up ~11x from 2022 to 2026.\n\nSelecting this constraint in the UI highlights everything downstream:\npackaged-module flow to Nvidia, GPU deployment into Azure, OpenAI's\ntraining compute, and ChatGPT itself. When the bottleneck migrates (HBM,\nsubstrates, power), new constraint entities will tell that story the same\nway — the system is deliberately agnostic about which bottleneck matters.\n\n**Reviewer notes:** (1) Metric values record midpoints of reported ranges;\nthe ranges are preserved in each metric's note. (2) Figures are TrendForce\nreporting (supply-chain checks), not TSMC disclosures — TSMC does not\npublish CoWoS capacity. This is the standard public source for these\nnumbers, but treat precision accordingly. (3) The 2026 figure is a\nprojection, marked as such."
+    },
+    {
+      "id": "euv-optics",
+      "name": "EUV optics & light source (single-source behind ASML)",
+      "category": "capacity",
+      "description": "ASML's EUV monopoly rests on an even narrower base than ASML itself. Carl Zeiss SMT in Oberkochen is ASML's sole supplier of the mirrors, lenses, illuminators and collectors inside every EUV system, and TRUMPF in Ditzingen builds the one-of-a-kind 30kW CO2 drive laser that generates the EUV light. ASML's own SEC risk language is blunt: if Zeiss SMT stopped supplying optics for a prolonged period, ASML \"would effectively cease to be able to conduct its business\" — and the number of lithography systems ASML can build is limited by Zeiss SMT's production capacity.\n",
+      "severity": "medium",
+      "tags": [
+        "euv",
+        "optics",
+        "single-source",
+        "germany",
+        "asml"
+      ],
+      "sources": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/0000937966/000162828026011378/asml-20251231.htm",
+          "title": "ASML Holding N.V. Form 20-F (FY2025), SEC EDGAR",
+          "date": "2026-02-25",
+          "quote": "Carl Zeiss SMT GmbH is ASML's sole supplier of lenses, mirrors, illuminators, collectors and other critical optical components... the number of lithography systems we are able to produce may be limited by the production capacity of this key supplier.",
+          "supports": "sole-supplier relationship; optics capacity limiting ASML output (risk-factor language recurring since at least FY2020)"
+        },
+        {
+          "url": "https://www.zeiss.com/semiconductor-manufacturing-technology/news-and-events/smt-press-releases/2025/euv-30-years.html",
+          "title": "30 years of EUV lithography optics at ZEISS SMT (Zeiss press release)",
+          "date": "2025-04-01",
+          "supports": "Oberkochen as the EUV optics development/production center; systems unique to strategic partner ASML"
+        },
+        {
+          "url": "https://www.deutscher-zukunftspreis.de/en/team-1-2020",
+          "title": "Deutscher Zukunftspreis 2020, Team 1: EUV lithography (TRUMPF, ZEISS, Fraunhofer IOF) — accessed 2026-06",
+          "date": "2026-06",
+          "quote": "The key component in these machines is the high-power laser for the EUV light source and the optical system. And this is exactly where the semiconductor segments of laser manufacturer TRUMPF and the optics specialist ZEISS come into play.",
+          "supports": "TRUMPF as developer of the EUV drive laser (30kW CO2, Ditzingen); Zeiss SMT as builder of the EUV mirror system"
+        }
+      ],
+      "body": "# EUV optics & light source (single-source behind ASML)\n\nEveryone now knows ASML is the only company that can make an EUV\nmachine. Almost nobody asks what ASML can't make: the optics and the\nlight source. Every EUV system contains a mirror train from Carl Zeiss\nSMT in Oberkochen — mirrors so precise that, scaled to Germany, their\nlargest unevenness would be a tenth of a millimeter — and a 30kW\npulsed CO2 laser from TRUMPF in Ditzingen that fires at tin droplets\nto make the 13.5nm light. Neither has a second source. ASML's 20-F\nsays the quiet part in plain risk-factor prose: lose Zeiss SMT and\nASML \"would effectively cease to be able to conduct its business\";\neven in the good case, ASML's output is capped by Zeiss SMT's\nproduction capacity. ASML bought 24.9% of Zeiss SMT in 2016 precisely\nto fund and lock in that capacity.\n\nSelecting this constraint highlights the equipment path: German optics\nand lasers into Veldhoven, EUV systems into Fab 18, and the whole\nwafer-to-GPU-to-model chain downstream.\n\n**Reviewer notes:** (1) Severity `medium`: the dependency is absolute\nbut there is no public reporting of optics supply currently binding\nASML shipments — the 20-F frames it as structural risk, and EUV\nshipments grew to 48 systems in 2025. If reporting emerges that Zeiss\ncapacity is pacing EUV output in practice, raise to `high`. (2) No\npublic metrics exist for optics output; metrics omitted rather than\ninvented. (3) The 20-F quote is condensed from risk-factor language\nthat recurs across FY2020-FY2025 filings; FY2025 cited as most recent."
+    },
+    {
+      "id": "euv-photoresist",
+      "name": "EUV photoresist concentration (Japan)",
+      "category": "geographic",
+      "description": "The light-sensitive chemicals that turn EUV exposure into actual circuit patterns are a near-Japanese monopoly: JSR, Tokyo Ohka Kogyo and Shin-Etsu together account for roughly 85% of EUV resist production volume, and Japanese firms hold ~80% of the photoresist market overall. The chokepoint has been exercised: in July 2019 Japan put photoresists under export licensing against South Korea, and in 2024 Japan's state-backed JIC fund took JSR private — a country treating resist chemistry as strategic infrastructure. No EUV resist, no patterned wafer, regardless of how many EUV machines exist.\n",
+      "metrics": [
+        {
+          "value": 85,
+          "unit": "pct_of_world_euv_resist_volume_top3_japan",
+          "as_of": "2026-05",
+          "note": "JSR + TOK + Shin-Etsu combined share of EUV resist production volume (Tom's Hardware); Japanese firms ~80% of photoresist overall"
+        }
+      ],
+      "severity": "medium",
+      "tags": [
+        "photoresist",
+        "japan",
+        "materials",
+        "concentration-risk",
+        "export-controls"
+      ],
+      "sources": [
+        {
+          "url": "https://www.tomshardware.com/tech-industry/jsr-builds-first-taiwan-photoresist-plant-as-japanese-materials-makers-race-to-embed-next-to-tsmc",
+          "title": "Japanese chemical giant JSR expands to Taiwan for EUV photoresist production near TSMC (Tom's Hardware)",
+          "date": "2026-05-13",
+          "quote": "Japanese companies collectively control roughly 80% of the global photoresist market, and dominance at the EUV level is even more concentrated: JSR, TOK, and Shin-Etsu account for nearly 85% of EUV resist production volume.",
+          "supports": "market-share metric; ongoing concentration as of 2026"
+        },
+        {
+          "url": "https://www.rieti.go.jp/en/columns/v01_0201.html",
+          "title": "The impact of export controls on international trade: Evidence from the Japan-Korea trade dispute (RIETI/VoxEU column)",
+          "date": "2023-05-08",
+          "quote": "In July 2019, the Japanese government announced potential export controls on South Korea for three chemical inputs, namely hydrogen fluoride, photoresist, and fluorinated polyimide.",
+          "supports": "the 2019 demonstration that resist supply can be weaponized; Japan supplying >90% of Korean imports of two of the three materials"
+        },
+        {
+          "url": "https://www.digitimes.com/news/a20240419PD204/jsr-japan-ic-manufacturing-delisting.html",
+          "title": "Japan's JIC successfully acquires JSR with delisting expected by summer (DigiTimes)",
+          "date": "2024-04-19",
+          "supports": "state-backed Japan Investment Corp taking the leading EUV resist maker private (strategic-asset signal)"
+        }
+      ],
+      "body": "# EUV photoresist concentration (Japan)\n\nA $30+ billion EUV scanner is inert without a few liters of the right\nchemistry. EUV photoresists — the films that record the 13.5nm image\nonto the wafer — are dominated by three Japanese suppliers (JSR, TOK,\nShin-Etsu, ~85% of volume), with the science resting on decades of\naccumulated polymer know-how that has proven nearly impossible to\nreplicate elsewhere.\n\nTwo events show this is a real lever, not a trivia fact. In July 2019\nJapan moved photoresists to individual export licensing against South\nKorea — a trade-dispute shot that rattled Samsung's and SK Hynix's\nfabs and remains the cleanest precedent of a materials chokepoint\nbeing exercised between allies. And in 2024 Japan's government-backed\nJIC fund bought JSR outright and delisted it; JSR is meanwhile\nembedding production next to TSMC (a Yunlin County, Taiwan plant\nco-developing resists with TSMC, online ~2028) — both moves treating\nresist chemistry as sovereign strategic infrastructure.\n\nSelecting this constraint highlights the materials path into Fab 18\nand everything downstream of patterned wafers.\n\n**Reviewer notes:** (1) Market-share figures are trade-press estimates\n(Tom's Hardware 2026; consistent with 2019-era reporting of ~90% for\nthe top three) — no audited share data exists; treat precision\naccordingly. (2) Severity `medium`: concentration is extreme but no\ncurrent supply shortage is reported; the binding scenario is\ngeopolitical disruption, same logic as Spruce Pine. (3) Shin-Etsu\nappears here and implicitly in the wafer story (it is also the #1\nsilicon wafer maker) — a future Shin-Etsu node could serve both."
+    },
+    {
+      "id": "grid-transformers",
+      "name": "Grid equipment lead times (large power transformers)",
+      "category": "capacity",
+      "description": "Datacenter buildouts are increasingly gated not by chips but by the electrical equipment that connects them to the grid. Lead times for large power transformers have stretched from the pre-2020 norm of under a year to 128+ weeks on average — with worst cases of four to five years — and close to half of planned US datacenter builds in 2026 are expected to slip or be canceled waiting on transformers, switchgear, and breakers. Manufacturing capacity is expanding (~$1.8B of announced North American investment), but new plants don't come online until 2027-2028.\n",
+      "metrics": [
+        {
+          "value": 128,
+          "unit": "weeks_avg_lead_time_power_transformer",
+          "as_of": "2025-Q2",
+          "note": "Wood Mackenzie Q2 2025 survey via POWER Magazine; generator step-up units average 144 weeks, worst cases ~4 years"
+        },
+        {
+          "value": 119,
+          "unit": "pct_demand_growth_power_transformers_since_2019",
+          "as_of": "2025",
+          "note": "Wood Mackenzie: US power transformer demand up 119% vs 2019; GSU demand up 274%"
+        }
+      ],
+      "severity": "high",
+      "tags": [
+        "transformers",
+        "grid",
+        "datacenter-buildout",
+        "lead-times"
+      ],
+      "sources": [
+        {
+          "url": "https://www.powermag.com/transformers-in-2026-shortage-scramble-or-self-inflicted-crisis/",
+          "title": "Transformers in 2026: Shortage, Scramble, or Self-Inflicted Crisis? (POWER Magazine)",
+          "date": "2026-01-02",
+          "quote": "Power transformer lead times averaging 128 weeks; generator step-up transformer lead times 144 weeks.",
+          "supports": "lead-time and demand-growth metrics (Wood Mackenzie Q2 2025 survey); ~$1.8B announced manufacturing expansion coming online 2027-2028"
+        },
+        {
+          "url": "https://dig.watch/updates/power-hardware-shortages-are-delaying-ai-data-centre-expansion-despite-record-investment",
+          "title": "Power hardware shortages are delaying AI data centre expansion (Digital Watch, citing Bloomberg)",
+          "date": "2026-04-06",
+          "quote": "Close to half of the planned US data-centre builds this year are expected to be delayed or cancelled.",
+          "supports": "constraint currently binding on datacenter buildouts; lead times stretching to five years"
+        },
+        {
+          "url": "https://www.hitachienergy.com/us/en/news-and-events/press-releases/2025/09/hitachi-announces-historic-1-billion-usd-manufacturing-investment-to-power-america-s-energy-future-through-production-of-critical-grid-infrastructure",
+          "title": "Hitachi announces historic $1 billion USD manufacturing investment (Hitachi Energy press release)",
+          "date": "2025-09-04",
+          "supports": "supply response — $457M new large-power-transformer factory in Virginia driven by AI datacenter demand"
+        }
+      ],
+      "body": "# Grid equipment lead times (large power transformers)\n\nThe bottleneck at the bottom of the stack. A GPU cluster is useless\nuntil a utility can energize it, and the long pole in energization is\nthe large power transformer: a bespoke, hundred-ton machine wound from\ngrain-oriented electrical steel, mostly imported, ordered years in\nadvance. Wood Mackenzie's Q2 2025 survey put average lead times at 128\nweeks (144 for generator step-up units), versus under a year before\n2020; demand is up 119% since 2019. By spring 2026, Bloomberg-reported\nestimates had close to half of planned US datacenter builds slipping\nor dying while they wait for transformers, switchgear, and breakers.\n\nThe supply response is real but slow: Hitachi Energy alone committed\n$1B to US grid-equipment manufacturing (including a $457M Virginia\ntransformer plant aimed explicitly at AI datacenter demand), part of\n~$1.8B in announced North American expansions — none of which produces\na transformer before 2027-2028.\n\nSelecting this constraint highlights the energy-side path: transformer\nsupply into MidAmerican's Iowa grid, grid power into the Azure West Des\nMoines campus, and everything downstream of the compute that campus\nhosts.\n\n**Reviewer notes:** (1) Lead-time figures are Wood Mackenzie survey\ndata via trade press, not manufacturer disclosures — same standing as\nthe TrendForce CoWoS numbers. (2) The \"close to half of builds\ndelayed\" claim originates in Bloomberg reporting; cited here through a\npublic secondary (Digital Watch) because Bloomberg is paywalled. If\nthat feels too indirect, drop the claim to the body only. (3) Turbines\n(GE Vernova sold out through 2028) are a related but separate story,\ndeliberately left out of this constraint's metrics — could become a\nsecond energy constraint later."
+    },
+    {
+      "id": "spruce-pine-quartz",
+      "name": "Spruce Pine ultra-pure quartz concentration",
+      "category": "geographic",
+      "description": "Essentially all of the world's semiconductor-grade high-purity quartz (HPQ) is mined in one small town: Spruce Pine, North Carolina, by two operators (Sibelco and The Quartz Corp). HPQ is what the crucibles used to melt polysilicon and pull monocrystalline silicon ingots are made of — the very first step of every wafer, every chip, every GPU. Hurricane Helene shut both operations in September 2024 and briefly exposed the entire industry's dependence on a single Appalachian valley.\n",
+      "metrics": [
+        {
+          "value": 80,
+          "unit": "pct_of_world_semiconductor_crucibles",
+          "as_of": "2024-10",
+          "note": "AP: an estimated 70-90% of crucibles used worldwide to melt polysilicon are made from Spruce Pine quartz (midpoint recorded)"
+        }
+      ],
+      "severity": "medium",
+      "tags": [
+        "raw-materials",
+        "concentration-risk",
+        "quartz",
+        "single-point-of-failure"
+      ],
+      "sources": [
+        {
+          "url": "https://www.npr.org/2024/09/30/nx-s1-5133462/hurricane-helene-quartz-microchips-solar-panels-spruce-pine",
+          "title": "Spruce Pine just got hit by Helene. The fallout on the tech industry could be huge (NPR)",
+          "date": "2024-09-30",
+          "supports": "global dependence on Spruce Pine HPQ; production halt after Helene"
+        },
+        {
+          "url": "https://www.cnbc.com/2024/10/03/helene-quartz-mine-semiconductor-north-carolina.html",
+          "title": "Helene quartz mine damage threatens semiconductor chip industry (CNBC)",
+          "date": "2024-10-03",
+          "quote": "This is the only plant in the world right now that serves the semiconductor industry in its entirety. If something were to happen to these mines, it can put the entire industry on its ear, period. There's no other capability.",
+          "supports": "single-source concentration (TECHCET CEO Lita Shon-Roy); both operators halted Sept 26, 2024"
+        },
+        {
+          "url": "https://finance.yahoo.com/news/north-carolina-maker-high-purity-201718462.html",
+          "title": "North Carolina maker of high-purity quartz back operating post-Helene (AP)",
+          "date": "2024-10-10",
+          "quote": "An estimated 70% to 90% of the crucibles used worldwide in which polysilicon used for the chips is melted down are made from Spruce Pine quartz.",
+          "supports": "crucible market share metric; Sibelco production restart 2024-10-10"
+        },
+        {
+          "url": "https://www.sibelco.com/en/news/sibelco-announces-a-major-expansion-of-its-spruce-pine-usa-high-purity-quartz-operations",
+          "title": "Sibelco announces a major expansion of its Spruce Pine (USA) high purity quartz operations",
+          "date": "2023-04",
+          "supports": "$200M Expansion 1 to double HPQ capacity 2023-2025; ~$500M Expansion 2 planned 2024-2027; 100+ year mine life"
+        }
+      ],
+      "body": "# Spruce Pine ultra-pure quartz concentration\n\nThe most upstream chokepoint in the entire AI supply chain, and the least\nknown. The Czochralski process that grows monocrystalline silicon ingots\nrequires crucibles of ultra-pure quartz that does not contaminate the melt\n— and the only commercially viable deposit of that quartz is in Spruce\nPine, North Carolina (pop. ~2,200). An estimated 70-90% of crucibles used\nworldwide are made from Spruce Pine quartz; TECHCET's CEO calls it \"the\nonly plant in the world right now that serves the semiconductor industry\nin its entirety.\"\n\nThe risk stopped being theoretical in September 2024: Hurricane Helene\nflooded the valley and halted both operators (Sibelco and The Quartz\nCorp) on September 26. Sibelco restarted production two weeks later\n(October 10) and the feared shortage never materialized — but the episode\nis the cleanest demonstration anywhere in the chain that a single zip\ncode gates global silicon output. Sibelco is meanwhile doubling capacity\n($200M Expansion 1, 2023-2025) with a further ~$500M Expansion 2 planned\nthrough 2027.\n\n**Reviewer notes:** (1) Severity recorded as `medium`, not `high`:\nthe concentration is extreme, but supply is currently not binding —\noperations recovered quickly post-Helene and capacity is expanding.\nThe category is `geographic` (concentration risk), not `capacity`.\n(2) The 70-90% figure is the crucible share, not the share of all HPQ\nend-uses; metric unit named accordingly, midpoint recorded. (3) Synthetic\nquartz and recycled crucibles exist but are not yet commercial-scale\nsubstitutes per the cited reporting; if a source quantifying substitutes\nappears, revisit substitutability on the gated edge."
     }
   ]
 }
