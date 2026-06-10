@@ -382,6 +382,12 @@ div.float-tooltip-kap {
   margin: 6px 0;
 }
 
+.sparkline .axis-label {
+  fill: #9aa0b4;
+  font-size: 9px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
 .finance-detail {
   font-size: 0.8rem;
   margin: 4px 0;
