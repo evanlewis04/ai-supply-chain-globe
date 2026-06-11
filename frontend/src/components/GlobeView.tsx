@@ -16,6 +16,23 @@ interface Props {
 const DIM_NODE = "rgba(110, 115, 145, 0.25)";
 const DIM_ARC = "rgba(110, 115, 145, 0.12)";
 
+// Default vantage: mid-Pacific, framing Taiwan and the US in one view.
+const HOME_POV = { lat: 28, lng: -165, altitude: 2.2 };
+// Camera altitude range the zoom slider maps onto (log scale — equal
+// slider steps feel like equal zoom steps).
+const MIN_ALT = 0.3;
+const MAX_ALT = 4;
+
+function altitudeToSlider(alt: number): number {
+  const clamped = Math.min(MAX_ALT, Math.max(MIN_ALT, alt));
+  // Slider runs zoomed-out (0) -> zoomed-in (100)
+  return Math.round(100 * (1 - Math.log(clamped / MIN_ALT) / Math.log(MAX_ALT / MIN_ALT)));
+}
+
+function sliderToAltitude(value: number): number {
+  return MIN_ALT * Math.pow(MAX_ALT / MIN_ALT, 1 - value / 100);
+}
+
 interface PointDatum {
   node: GraphNode;
   lat: number;
@@ -122,6 +139,7 @@ export default function GlobeView({
 }: Props) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const [size, setSize] = useState({ w: window.innerWidth, h: window.innerHeight });
+  const [altitude, setAltitude] = useState(HOME_POV.altitude);
 
   useEffect(() => {
     const onResize = () => setSize({ w: window.innerWidth, h: window.innerHeight });
@@ -129,17 +147,44 @@ export default function GlobeView({
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  useEffect(() => {
+  // Idle spin until the user interacts (re-armed by the recenter button).
+  const startAutoRotate = () => {
     const globe = globeRef.current;
     if (!globe) return;
-    // Frame the whole slice: mid-Pacific vantage shows Taiwan and the US
-    globe.pointOfView({ lat: 28, lng: -165, altitude: 2.2 }, 0);
     const controls = globe.controls();
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.35;
     const stop = () => (controls.autoRotate = false);
     globe.renderer().domElement.addEventListener("pointerdown", stop, { once: true });
+  };
+
+  useEffect(() => {
+    const globe = globeRef.current;
+    if (!globe) return;
+    globe.pointOfView(HOME_POV, 0);
+    startAutoRotate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // globe.gl only emits onZoom for user-driven camera changes, so our own
+  // programmatic moves must update the slider state themselves.
+  const setZoom = (sliderValue: number) => {
+    const globe = globeRef.current;
+    if (!globe) return;
+    const alt = sliderToAltitude(sliderValue);
+    const pov = globe.pointOfView();
+    globe.controls().autoRotate = false;
+    globe.pointOfView({ ...pov, altitude: alt }, 0);
+    setAltitude(alt);
+  };
+
+  const recenter = () => {
+    const globe = globeRef.current;
+    if (!globe) return;
+    globe.pointOfView(HOME_POV, 1000);
+    setAltitude(HOME_POV.altitude);
+    startAutoRotate();
+  };
 
   const displayPos = useMemo(() => displacedPositions(graph.nodes), [graph]);
 
@@ -170,6 +215,7 @@ export default function GlobeView({
     const altitude = Math.min(2.6, Math.max(0.8, 0.7 + spread / 38));
     globe.controls().autoRotate = false;
     globe.pointOfView({ lat, lng, altitude }, 1400);
+    setAltitude(altitude);
   }, [highlight, displayPos]);
 
   const points = useMemo<PointDatum[]>(
@@ -314,13 +360,40 @@ export default function GlobeView({
             ev.stopPropagation();
             onSelect(node.id);
           };
+          // globe.gl detects clicks from pointerdown/up pairs that bubble to
+          // its container; from a label they raycast the globe *behind* the
+          // box and fire onGlobeClick — instantly deselecting what the click
+          // just selected. Keep pointer events out of the canvas entirely.
+          box.onpointerdown = (ev) => ev.stopPropagation();
+          box.onpointerup = (ev) => ev.stopPropagation();
           wrap.appendChild(box);
           return wrap;
         }}
         htmlElementVisibilityModifier={(el: HTMLElement, isVisible: boolean) => {
           el.classList.toggle("behind", !isVisible);
         }}
+        onZoom={(pov: { altitude: number }) => setAltitude(pov.altitude)}
       />
+      <div className="view-controls">
+        <span className="view-zoom-icon" aria-hidden>
+          −
+        </span>
+        <input
+          type="range"
+          min={0}
+          max={100}
+          value={altitudeToSlider(altitude)}
+          onChange={(ev) => setZoom(Number(ev.target.value))}
+          aria-label="Zoom"
+          title="Zoom"
+        />
+        <span className="view-zoom-icon" aria-hidden>
+          +
+        </span>
+        <button className="view-recenter" onClick={recenter} title="Reset view">
+          ⌖ Reset view
+        </button>
+      </div>
     </div>
   );
 }
