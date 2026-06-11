@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { GraphData, GraphNode, PricesData } from "../types";
 import { LAYER_COLORS, LAYER_LABELS } from "../types";
 import Sparkline from "./Sparkline";
@@ -9,6 +10,56 @@ interface Props {
   onSelect: (id: string) => void;
   onSelectConstraint: (id: string) => void;
   onClose: () => void;
+}
+
+/**
+ * Minimal markdown for vault body prose: **bold**, `code`, and [[wikilinks]].
+ * Wikilinks resolve to clickable entity names when the id exists in the
+ * graph (constraint or node), otherwise to plain text.
+ */
+function renderInline(
+  text: string,
+  graph: GraphData,
+  onSelect: (id: string) => void,
+  onSelectConstraint: (id: string) => void
+): ReactNode[] {
+  const parts: ReactNode[] = [];
+  // [\s\S] instead of . — vault prose is hard-wrapped, so emphasis can span lines.
+  const re = /\*\*([\s\S]+?)\*\*|`([^`]+)`|\[\[([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g;
+  let last = 0;
+  let key = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    if (m.index > last) parts.push(text.slice(last, m.index));
+    if (m[1] !== undefined) {
+      parts.push(<b key={key++}>{m[1]}</b>);
+    } else if (m[2] !== undefined) {
+      parts.push(<code key={key++}>{m[2]}</code>);
+    } else {
+      const id = m[3];
+      const constraint = graph.constraints.find((c) => c.id === id);
+      const target = constraint ? null : graph.nodes.find((n) => n.id === id);
+      const label = m[4] ?? constraint?.name ?? target?.name ?? id;
+      if (constraint) {
+        parts.push(
+          <button key={key++} className="link-btn" onClick={() => onSelectConstraint(id)}>
+            {label}
+          </button>
+        );
+      } else if (target) {
+        parts.push(
+          <button key={key++} className="link-btn" onClick={() => onSelect(id)}>
+            {label}
+          </button>
+        );
+      } else {
+        parts.push(label);
+      }
+    }
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts;
 }
 
 export default function SidePanel({
@@ -136,7 +187,7 @@ export default function SidePanel({
               .split(/\n{2,}/)
               .filter((p) => !p.startsWith("#"))
               .map((p, i) => (
-                <p key={i}>{p}</p>
+                <p key={i}>{renderInline(p, graph, onSelect, onSelectConstraint)}</p>
               ))}
           </div>
         </section>

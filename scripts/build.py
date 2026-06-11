@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -198,7 +199,12 @@ def emit(
         for _path, meta, body in entries:
             item = dict(meta)
             if body:
-                item["body"] = body
+                # "Reviewer notes" are the vault-internal audit trail
+                # (working-model requirement) — maintainer-facing, so they
+                # stay out of the published graph entirely.
+                public_body = re.split(r"\n\s*\*\*Reviewer notes", body, maxsplit=1)[0].rstrip()
+                if public_body:
+                    item["body"] = public_body
             packed.append(item)
         return packed
 
