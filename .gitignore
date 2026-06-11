@@ -17,3 +17,7 @@ Thumbs.db
 
 # Local Claude Code settings
 .claude/settings.local.json
+
+# Local env (API keys) — never commit
+frontend/.env.local
+*.env.local

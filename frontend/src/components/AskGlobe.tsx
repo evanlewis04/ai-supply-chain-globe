@@ -54,6 +54,16 @@ function linkifyAnswer(
 const KEY_STORAGE = "ask-globe-api-key";
 const MODEL_STORAGE = "ask-globe-model";
 
+/**
+ * Dev convenience: VITE_ANTHROPIC_API_KEY from frontend/.env.local
+ * (gitignored). Restricted to the dev server on purpose — VITE_ vars are
+ * baked into production bundles, which would publish the key if the built
+ * site were ever hosted.
+ */
+const ENV_KEY: string = import.meta.env.DEV
+  ? (import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined) ?? ""
+  : "";
+
 const SUGGESTIONS = [
   "Why can't Nvidia just make more GPUs?",
   "What happens if another hurricane hits North Carolina?",
@@ -63,7 +73,9 @@ const SUGGESTIONS = [
 
 export default function AskGlobe({ graph, result, onResult, onSelectNode }: Props) {
   const [question, setQuestion] = useState("");
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem(KEY_STORAGE) ?? "");
+  const [apiKey, setApiKey] = useState(
+    () => localStorage.getItem(KEY_STORAGE) || ENV_KEY
+  );
   const [model, setModel] = useState<AskModel>(() => {
     const saved = localStorage.getItem(MODEL_STORAGE);
     return saved && saved in ASK_MODELS ? (saved as AskModel) : DEFAULT_ASK_MODEL;
