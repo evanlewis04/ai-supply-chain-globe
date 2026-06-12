@@ -6,7 +6,7 @@ centers, model labs, and end-user applications. Every node sits at its real
 geographic location; every edge is typed and directional; **every claim
 traces to a public, dated source**.
 
-![Default view — the v1 slice across the Pacific](docs/screenshots/globe-default.png)
+![Demo: cycling through the five constraint chokepoints and a node detail panel](docs/screenshots/demo.gif)
 
 ## The 30-second demo
 
@@ -16,7 +16,7 @@ GPUs into Azure, training compute to OpenAI, ChatGPT itself — and everything
 else dims. The binding constraint on the entire AI buildout, visible as a
 graph property, not a slide bullet.
 
-![CoWoS constraint selected — downstream highlight](docs/screenshots/constraint-cowos.png)
+![CoWoS constraint selected — camera flies to frame the downstream highlight](docs/screenshots/constraint-cowos.png)
 
 Constraints are first-class, data-driven entities. The flagship is CoWoS
 (TrendForce capacity timeline: ~37.5k wafers/month in 2024 → 75k in 2025 →
@@ -70,8 +70,8 @@ cent — with a Sonnet 4.6 toggle for harder questions.
 Public-company nodes carry their ticker and 2-year stock performance —
 hover for the badge, click for the sparkline. The supply chain's chokepoints
 and the market's verdict on them, on the same map. As of June 2026 the
-2-year tape reads like a bottleneck index: SK hynix +918%, Ibiden +482%,
-TSMC +154%, ASML +75%, Nvidia +57%, Microsoft −7%.
+2-year tape reads like a bottleneck index: SK hynix +841%, Ibiden +445%,
+TSMC +143%, ASML +72%, Nvidia +52%, Microsoft −9%.
 
 ![Node detail — TSMC AP6 with sources](docs/screenshots/node-detail.png)
 
