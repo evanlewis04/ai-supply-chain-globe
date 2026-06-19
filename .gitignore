@@ -21,3 +21,14 @@ Thumbs.db
 # Local env (API keys) — never commit
 frontend/.env.local
 *.env.local
+
+# Private to Evan — public repo, keep personal context and investment analysis off it.
+# Loop tooling (HANDOFF.md, .claude/agents/, the _TEMPLATE.md files) is committed;
+# the actual theses/candidates and the logs that name positions stay local.
+about-me-for-claude.md
+loop-state/progress.md
+loop-state/recruiter-audit.md
+loop-state/theses/*
+!loop-state/theses/_TEMPLATE.md
+loop-state/candidates/*
+!loop-state/candidates/_TEMPLATE.md
