@@ -98,7 +98,7 @@ export const LAYER_COLORS: Record<Layer, string> = {
   chips: "#4cc9f0",
   infrastructure: "#9d4edd",
   models: "#57cc99",
-  applications: "#ff6b6b",
+  applications: "#ff70a6", // rose — kept off red so #ff4d4d stays unique to chokepoints
 };
 
 export const LAYER_LABELS: Record<Layer, string> = {
