@@ -23,6 +23,20 @@ const HOME_POV = { lat: 28, lng: -165, altitude: 2.2 };
 const MIN_ALT = 0.3;
 const MAX_ALT = 4;
 
+// Stack nodes radially by supply-chain layer so the directed
+// energy → chips → infrastructure → models → applications structure is
+// legible from the globe geometry itself, not just the README. Upstream
+// layers sit lower (near the surface); downstream layers float higher.
+const LAYER_ALTITUDE: Record<Layer, number> = {
+  energy: 0.02,
+  chips: 0.07,
+  infrastructure: 0.12,
+  models: 0.17,
+  applications: 0.22,
+};
+// Selected node lifts slightly above its tier for emphasis.
+const SELECT_BUMP = 0.03;
+
 function altitudeToSlider(alt: number): number {
   const clamped = Math.min(MAX_ALT, Math.max(MIN_ALT, alt));
   // Slider runs zoomed-out (0) -> zoomed-in (100)
@@ -320,9 +334,10 @@ export default function GlobeView({
           if (highlight && !highlight.nodes.has(node.id)) return DIM_NODE;
           return LAYER_COLORS[node.layer];
         }}
-        pointAltitude={(d: object) =>
-          (d as PointDatum).node.id === selectedId ? 0.09 : 0.04
-        }
+        pointAltitude={(d: object) => {
+          const p = d as PointDatum;
+          return LAYER_ALTITUDE[p.node.layer] + (p.node.id === selectedId ? SELECT_BUMP : 0);
+        }}
         pointRadius={0.75}
         pointLabel={pointLabel}
         onPointClick={(d: object) => onSelect((d as PointDatum).node.id)}
@@ -346,7 +361,7 @@ export default function GlobeView({
         htmlElementsData={labelData}
         htmlLat="lat"
         htmlLng="lng"
-        htmlAltitude={0.015}
+        htmlAltitude={(d: object) => LAYER_ALTITUDE[(d as PointDatum).node.layer]}
         htmlElement={(d: object) => {
           const { node, angle, dimmed } = d as PointDatum;
           const wrap = document.createElement("div");
