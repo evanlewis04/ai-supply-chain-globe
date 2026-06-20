@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import type { GraphData, GraphNode, PricesData } from "../types";
 import { LAYER_COLORS, LAYER_LABELS } from "../types";
+import { upstreamOfNode, downstreamOfNode } from "../graph/traversal";
+import type { ChainNode } from "../graph/traversal";
 import Sparkline from "./Sparkline";
 
 interface Props {
@@ -71,8 +73,42 @@ export default function SidePanel({
   onClose,
 }: Props) {
   const series = node.ticker ? prices?.series[node.ticker.symbol] : undefined;
-  const connected = graph.edges.filter((e) => e.from === node.id || e.to === node.id);
   const nodeName = (id: string) => graph.nodes.find((n) => n.id === id)?.name ?? id;
+
+  // Full transitive supply-chain reach, not just direct neighbours.
+  const upstream = upstreamOfNode(graph, node.id);
+  const downstream = downstreamOfNode(graph, node.id);
+
+  // The direct edge to a depth-1 neighbour, so we can still show its flow type
+  // and chokepoint marker (the detail the old 1-hop "Flows" list carried).
+  const directEdge = (otherId: string, dir: "up" | "down") =>
+    graph.edges.find((e) =>
+      dir === "up" ? e.from === otherId && e.to === node.id : e.from === node.id && e.to === otherId
+    );
+
+  const renderChain = (chain: ChainNode[], dir: "up" | "down") => (
+    <ul className="flows">
+      {chain.map(({ id, depth }) => {
+        const edge = depth === 1 ? directEdge(id, dir) : undefined;
+        return (
+          <li key={id}>
+            <span className="flow-dir">{dir === "up" ? "←" : "→"}</span>{" "}
+            <button className="link-btn" onClick={() => onSelect(id)}>
+              {nodeName(id)}
+            </button>{" "}
+            {edge ? (
+              <span className="flow-type">({edge.flow_type.replace(/_/g, " ")})</span>
+            ) : (
+              <span className="flow-type">· {depth} hops</span>
+            )}
+            {edge && edge.constraint_level === "high" && edge.substitutability === "low" && (
+              <span className="chokepoint"> chokepoint</span>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  );
 
   return (
     <aside className="side-panel">
@@ -155,27 +191,17 @@ export default function SidePanel({
         </section>
       )}
 
-      {connected.length > 0 && (
+      {upstream.length > 0 && (
         <section>
-          <h3>Flows</h3>
-          <ul className="flows">
-            {connected.map((e) => {
-              const outgoing = e.from === node.id;
-              const otherId = outgoing ? e.to : e.from;
-              return (
-                <li key={e.id}>
-                  <span className="flow-dir">{outgoing ? "→" : "←"}</span>{" "}
-                  <button className="link-btn" onClick={() => onSelect(otherId)}>
-                    {nodeName(otherId)}
-                  </button>{" "}
-                  <span className="flow-type">({e.flow_type.replace(/_/g, " ")})</span>
-                  {e.constraint_level === "high" && e.substitutability === "low" && (
-                    <span className="chokepoint"> chokepoint</span>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+          <h3>Upstream — depends on ({upstream.length})</h3>
+          {renderChain(upstream, "up")}
+        </section>
+      )}
+
+      {downstream.length > 0 && (
+        <section>
+          <h3>Downstream — feeds ({downstream.length})</h3>
+          {renderChain(downstream, "down")}
         </section>
       )}
 

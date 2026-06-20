@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { downstreamOfConstraint } from "./traversal";
+import { downstreamOfConstraint, upstreamOfNode, downstreamOfNode } from "./traversal";
 import type { GraphData } from "../types";
 
 /**
@@ -82,5 +82,32 @@ describe("downstreamOfConstraint", () => {
     g.nodes = g.nodes.map((n) => ({ ...n, constraints: [] }));
     const { nodes } = downstreamOfConstraint(g, "test-constraint");
     expect([...nodes].sort()).toEqual(["app", "dc", "designer"]);
+  });
+});
+
+describe("upstreamOfNode", () => {
+  it("returns the full transitive upstream chain with shortest-hop depths", () => {
+    // pack <- fab <- grid, and pack <- hbm
+    const chain = upstreamOfNode(fixture(), "pack");
+    expect(chain.map((c) => c.id).sort()).toEqual(["fab", "grid", "hbm"]);
+    const depth = Object.fromEntries(chain.map((c) => [c.id, c.depth]));
+    expect(depth).toEqual({ fab: 1, hbm: 1, grid: 2 });
+  });
+
+  it("is empty for a root node with nothing upstream", () => {
+    expect(upstreamOfNode(fixture(), "grid")).toEqual([]);
+  });
+});
+
+describe("downstreamOfNode", () => {
+  it("returns the full transitive downstream chain with shortest-hop depths", () => {
+    // pack -> designer -> dc -> app
+    const chain = downstreamOfNode(fixture(), "pack");
+    expect(chain.map((c) => c.id)).toEqual(["designer", "dc", "app"]);
+    expect(chain.map((c) => c.depth)).toEqual([1, 2, 3]);
+  });
+
+  it("is empty for a leaf node with nothing downstream", () => {
+    expect(downstreamOfNode(fixture(), "app")).toEqual([]);
   });
 });
