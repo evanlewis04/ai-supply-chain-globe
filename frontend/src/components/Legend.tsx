@@ -26,6 +26,11 @@ export default function Legend({ hiddenLayers, onToggleLayer }: Props) {
         <span className="legend-dot" style={{ background: "#ff4d4d" }} />
         Chokepoint flow
       </span>
+      <span className="legend-note">
+        Dots stack by layer (energy lowest → applications highest). Arcs are
+        colored by flow type (hover to identify); red &amp; thicker = chokepoint
+        gated by a named constraint.
+      </span>
     </div>
   );
 }

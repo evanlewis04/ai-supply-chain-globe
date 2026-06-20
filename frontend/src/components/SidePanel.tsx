@@ -101,9 +101,19 @@ export default function SidePanel({
             ) : (
               <span className="flow-type">· {depth} hops</span>
             )}
-            {edge && edge.constraint_level === "high" && edge.substitutability === "low" && (
+            {/* "Chokepoint" means the same thing here as the red arcs on the globe:
+                the edge is gated by a named constraint entity. A merely
+                low-substitutability link (common in this chain) gets the softer,
+                accurately-named tag instead. */}
+            {edge && (edge.constraints?.length ?? 0) > 0 && (
               <span className="chokepoint"> chokepoint</span>
             )}
+            {edge &&
+              (edge.constraints?.length ?? 0) === 0 &&
+              edge.constraint_level === "high" &&
+              edge.substitutability === "low" && (
+                <span className="low-sub"> low-substitutability</span>
+              )}
           </li>
         );
       })}

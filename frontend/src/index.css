@@ -156,6 +156,15 @@ body,
   display: inline-block;
 }
 
+.legend-note {
+  flex-basis: 100%;
+  margin-top: 2px;
+  color: #9aa0b4;
+  font-size: 0.68rem;
+  line-height: 1.4;
+  max-width: 360px;
+}
+
 .constraint-panel {
   width: 300px;
   max-width: 80vw;
@@ -630,6 +639,12 @@ div.float-tooltip-kap {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  margin-left: 6px;
+}
+
+.low-sub {
+  color: #9aa0b4;
+  font-size: 0.72rem;
   margin-left: 6px;
 }
 
