@@ -26,6 +26,7 @@ frontend/.env.local
 # Loop tooling (HANDOFF.md, .claude/agents/, the _TEMPLATE.md files) is committed;
 # the actual theses/candidates and the logs that name positions stay local.
 about-me-for-claude.md
+all-theses.md
 loop-state/progress.md
 loop-state/recruiter-audit.md
 loop-state/theses/*
