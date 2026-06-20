@@ -120,6 +120,7 @@ loop-state/
 .claude/agents/
   thesis-developer.md    <- Markdown + YAML frontmatter (NOT .toml)
   thesis-adversary.md    <- model/effort in frontmatter; prompt in the body
+  recruiter-auditor.md   <- Loop D; writes recruiter-audit.md, feeds A and B
 ```
 
 ## Two things to carry over that are easy to lose
