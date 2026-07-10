@@ -3,12 +3,12 @@ import type { GraphData } from "../types";
 import type { AffectedSet } from "../graph/traversal";
 
 export const ASK_MODELS = {
+  "claude-sonnet-4-6": "Sonnet 4.6 (best answers)",
   "claude-haiku-4-5": "Haiku 4.5 (fast & cheap)",
-  "claude-sonnet-4-6": "Sonnet 4.6 (smarter)",
 } as const;
 
 export type AskModel = keyof typeof ASK_MODELS;
-export const DEFAULT_ASK_MODEL: AskModel = "claude-haiku-4-5";
+export const DEFAULT_ASK_MODEL: AskModel = "claude-sonnet-4-6";
 
 export interface AskReference {
   /** Validated node id. */
@@ -30,11 +30,12 @@ export interface AskResult {
 }
 
 /**
- * Compact graph context for the prompt: everything analytical, minus the
- * source bibliographies and body prose (they dominate the byte count and
- * the model only needs the structured facts to pick paths). Deterministic
- * output — this string is the cached prefix, so it must be byte-stable
- * across calls.
+ * Graph context for the prompt: the structured facts plus each entity's
+ * analysis prose (the vault body, already stripped of reviewer notes at
+ * build time) — the prose is what lets the model answer like an analyst
+ * instead of a lookup table. Source bibliographies stay out (bulk without
+ * answer value). Deterministic output — this string is the cached prefix,
+ * so it must be byte-stable across calls.
  */
 export function buildGraphContext(graph: GraphData): string {
   const nodes = graph.nodes.map((n) => ({
@@ -48,6 +49,7 @@ export function buildGraphContext(graph: GraphData): string {
     status: n.status,
     constraints: n.constraints?.length ? n.constraints : undefined,
     tags: n.tags?.length ? n.tags : undefined,
+    analysis: n.body,
   }));
   const edges = graph.edges.map((e) => ({
     id: e.id,
@@ -66,12 +68,13 @@ export function buildGraphContext(graph: GraphData): string {
     severity: c.severity,
     description: c.description,
     metrics: c.metrics?.map((m) => `${m.value} ${m.unit} (as of ${m.as_of})${m.note ? ` — ${m.note}` : ""}`),
+    analysis: c.body,
   }));
   return JSON.stringify({ nodes, edges, constraints });
 }
 
-function systemPrompt(graph: GraphData): string {
-  return `You are the analyst behind an interactive 3D globe of the AI supply chain. \
+export function systemPrompt(graph: GraphData): string {
+  return `You are the resident analyst for an interactive 3D globe of the AI supply chain. \
 The globe is a directed graph: nodes are real facilities/organizations, edges are typed \
 flows between them (wafers, materials, equipment, power, compute...), and constraints \
 are first-class bottleneck entities that gate specific edges. Every entity is backed by \
@@ -80,13 +83,26 @@ dated public sources in the underlying dataset.
 The user asks a question; you answer it AND select which parts of the graph the globe \
 should light up to illustrate the answer.
 
-Rules:
-- answer: 2-4 sentences, concrete and quantitative where the data allows. Plain prose, \
-no markdown. Only claim what the graph data supports; if the graph can't answer, say so \
-and return empty id arrays.
-- node_ids / edge_ids: the subset of the graph that tells the story of your answer — \
-the relevant path(s), not everything. Use ONLY ids that exist in the graph data. Include \
-the edges connecting the nodes you select.
+Voice — you are a sharp supply-chain analyst briefing a smart generalist:
+- Lead with the answer, then support it with the sourced numbers. 2-4 sentences, plain \
+prose, no markdown.
+- Never mention "the graph", "the data", "the dataset", or your own limitations. If no \
+public figure exists for exactly what was asked, give the closest sourced number and \
+reason through the supply-chain structure to the honest expert conclusion. Example: \
+asked what share of chips depend on Spruce Pine quartz, do not say the data lacks a \
+per-chip figure — say that effectively all of them do, because every silicon ingot is \
+pulled in an ultra-pure quartz crucible and an estimated 70-90% of those crucibles \
+worldwide are made from Spruce Pine quartz.
+- Stay within what the sourced facts support; structural inference is encouraged, \
+invented numbers are forbidden. Only if the question is genuinely outside the supply \
+chain covered here should you say so (and return empty id arrays).
+
+Selection:
+- node_ids / edge_ids: light up the full path that tells the story. For questions about \
+dependency, disruption, or scale, that means the whole affected chain — upstream source \
+through every downstream consumer (a good answer typically highlights 4-10 nodes and \
+their connecting edges), not just the two endpoints. Use ONLY ids that exist in the \
+graph data, and include the edges connecting the nodes you select.
 - constraint_id: if one constraint entity is central to the answer, its id; else null.
 - references: one entry per facility/company/product your answer mentions by name, \
 with node_id (a real graph node id) and text set to the EXACT substring of your answer \

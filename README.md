@@ -62,8 +62,8 @@ entities that exist in the vault, all of which are source-backed.
 
 Bring your own Anthropic API key (entered once, stored only in your
 browser's localStorage, sent only to `api.anthropic.com`). Default model is
-Haiku 4.5 — with the graph context prompt-cached, a question costs about a
-cent — with a Sonnet 4.6 toggle for harder questions.
+Sonnet 4.6 — with the graph context prompt-cached, a question costs a few
+cents — with a Haiku 4.5 toggle for speed.
 
 ## Finance overlay
 
