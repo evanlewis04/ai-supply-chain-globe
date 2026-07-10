@@ -184,21 +184,42 @@ export default function GlobeView({
 
   // Screen-space label de-clutter. Greedily keep higher-priority labels
   // (selected > highlighted > normal > dimmed) and hide any that overlap one
-  // already kept; the dots + hover tooltips remain for hidden ones. Two
-  // anti-flicker measures: the sweep runs ~8x/s instead of every frame, and
-  // hiding/showing use different pads (hysteresis) so a label near the
-  // threshold doesn't oscillate while the globe rotates.
+  // already kept; the dots + hover tooltips remain for hidden ones.
+  //
+  // Anti-flicker, in layers: the sweep runs ~8x/s instead of every frame;
+  // hiding/showing use different pads (spatial hysteresis); ties order
+  // deterministically; and — the piece that matters during drags and
+  // fly-tos — hiding is immediate but REAPPEARING requires several
+  // consecutive clear sweeps with the camera at rest. Fading out once is
+  // never flickery; flicker is hide/show alternation, which can't happen
+  // if shows are barred while the camera is still gliding.
   useEffect(() => {
     let raf = 0;
     let lastRun = 0;
+    let lastPov: { lat: number; lng: number; altitude: number } | null = null;
+    const showStreak = new Map<string, number>();
     const HIDE_PAD = 2; // visible labels may sit this close before hiding
     const SHOW_PAD = 12; // hidden labels need this much clearance to return
+    const SHOW_STREAK = 4; // ~0.5s of consecutive clear, still sweeps
+    const MOVE_DEG = 0.5; // camera movement per sweep that counts as "moving"
     const sweep = (now: number) => {
       raf = requestAnimationFrame(sweep);
       if (now - lastRun < 120) return;
       lastRun = now;
       const stage = stageRef.current;
-      if (!stage) return;
+      const globe = globeRef.current;
+      if (!stage || !globe) return;
+
+      // Camera considered moving when it shifted meaningfully since the
+      // last sweep. Idle auto-rotate (~0.25°/sweep) stays under the
+      // threshold, so labels still manage themselves during the idle spin.
+      const pov = globe.pointOfView();
+      const moving =
+        lastPov !== null &&
+        (angularDistanceDeg(pov.lat, pov.lng, lastPov.lat, lastPov.lng) > MOVE_DEG ||
+          Math.abs(pov.altitude - lastPov.altitude) > 0.02);
+      lastPov = pov;
+
       const boxes = Array.from(
         stage.querySelectorAll<HTMLElement>(".node-label-wrap:not(.behind) .node-label")
       );
@@ -212,8 +233,9 @@ export default function GlobeView({
       // sweeps — swapping is what reads as flicker.
       scored.sort((a, b) => b.priority - a.priority || a.id.localeCompare(b.id));
       const kept: DOMRect[] = [];
-      for (const { el, rect } of scored) {
-        const pad = el.classList.contains("crowded") ? SHOW_PAD : HIDE_PAD;
+      for (const { el, id, rect } of scored) {
+        const hidden = el.classList.contains("crowded");
+        const pad = hidden ? SHOW_PAD : HIDE_PAD;
         const clash = kept.some(
           (k) =>
             rect.left < k.right + pad &&
@@ -221,10 +243,22 @@ export default function GlobeView({
             rect.top < k.bottom + pad &&
             rect.bottom > k.top - pad
         );
-        if (clash) el.classList.add("crowded");
-        else {
-          el.classList.remove("crowded");
-          kept.push(rect);
+        if (!hidden) {
+          if (clash) {
+            el.classList.add("crowded");
+            showStreak.set(id, 0);
+          } else {
+            kept.push(rect);
+          }
+        } else if (clash || moving) {
+          showStreak.set(id, 0);
+        } else {
+          const streak = (showStreak.get(id) ?? 0) + 1;
+          showStreak.set(id, streak);
+          if (streak >= SHOW_STREAK) {
+            el.classList.remove("crowded");
+            kept.push(rect);
+          }
         }
       }
     };
