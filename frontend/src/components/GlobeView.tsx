@@ -73,6 +73,20 @@ function escapeHtml(s: string): string {
 }
 
 /**
+ * Compact map label: drop the parenthetical qualifier and any em/en-dash
+ * suffix, which are the widest parts of the box and cause most overlap.
+ * The full name still shows in the hover tooltip and the side panel.
+ * "Microsoft Azure — West Des Moines campus" -> "Microsoft Azure";
+ * "TSMC Fab 18 (GIGAFAB, N5/N3)" -> "TSMC Fab 18".
+ */
+function shortLabel(name: string): string {
+  return name
+    .replace(/\s*[—–-]\s.*$/, "")
+    .replace(/\s*\([^)]*\)\s*$/, "")
+    .trim();
+}
+
+/**
  * Display-only cartographic displacement: nodes within ~2° of each other
  * (OpenAI/ChatGPT share coordinates; Nvidia is ~60km away; the two Des
  * Moines nodes nearly touch) get spread on a small ring around their
@@ -152,6 +166,9 @@ export default function GlobeView({
   onSelect,
 }: Props) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const selectedIdRef = useRef<string | null>(selectedId);
+  selectedIdRef.current = selectedId;
   const [size, setSize] = useState({ w: window.innerWidth, h: window.innerHeight });
   const [altitude, setAltitude] = useState(HOME_POV.altitude);
 
@@ -159,6 +176,50 @@ export default function GlobeView({
     const onResize = () => setSize({ w: window.innerWidth, h: window.innerHeight });
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // Screen-space label de-clutter. The globe rotates and clusters pack many
+  // boxes together; here we greedily keep higher-priority labels (selected >
+  // highlighted > normal > dimmed) and hide any that overlap one already
+  // kept. Runs each frame — cheap for ~17 boxes, and the dots + hover
+  // tooltips remain for anything a label is hidden on.
+  useEffect(() => {
+    let raf = 0;
+    const sweep = () => {
+      raf = requestAnimationFrame(sweep);
+      const stage = stageRef.current;
+      if (!stage) return;
+      const boxes = Array.from(
+        stage.querySelectorAll<HTMLElement>(".node-label-wrap:not(.behind) .node-label")
+      );
+      const sel = selectedIdRef.current;
+      const scored = boxes.map((el) => {
+        const priority =
+          el.dataset.nodeId === sel ? 3 : el.classList.contains("dimmed") ? 1 : 2;
+        return { el, rect: el.getBoundingClientRect(), priority };
+      });
+      scored.sort((a, b) => b.priority - a.priority);
+      // A few px of slack so near-touching boxes also de-clutter (labels
+      // that share a cluster ring often abut without strictly overlapping).
+      const PAD = 4;
+      const kept: DOMRect[] = [];
+      for (const { el, rect } of scored) {
+        const clash = kept.some(
+          (k) =>
+            rect.left < k.right + PAD &&
+            rect.right > k.left - PAD &&
+            rect.top < k.bottom + PAD &&
+            rect.bottom > k.top - PAD
+        );
+        if (clash) el.classList.add("crowded");
+        else {
+          el.classList.remove("crowded");
+          kept.push(rect);
+        }
+      }
+    };
+    raf = requestAnimationFrame(sweep);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   // Idle spin until the user interacts (re-armed by the recenter button).
@@ -317,7 +378,7 @@ export default function GlobeView({
   };
 
   return (
-    <div className="globe-stage">
+    <div className="globe-stage" ref={stageRef}>
       <Globe
         ref={globeRef}
         width={size.w}
@@ -368,7 +429,9 @@ export default function GlobeView({
           wrap.className = "node-label-wrap";
           const box = document.createElement("div");
           box.className = "node-label" + (dimmed ? " dimmed" : "");
-          box.textContent = node.name;
+          box.textContent = shortLabel(node.name);
+          box.title = node.name;
+          box.dataset.nodeId = node.id;
           box.style.borderLeftColor = LAYER_COLORS[node.layer];
           box.style.transform = labelOffsetTransform(angle);
           box.onclick = (ev) => {

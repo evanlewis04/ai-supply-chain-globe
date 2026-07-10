@@ -64,13 +64,6 @@ const ENV_KEY: string = import.meta.env.DEV
   ? (import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined) ?? ""
   : "";
 
-const SUGGESTIONS = [
-  "Why can't Nvidia just make more GPUs?",
-  "What happens if another hurricane hits North Carolina?",
-  "Which single company failing would stop AI progress fastest?",
-  "Why are datacenter buildouts delayed?",
-];
-
 export default function AskGlobe({ graph, result, onResult, onSelectNode }: Props) {
   const [question, setQuestion] = useState("");
   const [apiKey, setApiKey] = useState(
@@ -144,15 +137,6 @@ export default function AskGlobe({ graph, result, onResult, onSelectNode }: Prop
         </div>
       )}
       {error && <div className="ask-error">{error}</div>}
-      {!result && !loading && !needsKey && (
-        <div className="ask-suggestions">
-          {SUGGESTIONS.map((s) => (
-            <button key={s} className="ask-chip" onClick={() => void ask(s)}>
-              {s}
-            </button>
-          ))}
-        </div>
-      )}
       {needsKey ? (
         <form className="ask-bar" onSubmit={saveKey}>
           <input

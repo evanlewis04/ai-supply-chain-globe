@@ -304,6 +304,13 @@ body,
   pointer-events: none;
 }
 
+/* Hidden by the screen-space de-clutter sweep because it overlapped a
+   higher-priority label. The dot and its hover tooltip remain. */
+.node-label.crowded {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* Stacking context for everything globe.gl renders (canvas, CSS2D labels,
    hover tooltip), so internal z-indexes can't leak above the UI panels. */
 .globe-stage {
