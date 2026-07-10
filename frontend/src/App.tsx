@@ -16,6 +16,8 @@ export default function App() {
   const [askResult, setAskResult] = useState<AskResult | null>(null);
   const [hiddenLayers, setHiddenLayers] = useState<Set<Layer>>(new Set());
   const [error, setError] = useState<string | null>(null);
+  // Bottom-band slot the globe's zoom/reset controls portal into.
+  const [controlsSlot, setControlsSlot] = useState<HTMLDivElement | null>(null);
 
   // Ask-answers and constraint selections drive the same highlight channel;
   // a manual chip click clears the answer, while an answer activates the
@@ -110,14 +112,21 @@ export default function App() {
         highlight={highlight}
         hiddenLayers={hiddenLayers}
         onSelect={setSelectedId}
+        controlsContainer={controlsSlot}
       />
-      <Legend hiddenLayers={hiddenLayers} onToggleLayer={toggleLayer} />
-      <AskGlobe
-        graph={graph}
-        result={askResult}
-        onResult={applyAskResult}
-        onSelectNode={setSelectedId}
-      />
+      {/* One flex band: nothing in it can overlap, whatever each piece's height. */}
+      <div className="bottom-band">
+        <div className="bottom-left">
+          <div ref={setControlsSlot} />
+          <Legend hiddenLayers={hiddenLayers} onToggleLayer={toggleLayer} />
+        </div>
+        <AskGlobe
+          graph={graph}
+          result={askResult}
+          onResult={applyAskResult}
+          onSelectNode={setSelectedId}
+        />
+      </div>
       {selectedNode && (
         <SidePanel
           node={selectedNode}

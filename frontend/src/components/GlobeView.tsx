@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Globe, { GlobeMethods } from "react-globe.gl";
 import type { GraphData, GraphNode, Layer, PricesData } from "../types";
 import { FLOW_COLORS, LAYER_COLORS } from "../types";
@@ -11,6 +12,8 @@ interface Props {
   highlight: AffectedSet | null;
   hiddenLayers: Set<Layer>;
   onSelect: (id: string | null) => void;
+  /** Slot in App's bottom band where the zoom/reset controls render. */
+  controlsContainer: HTMLElement | null;
 }
 
 const DIM_NODE = "rgba(110, 115, 145, 0.25)";
@@ -164,6 +167,7 @@ export default function GlobeView({
   highlight,
   hiddenLayers,
   onSelect,
+  controlsContainer,
 }: Props) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -178,15 +182,21 @@ export default function GlobeView({
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  // Screen-space label de-clutter. The globe rotates and clusters pack many
-  // boxes together; here we greedily keep higher-priority labels (selected >
-  // highlighted > normal > dimmed) and hide any that overlap one already
-  // kept. Runs each frame — cheap for ~17 boxes, and the dots + hover
-  // tooltips remain for anything a label is hidden on.
+  // Screen-space label de-clutter. Greedily keep higher-priority labels
+  // (selected > highlighted > normal > dimmed) and hide any that overlap one
+  // already kept; the dots + hover tooltips remain for hidden ones. Two
+  // anti-flicker measures: the sweep runs ~8x/s instead of every frame, and
+  // hiding/showing use different pads (hysteresis) so a label near the
+  // threshold doesn't oscillate while the globe rotates.
   useEffect(() => {
     let raf = 0;
-    const sweep = () => {
+    let lastRun = 0;
+    const HIDE_PAD = 2; // visible labels may sit this close before hiding
+    const SHOW_PAD = 12; // hidden labels need this much clearance to return
+    const sweep = (now: number) => {
       raf = requestAnimationFrame(sweep);
+      if (now - lastRun < 120) return;
+      lastRun = now;
       const stage = stageRef.current;
       if (!stage) return;
       const boxes = Array.from(
@@ -196,20 +206,20 @@ export default function GlobeView({
       const scored = boxes.map((el) => {
         const priority =
           el.dataset.nodeId === sel ? 3 : el.classList.contains("dimmed") ? 1 : 2;
-        return { el, rect: el.getBoundingClientRect(), priority };
+        return { el, id: el.dataset.nodeId ?? "", rect: el.getBoundingClientRect(), priority };
       });
-      scored.sort((a, b) => b.priority - a.priority);
-      // A few px of slack so near-touching boxes also de-clutter (labels
-      // that share a cluster ring often abut without strictly overlapping).
-      const PAD = 4;
+      // Deterministic order (priority, then id) so ties never swap between
+      // sweeps — swapping is what reads as flicker.
+      scored.sort((a, b) => b.priority - a.priority || a.id.localeCompare(b.id));
       const kept: DOMRect[] = [];
       for (const { el, rect } of scored) {
+        const pad = el.classList.contains("crowded") ? SHOW_PAD : HIDE_PAD;
         const clash = kept.some(
           (k) =>
-            rect.left < k.right + PAD &&
-            rect.right > k.left - PAD &&
-            rect.top < k.bottom + PAD &&
-            rect.bottom > k.top - PAD
+            rect.left < k.right + pad &&
+            rect.right > k.left - pad &&
+            rect.top < k.bottom + pad &&
+            rect.bottom > k.top - pad
         );
         if (clash) el.classList.add("crowded");
         else {
@@ -452,26 +462,30 @@ export default function GlobeView({
         }}
         onZoom={(pov: { altitude: number }) => setAltitude(pov.altitude)}
       />
-      <div className="view-controls">
-        <span className="view-zoom-icon" aria-hidden>
-          −
-        </span>
-        <input
-          type="range"
-          min={0}
-          max={100}
-          value={altitudeToSlider(altitude)}
-          onChange={(ev) => setZoom(Number(ev.target.value))}
-          aria-label="Zoom"
-          title="Zoom"
-        />
-        <span className="view-zoom-icon" aria-hidden>
-          +
-        </span>
-        <button className="view-recenter" onClick={recenter} title="Reset view">
-          ⌖ Reset view
-        </button>
-      </div>
+      {controlsContainer &&
+        createPortal(
+          <div className="view-controls">
+            <span className="view-zoom-icon" aria-hidden>
+              −
+            </span>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={altitudeToSlider(altitude)}
+              onChange={(ev) => setZoom(Number(ev.target.value))}
+              aria-label="Zoom"
+              title="Zoom"
+            />
+            <span className="view-zoom-icon" aria-hidden>
+              +
+            </span>
+            <button className="view-recenter" onClick={recenter} title="Reset view">
+              ⌖ Reset view
+            </button>
+          </div>,
+          controlsContainer
+        )}
     </div>
   );
 }

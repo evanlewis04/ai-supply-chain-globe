@@ -36,7 +36,10 @@ body,
   align-items: flex-start;
   gap: 12px;
   padding: 14px 20px;
-  max-height: calc(100% - 90px); /* keep clear of the legend */
+  /* Keep clear of the bottom band at its tallest (zoom controls stacked
+     over the legend with its wrapped note). The constraint panel scrolls
+     inside this cap. */
+  max-height: calc(100% - 185px);
   pointer-events: none;
 }
 
@@ -63,12 +66,35 @@ body,
   color: #6f7590;
 }
 
-.view-controls {
+/* The bottom band lays out zoom controls + legend (left) and the Ask bar
+   (center) in one flex row, so they can never overlap regardless of how
+   tall or wide each grows. */
+.bottom-band {
   position: absolute;
-  bottom: 64px;
   left: 20px;
-  z-index: 11;
+  right: 20px;
+  bottom: 14px;
+  z-index: 12;
   display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  pointer-events: none;
+}
+
+.bottom-band > * {
+  pointer-events: auto;
+}
+
+.bottom-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.view-controls {
+  display: inline-flex;
   align-items: center;
   gap: 7px;
   background: rgba(5, 8, 25, 0.65);
@@ -109,13 +135,10 @@ body,
 }
 
 .legend {
-  position: absolute;
-  bottom: 14px;
-  left: 20px;
-  z-index: 10;
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
+  max-width: 420px;
   font-size: 0.75rem;
   color: #c8cbe0;
   background: rgba(5, 8, 25, 0.65);
@@ -169,6 +192,7 @@ body,
   width: 300px;
   max-width: 80vw;
   overflow-y: auto;
+  min-height: 0; /* let it actually shrink inside the flex rail */
   pointer-events: auto;
   background: rgba(5, 8, 25, 0.78);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -330,14 +354,12 @@ div.float-tooltip-kap {
 }
 
 .ask-globe {
-  position: absolute;
-  /* Clear of the legend's bottom lane (legend is bottom: 14px, ~40px tall),
-     so wrapped suggestion chips can never collide with it. */
-  bottom: 64px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 12;
-  width: min(620px, 60vw);
+  /* Flex child of .bottom-band — flow layout, so it can't overlap the
+     legend/controls column beside it. */
+  flex: 1 1 auto;
+  min-width: 260px;
+  max-width: 620px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 8px;
