@@ -4,7 +4,8 @@ import SidePanel from "./components/SidePanel";
 import Legend from "./components/Legend";
 import ConstraintPanel from "./components/ConstraintPanel";
 import AskGlobe from "./components/AskGlobe";
-import { downstreamOfConstraint } from "./graph/traversal";
+import ScenarioPanel from "./components/ScenarioPanel";
+import { downstreamOfConstraint, downstreamAffectedSet } from "./graph/traversal";
 import type { AskResult } from "./lib/askGlobe";
 import type { GraphData, Layer, PricesData } from "./types";
 
@@ -14,21 +15,32 @@ export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [constraintId, setConstraintId] = useState<string | null>(null);
   const [askResult, setAskResult] = useState<AskResult | null>(null);
+  const [shockOriginId, setShockOriginId] = useState<string | null>(null);
   const [hiddenLayers, setHiddenLayers] = useState<Set<Layer>>(new Set());
   const [error, setError] = useState<string | null>(null);
   // Bottom-band slot the globe's zoom/reset controls portal into.
   const [controlsSlot, setControlsSlot] = useState<HTMLDivElement | null>(null);
 
-  // Ask-answers and constraint selections drive the same highlight channel;
-  // a manual chip click clears the answer, while an answer activates the
-  // constraint chip the model judged central (or clears any stale one).
+  // Constraint selections, Ask answers, and disruption scenarios all drive the
+  // one `highlight` channel, so they are mutually exclusive: activating one
+  // clears the others. A manual chip click clears the answer, while an answer
+  // activates the constraint chip the model judged central (or clears a stale one).
   const selectConstraint = (id: string | null) => {
     setConstraintId(id);
-    if (id) setAskResult(null);
+    if (id) {
+      setAskResult(null);
+      setShockOriginId(null);
+    }
   };
   const applyAskResult = (result: AskResult | null) => {
     setAskResult(result);
     setConstraintId(result?.constraintId ?? null);
+    if (result) setShockOriginId(null);
+  };
+  const startShock = (id: string) => {
+    setShockOriginId(id);
+    setConstraintId(null);
+    setAskResult(null);
   };
 
   const toggleLayer = (layer: Layer) =>
@@ -47,11 +59,14 @@ export default function App() {
       })
       .then((g: GraphData) => {
         setGraph(g);
-        // Shareable demo states: ?constraint=cowos-capacity or ?node=tsmc-fab-18
+        // Shareable demo states: ?constraint=cowos-capacity, ?node=tsmc-fab-18,
+        // or ?shock=spruce-pine-quartz-district (disruption scenario).
         const params = new URLSearchParams(window.location.search);
         const c = params.get("constraint");
         const n = params.get("node");
-        if (c && g.constraints.some((x) => x.id === c)) setConstraintId(c);
+        const s = params.get("shock");
+        if (s && g.nodes.some((x) => x.id === s)) setShockOriginId(s);
+        else if (c && g.constraints.some((x) => x.id === c)) setConstraintId(c);
         if (n && g.nodes.some((x) => x.id === n)) setSelectedId(n);
       })
       .catch((e) => setError(String(e)));
@@ -66,11 +81,17 @@ export default function App() {
     [graph, selectedId]
   );
 
+  const shockOrigin = useMemo(
+    () => graph?.nodes.find((n) => n.id === shockOriginId) ?? null,
+    [graph, shockOriginId]
+  );
+
   const highlight = useMemo(() => {
+    if (graph && shockOrigin) return downstreamAffectedSet(graph, shockOrigin.id);
     if (askResult && askResult.affected.nodes.size > 0) return askResult.affected;
     if (graph && constraintId) return downstreamOfConstraint(graph, constraintId);
     return null;
-  }, [graph, constraintId, askResult]);
+  }, [graph, constraintId, askResult, shockOrigin]);
 
   if (error) {
     return (
@@ -87,29 +108,34 @@ export default function App() {
 
   return (
     <div className="app">
-      <div className="left-rail">
-        <header className="header">
-          <h1>AI Supply Chain Globe</h1>
-          <span className="header-sub">
-            {graph.meta.counts.nodes} nodes · {graph.meta.counts.edges} edges ·
-            every claim sourced
-          </span>
-          <span className="header-hint">
-            Click a node for details &amp; sources · pick a constraint to trace
-            the bottleneck · hover arcs for flows
-          </span>
-        </header>
-        <ConstraintPanel
-          constraints={graph.constraints}
-          selectedId={constraintId}
-          onSelect={selectConstraint}
-        />
-      </div>
+      {/* The left rail (title + constraints) yields to the scenario readout,
+          which docks in the same place while a disruption is active. */}
+      {!shockOrigin && (
+        <div className="left-rail">
+          <header className="header">
+            <h1>AI Supply Chain Globe</h1>
+            <span className="header-sub">
+              {graph.meta.counts.nodes} nodes · {graph.meta.counts.edges} edges ·
+              every claim sourced
+            </span>
+            <span className="header-hint">
+              Click a node for details &amp; sources · pick a constraint to trace
+              the bottleneck · hover arcs for flows
+            </span>
+          </header>
+          <ConstraintPanel
+            constraints={graph.constraints}
+            selectedId={constraintId}
+            onSelect={selectConstraint}
+          />
+        </div>
+      )}
       <GlobeView
         graph={graph}
         prices={prices}
         selectedId={selectedId}
         highlight={highlight}
+        shockOriginId={shockOriginId}
         hiddenLayers={hiddenLayers}
         onSelect={setSelectedId}
         controlsContainer={controlsSlot}
@@ -127,11 +153,22 @@ export default function App() {
           onSelectNode={setSelectedId}
         />
       </div>
+      {shockOrigin && (
+        <ScenarioPanel
+          origin={shockOrigin}
+          graph={graph}
+          prices={prices}
+          onSelectNode={setSelectedId}
+          onClear={() => setShockOriginId(null)}
+        />
+      )}
       {selectedNode && (
         <SidePanel
           node={selectedNode}
           graph={graph}
           prices={prices}
+          isShockOrigin={selectedNode.id === shockOriginId}
+          onSimulateShock={startShock}
           onSelect={setSelectedId}
           onSelectConstraint={selectConstraint}
           onClose={() => setSelectedId(null)}
