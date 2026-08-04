@@ -1161,3 +1161,82 @@ div.float-tooltip-kap {
   color: #6f7590;
   margin: 12px 0 0;
 }
+
+/* ── Phase 3: point-in-time slider ───────────────────────────────────── */
+
+.time-slider {
+  pointer-events: auto;
+  width: 300px;
+  max-width: 80vw;
+  background: rgba(5, 8, 25, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px 14px 12px;
+  backdrop-filter: blur(8px);
+}
+
+.time-slider-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.time-slider-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #9aa0b4;
+}
+
+.time-slider-date {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ff9f7a;
+}
+
+.time-slider input[type="range"] {
+  width: 100%;
+  accent-color: #ff8a6a;
+  cursor: pointer;
+}
+
+.time-slider-ends {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 0.66rem;
+  color: #6f7590;
+}
+
+.time-slider-note {
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
+.constraint-asof {
+  font-size: 0.8rem;
+  color: #c8cbe0;
+  background: rgba(255, 122, 69, 0.1);
+  border: 1px solid rgba(255, 122, 69, 0.28);
+  border-radius: 8px;
+  padding: 7px 10px;
+  margin: 8px 0;
+}
+
+.constraint-asof-note {
+  color: #9aa0b4;
+  font-size: 0.72rem;
+}
+
+.constraint-metrics tr.metric-current td {
+  color: #ffd0c0;
+  font-weight: 600;
+}
+
+.constraint-metrics tr.metric-future td {
+  color: #5b6076;
+}

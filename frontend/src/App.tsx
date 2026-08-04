@@ -6,7 +6,9 @@ import ConstraintPanel from "./components/ConstraintPanel";
 import AskGlobe from "./components/AskGlobe";
 import ScenarioPanel from "./components/ScenarioPanel";
 import ExposureMatrixPanel from "./components/ExposureMatrixPanel";
+import TimeSlider from "./components/TimeSlider";
 import { downstreamOfConstraint, downstreamAffectedSet } from "./graph/traversal";
+import { constraintTimeline } from "./graph/timeline";
 import type { AskResult } from "./lib/askGlobe";
 import type { GraphData, Layer, PricesData } from "./types";
 
@@ -18,6 +20,9 @@ export default function App() {
   const [askResult, setAskResult] = useState<AskResult | null>(null);
   const [shockOriginId, setShockOriginId] = useState<string | null>(null);
   const [showMatrix, setShowMatrix] = useState(false);
+  // Point-in-time slider index into the constraint timeline. null = latest
+  // (opens on "now"; the user scrubs back).
+  const [asOfIndex, setAsOfIndex] = useState<number | null>(null);
   const [hiddenLayers, setHiddenLayers] = useState<Set<Layer>>(new Set());
   const [error, setError] = useState<string | null>(null);
   // Bottom-band slot the globe's zoom/reset controls portal into.
@@ -71,6 +76,12 @@ export default function App() {
         else if (c && g.constraints.some((x) => x.id === c)) setConstraintId(c);
         if (n && g.nodes.some((x) => x.id === n)) setSelectedId(n);
         if (params.get("matrix") === "1") setShowMatrix(true);
+        // ?asof=2024 opens the slider at that stop (else it defaults to latest).
+        const a = params.get("asof");
+        if (a) {
+          const idx = constraintTimeline(g).findIndex((st) => st.asOf === a);
+          if (idx >= 0) setAsOfIndex(idx);
+        }
       })
       .catch((e) => setError(String(e)));
     fetch("prices.json")
@@ -88,6 +99,13 @@ export default function App() {
     () => graph?.nodes.find((n) => n.id === shockOriginId) ?? null,
     [graph, shockOriginId]
   );
+
+  // Distinct real as_of dates across all constraints — the slider's stops.
+  const timeline = useMemo(() => (graph ? constraintTimeline(graph) : []), [graph]);
+  const effectiveIndex = timeline.length
+    ? Math.min(asOfIndex ?? timeline.length - 1, timeline.length - 1)
+    : 0;
+  const activeStop = timeline.length ? timeline[effectiveIndex] : null;
 
   const highlight = useMemo(() => {
     if (graph && shockOrigin) return downstreamAffectedSet(graph, shockOrigin.id);
@@ -130,7 +148,9 @@ export default function App() {
             constraints={graph.constraints}
             selectedId={constraintId}
             onSelect={selectConstraint}
+            asOf={activeStop}
           />
+          <TimeSlider timeline={timeline} index={effectiveIndex} onChange={setAsOfIndex} />
           <button className="matrix-open" onClick={() => setShowMatrix(true)}>
             Exposure matrix ▸
           </button>
