@@ -5,6 +5,7 @@ import Legend from "./components/Legend";
 import ConstraintPanel from "./components/ConstraintPanel";
 import AskGlobe from "./components/AskGlobe";
 import ScenarioPanel from "./components/ScenarioPanel";
+import ExposureMatrixPanel from "./components/ExposureMatrixPanel";
 import { downstreamOfConstraint, downstreamAffectedSet } from "./graph/traversal";
 import type { AskResult } from "./lib/askGlobe";
 import type { GraphData, Layer, PricesData } from "./types";
@@ -16,6 +17,7 @@ export default function App() {
   const [constraintId, setConstraintId] = useState<string | null>(null);
   const [askResult, setAskResult] = useState<AskResult | null>(null);
   const [shockOriginId, setShockOriginId] = useState<string | null>(null);
+  const [showMatrix, setShowMatrix] = useState(false);
   const [hiddenLayers, setHiddenLayers] = useState<Set<Layer>>(new Set());
   const [error, setError] = useState<string | null>(null);
   // Bottom-band slot the globe's zoom/reset controls portal into.
@@ -68,6 +70,7 @@ export default function App() {
         if (s && g.nodes.some((x) => x.id === s)) setShockOriginId(s);
         else if (c && g.constraints.some((x) => x.id === c)) setConstraintId(c);
         if (n && g.nodes.some((x) => x.id === n)) setSelectedId(n);
+        if (params.get("matrix") === "1") setShowMatrix(true);
       })
       .catch((e) => setError(String(e)));
     fetch("prices.json")
@@ -128,6 +131,9 @@ export default function App() {
             selectedId={constraintId}
             onSelect={selectConstraint}
           />
+          <button className="matrix-open" onClick={() => setShowMatrix(true)}>
+            Exposure matrix ▸
+          </button>
         </div>
       )}
       <GlobeView
@@ -160,6 +166,17 @@ export default function App() {
           prices={prices}
           onSelectNode={setSelectedId}
           onClear={() => setShockOriginId(null)}
+        />
+      )}
+      {showMatrix && (
+        <ExposureMatrixPanel
+          graph={graph}
+          onSelectNode={(id) => {
+            setSelectedId(id);
+            setShowMatrix(false);
+          }}
+          onSelectConstraint={selectConstraint}
+          onClose={() => setShowMatrix(false)}
         />
       )}
       {selectedNode && (
