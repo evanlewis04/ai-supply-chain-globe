@@ -722,3 +722,248 @@ div.float-tooltip-kap {
   font-style: italic;
   font-size: 0.78rem;
 }
+
+/* --- Scenario / shock engine --- */
+
+/* SidePanel entry point into a disruption scenario. */
+.shock-cta {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin: 0 0 16px;
+  padding: 9px 12px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #ffd9cc;
+  background: rgba(255, 77, 45, 0.12);
+  border: 1px solid rgba(255, 122, 69, 0.5);
+  border-radius: 9px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.shock-cta:hover {
+  background: rgba(255, 77, 45, 0.2);
+  border-color: #ff7a45;
+}
+
+.shock-cta.active {
+  background: rgba(255, 77, 45, 0.24);
+  border-color: #ff2d2d;
+}
+
+.shock-cta-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: #c9a99e;
+}
+
+/* The readout docks where the left rail was, so it never fights the SidePanel. */
+.scenario-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 15;
+  width: 380px;
+  max-width: 92vw;
+  height: 100%;
+  overflow-y: auto;
+  padding: 18px 20px 32px;
+  background: rgba(7, 10, 28, 0.94);
+  border-right: 1px solid rgba(255, 122, 69, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.scenario-back {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #9aa0b4;
+  font-family: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.scenario-back:hover {
+  color: #fff;
+}
+
+.scenario-tag {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #ff9f7a;
+}
+
+.scenario-panel h2 {
+  margin: 4px 0 12px;
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+.scenario-lede {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #c8cbe0;
+  margin: 0 0 10px;
+}
+
+.scenario-rule {
+  font-size: 0.74rem;
+  line-height: 1.5;
+  color: #9aa0b4;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin: 0 0 14px;
+}
+
+.scenario-empty {
+  font-size: 0.85rem;
+  color: #9aa0b4;
+}
+
+.scenario-foot {
+  margin-top: 18px;
+  font-size: 0.7rem;
+  color: #6f7590;
+  line-height: 1.4;
+}
+
+.exp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.exp-card {
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  padding: 12px 0;
+}
+
+.exp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.exp-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e8e8f0;
+}
+
+.exp-name:hover {
+  text-decoration: underline;
+}
+
+.exp-badge {
+  flex-shrink: 0;
+  font-size: 0.66rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 999px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
+.exp-badge.inline {
+  white-space: normal;
+}
+
+.exp-badge.single-source {
+  color: #ffd0c8;
+  background: rgba(255, 45, 45, 0.18);
+  border: 1px solid rgba(255, 77, 77, 0.55);
+}
+
+.exp-badge.has-redundancy {
+  color: #bfe9cf;
+  background: rgba(87, 204, 153, 0.14);
+  border: 1px solid rgba(87, 204, 153, 0.45);
+}
+
+.exp-badge.unknown {
+  color: #cdd2e6;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.exp-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  margin: 6px 0;
+  font-size: 0.78rem;
+  color: #9aa0b4;
+}
+
+.exp-ticker {
+  font-weight: 600;
+  color: #c8cbe0;
+}
+
+.exp-trace summary {
+  font-size: 0.74rem;
+  color: #9aa0b4;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.exp-path {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0 0 0 4px;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.exp-path-node {
+  font-size: 0.82rem;
+  padding-left: 10px;
+}
+
+.exp-path-node.origin {
+  font-weight: 600;
+  color: #ff9f7a;
+}
+
+.exp-path-edge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  padding: 2px 0 2px 10px;
+  margin: 1px 0;
+  font-size: 0.72rem;
+}
+
+.exp-flow {
+  color: #9aa0b4;
+}
+
+.exp-sub {
+  color: #9aa0b4;
+}
+
+.exp-sub.bottleneck {
+  color: #ff8a6a;
+  font-weight: 600;
+}
+
+.exp-cite {
+  color: #7ab8ff;
+  text-decoration: none;
+}
+
+.exp-cite:hover {
+  text-decoration: underline;
+}

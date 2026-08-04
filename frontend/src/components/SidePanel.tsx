@@ -9,6 +9,8 @@ interface Props {
   node: GraphNode;
   graph: GraphData;
   prices: PricesData | null;
+  isShockOrigin: boolean;
+  onSimulateShock: (id: string) => void;
   onSelect: (id: string) => void;
   onSelectConstraint: (id: string) => void;
   onClose: () => void;
@@ -68,6 +70,8 @@ export default function SidePanel({
   node,
   graph,
   prices,
+  isShockOrigin,
+  onSimulateShock,
   onSelect,
   onSelectConstraint,
   onClose,
@@ -130,6 +134,18 @@ export default function SidePanel({
         {LAYER_LABELS[node.layer]} · {node.type.replace(/_/g, " ")}
       </span>
       <h2>{node.name}</h2>
+
+      {downstream.length > 0 && (
+        <button
+          className={`shock-cta${isShockOrigin ? " active" : ""}`}
+          onClick={() => onSimulateShock(node.id)}
+        >
+          ⚡ Simulate disruption here
+          <span className="shock-cta-sub">
+            trace the downstream blast radius &amp; exposed public companies
+          </span>
+        </button>
+      )}
 
       <dl className="facts">
         {node.operator && (

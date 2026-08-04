@@ -10,6 +10,10 @@ interface Props {
   prices: PricesData | null;
   selectedId: string | null;
   highlight: AffectedSet | null;
+  /** When set, the highlight is a disruption scenario seeded at this node —
+   *  drawn in the danger palette with an epicenter ring, not the neutral
+   *  constraint/Ask treatment. */
+  shockOriginId: string | null;
   hiddenLayers: Set<Layer>;
   onSelect: (id: string | null) => void;
   /** Slot in App's bottom band where the zoom/reset controls render. */
@@ -18,6 +22,9 @@ interface Props {
 
 const DIM_NODE = "rgba(110, 115, 145, 0.25)";
 const DIM_ARC = "rgba(110, 115, 145, 0.12)";
+// Disruption palette: the shock epicenter and the links carrying it forward.
+const SHOCK_ORIGIN = "#ff2d2d";
+const SHOCK_ARC = "#ff7a45";
 
 // Default vantage: mid-Pacific, framing Taiwan and the US in one view.
 const HOME_POV = { lat: 28, lng: -165, altitude: 2.2 };
@@ -165,6 +172,7 @@ export default function GlobeView({
   prices,
   selectedId,
   highlight,
+  shockOriginId,
   hiddenLayers,
   onSelect,
   controlsContainer,
@@ -405,6 +413,15 @@ export default function GlobeView({
     [graph, nodeById, hiddenLayers, displayPos]
   );
 
+  // A single pulsing ring marks the shock epicenter when a scenario is active.
+  const shockRings = useMemo(() => {
+    if (!shockOriginId) return [];
+    const p = displayPos.get(shockOriginId);
+    const node = nodeById.get(shockOriginId);
+    if (!p || !node) return [];
+    return [{ lat: p.lat, lng: p.lng, alt: LAYER_ALTITUDE[node.layer] }];
+  }, [shockOriginId, displayPos, nodeById]);
+
   const pointLabel = (d: object) => {
     const { node } = d as PointDatum;
     const series = node.ticker ? prices?.series[node.ticker.symbol] : undefined;
@@ -436,6 +453,7 @@ export default function GlobeView({
         pointLng="lng"
         pointColor={(d: object) => {
           const { node } = d as PointDatum;
+          if (node.id === shockOriginId) return SHOCK_ORIGIN;
           if (highlight && !highlight.nodes.has(node.id)) return DIM_NODE;
           return LAYER_COLORS[node.layer];
         }}
@@ -443,7 +461,7 @@ export default function GlobeView({
           const p = d as PointDatum;
           return LAYER_ALTITUDE[p.node.layer] + (p.node.id === selectedId ? SELECT_BUMP : 0);
         }}
-        pointRadius={0.75}
+        pointRadius={(d: object) => ((d as PointDatum).node.id === shockOriginId ? 1.15 : 0.75)}
         pointLabel={pointLabel}
         onPointClick={(d: object) => onSelect((d as PointDatum).node.id)}
         onGlobeClick={() => onSelect(null)}
@@ -451,6 +469,10 @@ export default function GlobeView({
         arcColor={(d: object) => {
           const arc = d as ArcDatum;
           if (highlight && !highlight.edges.has(arc.id)) return DIM_ARC;
+          // In a disruption scenario, the affected links read as danger, not
+          // their neutral flow colour — the visual tell that separates a shock
+          // from a constraint highlight.
+          if (shockOriginId && highlight?.edges.has(arc.id)) return SHOCK_ARC;
           return arc.color;
         }}
         arcStroke={(d: object) => {
@@ -494,6 +516,14 @@ export default function GlobeView({
         htmlElementVisibilityModifier={(el: HTMLElement, isVisible: boolean) => {
           el.classList.toggle("behind", !isVisible);
         }}
+        ringsData={shockRings}
+        ringLat="lat"
+        ringLng="lng"
+        ringAltitude={(d: object) => (d as { alt: number }).alt}
+        ringColor={() => (t: number) => `rgba(255, 45, 45, ${1 - t})`}
+        ringMaxRadius={5}
+        ringPropagationSpeed={2.2}
+        ringRepeatPeriod={850}
         onZoom={(pov: { altitude: number }) => setAltitude(pov.altitude)}
       />
       {controlsContainer &&
