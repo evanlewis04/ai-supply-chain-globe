@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import type { GraphData, GraphNode, PricesData } from "../types";
 import { exposureFromNode } from "../graph/traversal";
-import type { CompanyExposure, ExposurePathEdge, ExposureStatus } from "../graph/traversal";
+import type { ExposureStatus } from "../graph/traversal";
 import Sparkline from "./Sparkline";
+import ExposurePath from "./ExposurePath";
 
 interface Props {
   origin: GraphNode;
@@ -18,50 +19,10 @@ const STATUS_LABEL: Record<ExposureStatus, string> = {
   unknown: "Redundancy unknown",
 };
 
-/** Human phrasing for an edge's substitutability, honest about the unknown. */
-function subLabel(sub: ExposurePathEdge["substitutability"]): string {
-  if (sub === null) return "substitutability undisclosed";
-  if (sub === "low") return "low-substitutability";
-  return `${sub} substitutability`;
-}
-
 export default function ScenarioPanel({ origin, graph, prices, onSelectNode, onClear }: Props) {
   const exposures = useMemo(() => exposureFromNode(graph, origin.id), [graph, origin.id]);
-  const edgeById = useMemo(() => {
-    const m = new Map(graph.edges.map((e) => [e.id, e]));
-    return m;
-  }, [graph]);
-  const nodeName = (id: string) => graph.nodes.find((n) => n.id === id)?.name ?? id;
 
   const singleSourced = exposures.filter((e) => e.status === "single-source").length;
-
-  const renderPath = (exp: CompanyExposure) => (
-    <ol className="exp-path">
-      <li className="exp-path-node origin">{origin.name}</li>
-      {exp.path.map((hop) => {
-        const edge = edgeById.get(hop.edgeId);
-        const cite = edge?.sources[0];
-        return [
-          <li key={`${hop.edgeId}-edge`} className="exp-path-edge">
-            <span className="exp-flow">{hop.flowType.replace(/_/g, " ")}</span>
-            <span className={hop.bottleneck ? "exp-sub bottleneck" : "exp-sub"}>
-              {subLabel(hop.substitutability)}
-            </span>
-            {cite && (
-              <a className="exp-cite" href={cite.url} target="_blank" rel="noreferrer" title={cite.title ?? cite.url}>
-                source ({cite.date})
-              </a>
-            )}
-          </li>,
-          <li key={`${hop.edgeId}-node`} className="exp-path-node">
-            <button className="link-btn" onClick={() => onSelectNode(hop.to)}>
-              {nodeName(hop.to)}
-            </button>
-          </li>,
-        ];
-      })}
-    </ol>
-  );
 
   return (
     <aside className="scenario-panel">
@@ -122,7 +83,12 @@ export default function ScenarioPanel({ origin, graph, prices, onSelectNode, onC
                 {series && <Sparkline series={series} width={300} height={72} />}
                 <details className="exp-trace">
                   <summary>Traced path &amp; sources</summary>
-                  {renderPath(exp)}
+                  <ExposurePath
+                    originLabel={origin.name}
+                    path={exp.path}
+                    graph={graph}
+                    onSelectNode={onSelectNode}
+                  />
                 </details>
               </li>
             );
