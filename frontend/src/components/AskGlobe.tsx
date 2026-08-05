@@ -7,6 +7,7 @@ import {
   AskResult,
   DEFAULT_ASK_MODEL,
   askGlobe,
+  askViaProxy,
 } from "../lib/askGlobe";
 
 interface Props {
@@ -64,6 +65,14 @@ const ENV_KEY: string = import.meta.env.DEV
   ? (import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined) ?? ""
   : "";
 
+/**
+ * In production builds Ask goes through the /api/ask serverless proxy, which
+ * holds the key server-side — so the hosted demo needs no key entry at all and
+ * the browser key UI is hidden. In dev we call Anthropic directly with a pasted
+ * or env-supplied key.
+ */
+const PROXIED = !import.meta.env.DEV;
+
 export default function AskGlobe({ graph, result, onResult, onSelectNode }: Props) {
   const [question, setQuestion] = useState("");
   const [apiKey, setApiKey] = useState(
@@ -80,7 +89,7 @@ export default function AskGlobe({ graph, result, onResult, onSelectNode }: Prop
 
   const ask = async (q: string) => {
     if (!q.trim() || loading) return;
-    if (!apiKey) {
+    if (!PROXIED && !apiKey) {
       setQuestion(q);
       setNeedsKey(true);
       return;
@@ -89,10 +98,13 @@ export default function AskGlobe({ graph, result, onResult, onSelectNode }: Prop
     setError(null);
     onResult(null);
     try {
-      onResult(await askGlobe(apiKey, model, graph, q.trim()));
+      const answer = PROXIED
+        ? await askViaProxy(model, graph, q.trim())
+        : await askGlobe(apiKey, model, graph, q.trim());
+      onResult(answer);
     } catch (e) {
       const status = (e as { status?: number }).status;
-      if (status === 401) {
+      if (!PROXIED && status === 401) {
         localStorage.removeItem(KEY_STORAGE);
         setApiKey("");
         setNeedsKey(true);
