@@ -137,6 +137,58 @@ const RESPONSE_SCHEMA = {
   additionalProperties: false,
 } as const;
 
+/** The raw Anthropic request. Identical for the dev direct-call path and the
+ * hosted proxy path, so the cached prefix stays byte-stable across both. */
+export function buildRequestParams(model: AskModel, graph: GraphData, question: string) {
+  return {
+    model,
+    max_tokens: 1024,
+    system: [
+      {
+        type: "text" as const,
+        text: systemPrompt(graph),
+        // The graph context is identical across questions — cache it so
+        // repeat questions only pay for the question itself.
+        cache_control: { type: "ephemeral" as const },
+      },
+    ],
+    output_config: {
+      format: { type: "json_schema" as const, schema: RESPONSE_SCHEMA },
+    },
+    messages: [{ role: "user" as const, content: question }],
+  };
+}
+
+/** The model's JSON payload, before grounding against the graph. */
+interface ParsedAnswer {
+  answer: string;
+  node_ids: string[];
+  edge_ids: string[];
+  constraint_id: string | null;
+  references: { node_id: string; text: string }[];
+}
+
+/** Pull the model's JSON out of an Anthropic message response. */
+function parseAnswer(content: { type: string; text?: string }[]): ParsedAnswer {
+  const text = content.find((b) => b.type === "text")?.text;
+  if (!text) throw new Error("Empty response from the model.");
+  return JSON.parse(text) as ParsedAnswer;
+}
+
+/** An error carrying the upstream HTTP status, so callers can special-case 401. */
+export class AskError extends Error {
+  constructor(message: string, readonly status?: number) {
+    super(message);
+    this.name = "AskError";
+  }
+}
+
+/**
+ * Dev path: call Anthropic straight from the browser with a key the developer
+ * pasted or supplied via VITE_ANTHROPIC_API_KEY. Never used in production
+ * builds — the hosted demo goes through the server proxy (`askViaProxy`) so
+ * the key is never in the browser.
+ */
 export async function askGlobe(
   apiKey: string,
   model: AskModel,
@@ -145,40 +197,46 @@ export async function askGlobe(
 ): Promise<AskResult> {
   const client = new Anthropic({
     apiKey,
-    // Static site by design: the key is the owner's own, entered at runtime
-    // and kept in localStorage — never bundled or committed.
     dangerouslyAllowBrowser: true,
   });
+  const response = await client.messages.create(buildRequestParams(model, graph, question));
+  return groundResult(graph, parseAnswer(response.content));
+}
 
-  const response = await client.messages.create({
-    model,
-    max_tokens: 1024,
-    system: [
-      {
-        type: "text",
-        text: systemPrompt(graph),
-        // The graph context is identical across questions — cache it so
-        // repeat questions only pay for the question itself.
-        cache_control: { type: "ephemeral" },
-      },
-    ],
-    output_config: {
-      format: { type: "json_schema", schema: RESPONSE_SCHEMA },
-    },
-    messages: [{ role: "user", content: question }],
+/**
+ * Production path: POST the request to our own `/api/ask` serverless function,
+ * which holds the demo key server-side (see frontend/api/ask.ts) and forwards
+ * it to Anthropic. The key never reaches the browser; the whole site sits
+ * behind Basic Auth so the proxy is not an open relay.
+ */
+export async function askViaProxy(
+  model: AskModel,
+  graph: GraphData,
+  question: string
+): Promise<AskResult> {
+  const res = await fetch("/api/ask", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(buildRequestParams(model, graph, question)),
   });
+  if (!res.ok) {
+    const detail = await res.json().catch(() => null);
+    const message =
+      (detail && typeof detail.error === "string" && detail.error) ||
+      `Ask failed (HTTP ${res.status}).`;
+    throw new AskError(message, res.status);
+  }
+  const response = (await res.json()) as { content: { type: string; text?: string }[] };
+  return groundResult(graph, parseAnswer(response.content));
+}
 
-  const text = response.content.find((b) => b.type === "text")?.text;
-  if (!text) throw new Error("Empty response from the model.");
-  const parsed = JSON.parse(text) as {
-    answer: string;
-    node_ids: string[];
-    edge_ids: string[];
-    constraint_id: string | null;
-    references: { node_id: string; text: string }[];
-  };
-
-  // Ground the response: only ids that exist in the graph may render.
+/**
+ * Ground a model answer against the graph: drop ids that don't exist, pull in
+ * every selected edge's endpoints, and keep only references that point at real
+ * nodes and quote the answer verbatim. Pure — shared by both transports.
+ */
+export function groundResult(graph: GraphData, parsed: ParsedAnswer): AskResult {
+  // Only ids that exist in the graph may render.
   const nodeIds = new Set(graph.nodes.map((n) => n.id));
   const edgeIds = new Set(graph.edges.map((e) => e.id));
   const constraintIds = new Set(graph.constraints.map((c) => c.id));

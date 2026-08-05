@@ -6,6 +6,8 @@ centers, model labs, and end-user applications. Every node sits at its real
 geographic location; every edge is typed and directional; **every claim
 traces to a public, dated source**.
 
+**Live demo:** _(password-gated — link added after the first deploy; see [Deploy](#deploy-vercel))_
+
 ![Demo: cycling through the five constraint chokepoints and a node detail panel](docs/screenshots/demo.gif)
 
 ## The 30-second demo
@@ -60,10 +62,14 @@ names in the answer are clickable — opening that node's detail panel with
 its primary sources. Grounding comes free: the model can only reference
 entities that exist in the vault, all of which are source-backed.
 
-Bring your own Anthropic API key (entered once, stored only in your
-browser's localStorage, sent only to `api.anthropic.com`). Default model is
-Sonnet 4.6 — with the graph context prompt-cached, a question costs a few
-cents — with a Haiku 4.5 toggle for speed.
+On the **hosted demo** Ask works out of the box — no key to enter. Requests
+go through a small serverless proxy (`frontend/api/ask.ts`) that holds the
+key server-side, so it is never shipped in the browser bundle; the whole site
+sits behind a login (see [Deploy](#deploy-vercel)). Running **locally**, you
+bring your own key (entered once, stored only in your browser's localStorage,
+sent only to `api.anthropic.com`, or supplied via `VITE_ANTHROPIC_API_KEY`).
+Default model is Sonnet 4.6 — with the graph context prompt-cached, a question
+costs a few cents — with a Haiku 4.5 toggle for speed.
 
 ## Finance overlay
 
@@ -109,6 +115,31 @@ cd frontend && npm install && npm run dev
 ```
 
 Shareable demo states: `?constraint=cowos-capacity`, `?node=tsmc-fab-18`.
+
+## Deploy (Vercel)
+
+The hosted demo is a static Vite build plus one serverless function, gated by
+a login so it can stay private and keep **Ask the Globe** live without ever
+publishing an API key.
+
+- **`frontend/middleware.ts`** — HTTP Basic Auth at the edge, in front of every
+  request (pages, assets, and the API). Credentials come from env vars, so
+  they can be rotated without a code change. Fails closed if unset.
+- **`frontend/api/ask.ts`** — serverless proxy that injects the Anthropic key
+  server-side; the key is never in the browser bundle. Behind the login, so
+  it is not an open relay. Only the two UI models are allowed and output is
+  capped.
+
+Setup:
+
+1. Import the repo in Vercel and set **Root Directory = `frontend`**
+   (`vercel.json` there handles build command and output).
+2. Add three **Environment Variables**:
+   - `ANTHROPIC_API_KEY` — a key for the demo (a low-cap key is recommended).
+   - `BASIC_AUTH_USER` and `BASIC_AUTH_PASSWORD` — the login you hand to
+     reviewers.
+3. Deploy, then paste the resulting URL into **Live demo** at the top of this
+   README.
 
 ## Data methodology
 
